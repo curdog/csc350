@@ -43,16 +43,16 @@ class Program1 {
 		System.out.println("Grades Entered: " + num_entries);
 		System.out.println("Grade Sum: " + grades_sum );
 		last = grades_sum / (double)num_entries;
-		//print average
+		//print average, check for cases
 		if( last == Double.NEGATIVE_INFINITY ){
 			System.out.println("Your grade is: " + last);
-			System.out.println("You have failed to the maxium degree. Congratulations");
+			System.out.println("You have failed to the maxium degree. Congratulations, especially so, because this is not an executable branch.");
 		} else if ( Double.isNaN(last) ){
 			System.out.println("Your grade is: " + last);
 			System.out.println("I don't know what your grade ended up being, but its not a number.");
 		} else if ( last == Double.POSITIVE_INFINITY ){
 			System.out.println("Your grade is: " + last);
-			System.out.println("You really know everything, don't you?");
+			System.out.println("You really know everything. Don't you?");
 		} else {
 			System.out.println("Your grade is: " + last);
 		}
