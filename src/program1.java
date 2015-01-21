@@ -19,7 +19,7 @@ class Program1 {
 		//temp var
 		double last = 0.0;
 		//entry loop
-		while ( last >= 0.0 ){
+		while ( last >= 0.0 || Double.isNaN(last) ){
 			System.out.print("Enter grade \"0-100\": " );
 			//mandatory idiot check
 			try {
@@ -33,21 +33,21 @@ class Program1 {
 			}
 			
 			//adjust values
-			if( last >= 0 ){
+			if( last >= 0.0 || Double.isNaN(last) ){
 				grades_sum += last;
 				num_entries++;
 			}
 		}
 		//end game screen
-		System.out.println("Totals:");
+		System.out.println("-----Totals------");
 		System.out.println("Grades Entered: " + num_entries);
 		System.out.println("Grade Sum: " + grades_sum );
 		last = grades_sum / (double)num_entries;
 		//print average
 		if( last == Double.NEGATIVE_INFINITY ){
 			System.out.println("You have failed to the maxium degree. Congratulations");
-		} else if ( last == Double.NaN ){
-			System.out.println("I don't know what your grade ended up being, but its not of this world.");
+		} else if ( Double.isNaN(last) ){
+			System.out.println("I don't know what your grade ended up being, but its not a number.");
 		} else if ( last == Double.POSITIVE_INFINITY ){
 			System.out.println("You really know everything, don't you?");
 		} else {
