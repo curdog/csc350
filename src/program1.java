@@ -45,16 +45,20 @@ class Program1 {
 		last = grades_sum / (double)num_entries;
 		//print average
 		if( last == Double.NEGATIVE_INFINITY ){
+			System.out.println("Your grade is: " + last);
 			System.out.println("You have failed to the maxium degree. Congratulations");
 		} else if ( Double.isNaN(last) ){
+			System.out.println("Your grade is: " + last);
 			System.out.println("I don't know what your grade ended up being, but its not a number.");
 		} else if ( last == Double.POSITIVE_INFINITY ){
+			System.out.println("Your grade is: " + last);
 			System.out.println("You really know everything, don't you?");
 		} else {
 			System.out.println("Your grade is: " + last);
 		}
 		
-		
+		//close input (not necessary for a RTE but gets rid of yellow squiggly lines)
+		input.close();
 	}
 
 }
