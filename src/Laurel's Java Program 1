@@ -1,0 +1,98 @@
+Enter file contents here//Java Program 1
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.*;
+
+ class Java1{
+	public static void main(String[] args) throws IOException
+	{
+	BufferedReader kbd = new BufferedReader(new InputStreamReader(System.in));
+	
+//variable declaration
+int gradecount;
+double grade;
+double average;
+double sum;
+int run;
+
+grade = 0.0;
+sum = 0.0;
+average = 0.0;
+gradecount = 0;
+run = 1;
+
+
+
+System.out.println("\nWELCOME TO THE GRADE AVERAGING PROGRAM!");
+System.out.println("---------------------------------------");
+System.out.println("Enter 0.0 when all of your grades have been entered");
+
+
+	//prompt for first grade
+	System.out.println("Please enter the first grade: ");
+	//extracts a string and creates an object of type double 
+	grade = Double.valueOf(kbd.readLine());
+	System.out.println(" ");
+	//increment grade counter
+	gradecount++;
+		
+	System.out.println("First Grade: " + grade);
+	
+	//if first grade == 0.0 then no grades were entered
+	if(grade == 0.0)
+	{
+		System.out.println("You did not enter in any grades.");
+		System.out.println("Please try again!");
+	}
+	
+	//if the first grade is 0.0, then no grades have been entered
+		
+	while(grade != 0.0) 
+	{
+		//accumulate grades in sum
+		sum = sum+grade;
+		System.out.println("Sum: " + sum);
+		//prompt for more grades
+		System.out.println("Please enter another grade: ");
+		//reads grade
+		grade = Double.valueOf(kbd.readLine());
+		System.out.println(" ");
+		//increment grade count
+		gradecount++;
+		
+	}
+
+//subtract 1, so 0.0 is not included in the count
+gradecount = gradecount - 1;
+
+//calculate the average
+average = sum / gradecount;
+
+//print average
+System.out.println("Average: " + average);
+
+/*
+//display the calculated average
+//validating NaN, NEGATIVE_INFINITY, POSITIVE_INFINITY
+if(average == Double.NEGATIVE_INFINITY)
+{
+	System.out.println("Your calculated average is negative infinity.");
+	System.out.println("Therefore, you have encountered a result of undefined.");
+	
+} else if (Double.isNaN(average))
+{
+	System.out.println("Your calculated average is not a number.");
+} else if(average == Double.POSITIVE_INFINITY)
+{
+	System.out.println("Your calculated average is positive infinity.");
+	System.out.println("Therefore, you have encountered a result of undefined.");
+	
+} else {
+	System.out.println("Your calculated grade average is: " + average);
+}*/ 
+}
+}
+
+
+
