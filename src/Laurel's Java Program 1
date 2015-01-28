@@ -1,10 +1,10 @@
-Enter file contents here//Java Program 1
+//Java Program 1
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.*;
 
- class Java1{
+ class Average{
 	public static void main(String[] args) throws IOException
 	{
 	BufferedReader kbd = new BufferedReader(new InputStreamReader(System.in));
@@ -20,51 +20,67 @@ grade = 0.0;
 sum = 0.0;
 average = 0.0;
 gradecount = 0;
+
+
 run = 1;
-
-
 
 System.out.println("\nWELCOME TO THE GRADE AVERAGING PROGRAM!");
 System.out.println("---------------------------------------");
 System.out.println("Enter 0.0 when all of your grades have been entered");
 
-
+//run 1 = good
+//run 2 = kick out
+while(run ==1 || Double.isNaN(grade))
+{
 	//prompt for first grade
-	System.out.println("Please enter the first grade: ");
+	System.out.println("Please enter a grade: ");
 	//extracts a string and creates an object of type double 
 	grade = Double.valueOf(kbd.readLine());
 	System.out.println(" ");
-	//increment grade counter
+	//increment gradecount
 	gradecount++;
-		
-	System.out.println("First Grade: " + grade);
+	
+	//validate that the grade is <= 100
+	if(grade > 0.0 && grade <= 100)
+	{
+		sum = sum + grade;
+	}
+	
+	//make sure the grade is a positive number
+	if(grade < 0.0 || Double.isNaN(grade))
+	{
+		System.out.println("Please enter a positive number");
+		//do not include the negative number in the sum
+		//sum = sum - grade;
+		//ignore the negative number in the grade count
+		gradecount--;
+	}
+	
+	//check if grade > 100
+	if(grade > 100 || Double.isNaN(grade))
+	{
+		System.out.println("Please enter a number between 0-100");
+		System.out.println(" ");
+		gradecount--;
+	}
 	
 	//if first grade == 0.0 then no grades were entered
 	if(grade == 0.0)
 	{
-		System.out.println("You did not enter in any grades.");
-		System.out.println("Please try again!");
+		run = 2;
 	}
 	
-	//if the first grade is 0.0, then no grades have been entered
-		
-	while(grade != 0.0) 
-	{
-		//accumulate grades in sum
-		sum = sum+grade;
-		System.out.println("Sum: " + sum);
-		//prompt for more grades
-		System.out.println("Please enter another grade: ");
-		//reads grade
-		grade = Double.valueOf(kbd.readLine());
-		System.out.println(" ");
-		//increment grade count
-		gradecount++;
-		
-	}
+} //end while
+
+//print out totals
+System.out.println("------------Totals------------");
+
+//print sum
+System.out.println("Sum: " + sum);
 
 //subtract 1, so 0.0 is not included in the count
 gradecount = gradecount - 1;
+System.out.println("Total Number of Grades Entered: " + gradecount);
 
 //calculate the average
 average = sum / gradecount;
@@ -72,7 +88,6 @@ average = sum / gradecount;
 //print average
 System.out.println("Average: " + average);
 
-/*
 //display the calculated average
 //validating NaN, NEGATIVE_INFINITY, POSITIVE_INFINITY
 if(average == Double.NEGATIVE_INFINITY)
@@ -90,8 +105,8 @@ if(average == Double.NEGATIVE_INFINITY)
 	
 } else {
 	System.out.println("Your calculated grade average is: " + average);
-}*/ 
-}
+} 
+} 
 }
 
 
