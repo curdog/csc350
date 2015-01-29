@@ -1,0 +1,56 @@
+Enter file contents here//Java Program 2
+//Laurel, Sean, Kris
+//Group 3
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.*;
+
+ class Program2
+ {
+	public static void main(String[] args)
+	{
+	BufferedReader kbd = new BufferedReader(new InputStreamReader(System.in));
+	
+	//declarations
+	int i;
+	FileInputStream inf;
+	word[] words = new Word[100];
+	string[] ionames = new String[2];
+	
+	
+	//get filename
+	if(args.length != 1)
+	{
+		System.out.println("blah");
+		return;	
+	}
+	
+	//attempt to open file
+	try
+	{
+		inf = new FileInputStream(args[0]);
+	} catch(FileNotFoundException e) {
+		System.out.println("Cannot open file");
+		}
+		
+	//read file until EOF 
+		try{
+		do{
+			i = inf.read();
+			if(i!= -1) System.out.print((char) i);
+		  }
+		while( i != -1);
+			} catch(IOException e){
+				System.out.println("Error reading file");
+				}
+				
+	//close file
+	try{
+		inf.close();
+		} catch(IOException e){
+			System.out.println("Error closing file");
+			}
+				
+	} //end public
+}//end class
