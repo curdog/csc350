@@ -88,26 +88,16 @@ class Program2 {
 			System.out.println("Error reading file");
 		}
 
-		// close file
-		try {
-			inf.close();
-		} catch (IOException e) {
-			System.out.println("Error closing file");
-		}
 
 		// ------------GETTING THE TOKENS------------
-		StringTokenizer inline = new StringTokenizer(inbuffer, " \t.,\n\r");
-		while (inbuffer != null) {
-			// parse inbuffer into tokens
-			// input delimiters
-
+		StringTokenizer inline = new StringTokenizer(inbuffer, " \t.,\n\r;");
 			// while there are token
 			while (inline.hasMoreTokens()) {
 				// get token
 				String token1 = inline.nextToken();
 
 				// test string for integer
-				if (Character.isDigit(token1)) {
+				if (Integer.) {
 					// convert string token1 to numeric digit
 					int digit = Integer.valueOf(token1);
 					// add digit to the accumulating sum
@@ -138,9 +128,15 @@ class Program2 {
 				} // end if
 
 			} // end while
-			readLine();
-		} // end while
 
+			// close input file
+			try {
+				inf.close();
+			} catch (IOException e) {
+				System.out.println("Error closing file");
+			}
+
+			
 	} // end public
 }// end class
 
