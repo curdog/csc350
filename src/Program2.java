@@ -75,14 +75,15 @@ class Program2 {
 		BufferedReader infread = new BufferedReader( new InputStreamReader( inf ) );
 		BufferedWriter oufwrite = new BufferedWriter( new OutputStreamWriter( ouf ));
 		
-		// read file until EOF
+		// read file until EOF into inbuffer
+		String temp = "";
 		try {
 			do {
-				i = infread.;
-				if (i != -1)
-					System.out.print((char) i);
+				// stupid to re-add the \n but easier to read 
+				temp = infread.readLine();
+				inbuffer = inbuffer.concat("\n" + temp);
+			} while (temp != null);
 
-			} while (i != -1);
 		} catch (IOException e) {
 			System.out.println("Error reading file");
 		}
@@ -95,7 +96,6 @@ class Program2 {
 		}
 
 		// ------------GETTING THE TOKENS------------
-		inbuffer = input.readLine();
 		StringTokenizer inline = new StringTokenizer(inbuffer, " \t.,\n\r");
 		while (inbuffer != null) {
 			// parse inbuffer into tokens
