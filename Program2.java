@@ -1,10 +1,12 @@
+
 import java.io.*;
+import java.util.Hashtable;
 import java.util.StringTokenizer;
 //easier to count words
 import java.util.HashMap;
 
 class Program2 {
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 		BufferedReader kbd = new BufferedReader(
 				new InputStreamReader(System.in));
 
@@ -25,7 +27,7 @@ class Program2 {
 		// declare inbuffer
 		String inbuffer = "";
 		// word dictionary
-		Hashtable<Integer, String> dictionary;
+		Hashtable<Integer, Word> dictionary = new Hashtable<Integer,Word>();
 		
 		
 		// get filename
@@ -55,7 +57,7 @@ class Program2 {
 				System.out.println("Your output file: " + output);
 			}
 
-			// attempt to open file
+			// attempt to open files
 			try {
 				inf = new FileInputStream(input);
 				ouf = new FileOutputStream(output);
@@ -71,6 +73,7 @@ class Program2 {
 		BufferedWriter oufwrite = new BufferedWriter( new OutputStreamWriter( ouf ));
 		
 		// read file until EOF into inbuffer
+		//we swallow the whole potato instead of chunks
 		String temp = "";
 		try {
 			do {
@@ -89,38 +92,26 @@ class Program2 {
 			// while there are token
 			while (inline.hasMoreTokens()) {
 				// get token
-				String token1 = inline.nextToken();
+				String token = inline.nextToken();
 
 				// test string for integer
-				if (Integer.) {
-					// convert string token1 to numeric digit
-					int digit = Integer.valueOf(token1);
-					// add digit to the accumulating sum
-					sum = sum + digit;
-				} else {
-
-					// search for the word in the buffer
-					int x;
-					for (x = 0; x < inbuffer.length; x++) {
-						if (inbuffer[x] == token1) {
-							found = true;
-							break;
-						} // end if
-					} // end for
-
-					// found = false the word was not found
-					// found = true the word was found
-					// check if the word exists
-					if (found) {
-						// add 1
-						wordQuant++;
-					} else {
-						System.out.println(token1 + " was not found in");
-						System.out.println("It has not been created");
-						// create Word
-						// adjust index
-					} // end if
-				} // end if
+				try{
+					sum += Integer.parseInt(token);
+				} catch ( NumberFormatException e){
+					//definately not a number
+					//look in dict
+					int hash = token.hashCode();
+					//have word?
+					if( dictionary.containsKey( hash ) ){
+						dictionary.get( hash ).inc();	
+					} 
+					//not have word? add it
+					else {
+						dictionary.put(hash, new Word( token ) );	
+					}
+					
+				}
+				
 
 			} // end while
 
@@ -134,4 +125,27 @@ class Program2 {
 			
 	} // end public
 }// end class
+
+class Word{
+	String s;
+	int count;
+	
+	public Word( String w ){
+		s = w;
+		count = 0;
+	}
+	
+	public void inc(){
+		count++;
+	}
+	
+	public String getWord(){
+		return s;
+	}
+	public int hashCode(){
+		return s.hashCode();
+	}
+	
+	
+}
 
