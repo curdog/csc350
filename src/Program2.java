@@ -1,5 +1,3 @@
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.io.*;
 import java.util.StringTokenizer;
 //easier to count words
@@ -19,6 +17,8 @@ class Program2 {
 		boolean fail = false;
 		FileInputStream inf = null;
 		FileOutputStream ouf = null;
+		//because java
+	
 
 		String[] ionames = new String[2];
 
@@ -63,18 +63,22 @@ class Program2 {
 			// attempt to open file
 			try {
 				inf = new FileInputStream(input);
+				ouf = new FileOutputStream(output);
 				fail = false;
 			} catch (FileNotFoundException e) {
 				// file open fail
-				System.out.println("Cannot open file");
+				System.out.println("Cannot open file(s)");
 				fail = true;
 			}
 		} while (!fail);
-
+		//files should be good here, will be easier to handle using these
+		BufferedReader infread = new BufferedReader( new InputStreamReader( inf ) );
+		BufferedWriter oufwrite = new BufferedWriter( new OutputStreamWriter( ouf ));
+		
 		// read file until EOF
 		try {
 			do {
-				i = inf.read();
+				i = infread.;
 				if (i != -1)
 					System.out.print((char) i);
 
