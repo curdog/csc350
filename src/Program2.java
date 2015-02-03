@@ -8,19 +8,13 @@ class Program2 {
 		BufferedReader kbd = new BufferedReader(
 				new InputStreamReader(System.in));
 
-		// declarations
-		// Word w = new Word();
-		// Word k = new Word();
 		int i, sum, wordQuant;
 		sum = 0;
 		boolean found = false;
 		boolean fail = false;
+
 		FileInputStream inf = null;
 		FileOutputStream ouf = null;
-		//because java
-	
-
-		String[] ionames = new String[2];
 
 		// input filename
 		String input = "input";
@@ -28,16 +22,18 @@ class Program2 {
 		// output filename
 		String output = "output";
 
-		// declare inbuffer array
+		// declare inbuffer
 		String inbuffer = "";
-
+		// word dictionary
+		Hashtable<Integer, String> dictionary;
+		
+		
 		// get filename
 		do {
 			// no arguments were entered in the command line
 			if (args.length == 0) {
 				// prompt for file
 				System.out.println("Enter an input file:");
-				input = "input";
 				input = kbd.readLine();
 
 				// prompt for output file
@@ -49,7 +45,6 @@ class Program2 {
 			} else if (args.length == 1) {
 				// prompt for file
 				System.out.println("Enter an output file:");
-				output = "output";
 				output = kbd.readLine();
 
 				// both an input and output file have been entered
