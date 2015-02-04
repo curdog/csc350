@@ -37,10 +37,10 @@ class Program2 {
 				// prompt for file
 				System.out.println("Enter an input file:");
 				input = kbd.readLine();
-
+				
 				// prompt for output file
 				System.out.println("Enter an output file:");
-				output = "output";
+				
 				output = kbd.readLine();
 
 				// an input file was entered in the command line
@@ -64,10 +64,13 @@ class Program2 {
 				fail = false;
 			} catch (FileNotFoundException e) {
 				// file open fail
+				System.out.println(input);
+				System.out.println(output);
+				System.out.println(e.toString() );
 				System.out.println("Cannot open file(s)");
 				fail = true;
 			}
-		} while (!fail);
+		} while (fail);
 		//files should be good here, will be easier to handle using these
 		BufferedReader infread = new BufferedReader( new InputStreamReader( inf ) );
 		BufferedWriter oufwrite = new BufferedWriter( new OutputStreamWriter( ouf ));
@@ -122,6 +125,7 @@ class Program2 {
 				System.out.println("Error closing file");
 			}
 
+			System.out.println(sum);
 			
 	} // end public
 }// end class
