@@ -29,6 +29,8 @@ class Program2 {
 		// word dictionary
 		Hashtable<Integer, Word> dictionary = new Hashtable<Integer,Word>();
 		
+		//printwriter tp wrote to the output file
+		PrintWriter pw = new PrintWriter(output);
 		
 		// get filename
 		do {
@@ -114,7 +116,10 @@ class Program2 {
 				
 
 			} // end while
-
+			
+			//printing to the output file with PrintWriter(pw)
+			pw.println("The sum of integers is: " + sum);
+			
 			// close input file
 			try {
 				inf.close();
