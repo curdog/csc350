@@ -23,16 +23,13 @@ class Program2 {
 		// declare inbuffer
 		String inbuffer = "";
 		// word dictionary
-<<<<<<< HEAD
-		Hashtable<Integer, Word> dictionary = new Hashtable<Integer, Word>();
 
-=======
 		Hashtable<Integer, Word> dictionary = new Hashtable<Integer,Word>();
 		
 		//printwriter tp wrote to the output file
 		PrintWriter pw = new PrintWriter(output);
 		
->>>>>>> origin/master
+
 		// get filename
 		do {
 			// no arguments were entered in the command line
@@ -98,22 +95,13 @@ class Program2 {
 		StringTokenizer inline = new StringTokenizer(inbuffer, " \t.,\n\r;");
 		// while there are token
 
-<<<<<<< HEAD
-<<<<<<< HEAD
+
 		while (inline.hasMoreTokens()) {
 			// get token
 			String token = inline.nextToken();
 
 			// test string for integer
-=======
->>>>>>> origin/master
-			} // end while
-			
-			//printing to the output file with PrintWriter(pw)
-			pw.println("The sum of integers is: " + sum);
-			
-			// close input file
->>>>>>> origin/master
+
 			try {
 				sum += Integer.parseInt(token);
 			} catch (NumberFormatException e) {
@@ -132,8 +120,12 @@ class Program2 {
 			}
 
 		} // end while
+		
+		//printing to the output file with PrintWriter(pw)
+		pw.println("The sum of integers is: " + sum);
 
-		// close input file
+
+		// close input/outputs file
 		try {
 			ouf.close();
 			inf.close();
