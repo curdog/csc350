@@ -3,6 +3,10 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.StringTokenizer;
 
+//assignment 2
+//csc java
+//Laurel Cris Sean Group 3
+
 class Program2 {
 	public static void main(String[] args) throws IOException {
 		BufferedReader kbd = new BufferedReader(
