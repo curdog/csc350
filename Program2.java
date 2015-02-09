@@ -99,12 +99,14 @@ class Program2 {
 		// while there are token
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 		while (inline.hasMoreTokens()) {
 			// get token
 			String token = inline.nextToken();
 
 			// test string for integer
 =======
+>>>>>>> origin/master
 			} // end while
 			
 			//printing to the output file with PrintWriter(pw)
