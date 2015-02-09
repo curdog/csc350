@@ -27,7 +27,7 @@ class Program2 {
 		Hashtable<Integer, Word> dictionary = new Hashtable<Integer,Word>();
 		
 		//printwriter tp wrote to the output file
-		PrintWriter pw = new PrintWriter(output);
+		PrintWriter pw = null;
 		
 
 		// get filename
@@ -60,7 +60,8 @@ class Program2 {
 			// attempt to open files
 			try {
 				inf = new FileInputStream(input);
-				ouf = new FileOutputStream(output);
+				//ouf = new FileOutputStream(output);
+				pw = new PrintWriter(output);
 				fail = false;
 			} catch (FileNotFoundException e) {
 				// file open fail
@@ -121,19 +122,25 @@ class Program2 {
 
 		} // end while
 		
+		//get all words
+		Word[] arr = (Word[]) dictionary.values().toArray();
+		for( int i = 0; i < arr.length; i++){
+			pw.println(arr[i].getWord() + ": " + arr[i].getCount());
+		}
+		
 		//printing to the output file with PrintWriter(pw)
 		pw.println("The sum of integers is: " + sum);
 
 
 		// close input/outputs file
 		try {
-			ouf.close();
+			//ouf.close();
 			inf.close();
+			pw.close();
 		} catch (IOException e) {
 			System.out.println("Error closing files");
 		}
 
-		System.out.println(sum);
 
 	} // end public
 }// end class
@@ -149,6 +156,10 @@ class Word {
 
 	public void inc() {
 		count++;
+	}
+	
+	public int getCount(){
+		return count;
 	}
 
 	public String getWord() {
