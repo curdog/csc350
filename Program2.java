@@ -1,5 +1,6 @@
 import java.io.*;
 import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.StringTokenizer;
 
 class Program2 {
@@ -12,7 +13,7 @@ class Program2 {
 		boolean fail = false;
 
 		FileInputStream inf = null;
-		FileOutputStream ouf = null;
+		
 
 		// input filename
 		String input = "input";
@@ -23,7 +24,7 @@ class Program2 {
 		// declare inbuffer
 		String inbuffer = "";
 		// word dictionary
-
+		
 		Hashtable<Integer, Word> dictionary = new Hashtable<Integer,Word>();
 		
 		//printwriter tp wrote to the output file
@@ -32,6 +33,7 @@ class Program2 {
 
 		// get filename
 		do {
+			System.out.println("Please use absulute paths");
 			// no arguments were entered in the command line
 			if (args.length == 0) {
 				// prompt for file
@@ -74,8 +76,8 @@ class Program2 {
 		} while (fail);
 		// files should be good here, will be easier to handle using these
 		BufferedReader infread = new BufferedReader(new InputStreamReader(inf));
-		BufferedWriter oufwrite = new BufferedWriter(
-				new OutputStreamWriter(ouf));
+		//BufferedWriter oufwrite = new BufferedWriter(
+		//		new OutputStreamWriter(ouf));
 
 		// read file until EOF into inbuffer
 		// we swallow the whole potato instead of chunks
@@ -116,6 +118,7 @@ class Program2 {
 				// not have word? add it
 				else {
 					dictionary.put(hash, new Word(token));
+					
 				}
 
 			}
@@ -123,9 +126,11 @@ class Program2 {
 		} // end while
 		
 		//get all words
-		Word[] arr = (Word[]) dictionary.values().toArray();
-		for( int i = 0; i < arr.length; i++){
-			pw.println(arr[i].getWord() + ": " + arr[i].getCount());
+		Iterator<Word> itr = dictionary.values().iterator();
+		
+		while( itr.hasNext() ){
+			Word topr = itr.next();
+			pw.println(topr.getWord() + ": " + topr.getCount());
 		}
 		
 		//printing to the output file with PrintWriter(pw)
@@ -151,7 +156,7 @@ class Word {
 
 	public Word(String w) {
 		s = w;
-		count = 0;
+		count = 1;
 	}
 
 	public void inc() {
