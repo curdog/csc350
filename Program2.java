@@ -23,6 +23,7 @@ class Program2 {
 		// declare inbuffer
 		String inbuffer = "";
 		// word dictionary
+<<<<<<< HEAD
 		Hashtable<Integer, Word> dictionary = new Hashtable<Integer, Word>();
 
 		// get filename
@@ -90,6 +91,7 @@ class Program2 {
 		StringTokenizer inline = new StringTokenizer(inbuffer, " \t.,\n\r;");
 		// while there are token
 
+<<<<<<< HEAD
 		while (inline.hasMoreTokens()) {
 			// get token
 			String token = inline.nextToken();
