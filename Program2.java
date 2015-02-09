@@ -1,18 +1,14 @@
-
 import java.io.*;
 import java.util.Hashtable;
 import java.util.StringTokenizer;
-//easier to count words
-import java.util.HashMap;
 
 class Program2 {
 	public static void main(String[] args) throws IOException {
 		BufferedReader kbd = new BufferedReader(
 				new InputStreamReader(System.in));
 
-		int i, sum, wordQuant;
-		sum = 0;
-		boolean found = false;
+		int sum = 0;
+
 		boolean fail = false;
 
 		FileInputStream inf = null;
@@ -27,9 +23,8 @@ class Program2 {
 		// declare inbuffer
 		String inbuffer = "";
 		// word dictionary
-		Hashtable<Integer, Word> dictionary = new Hashtable<Integer,Word>();
-		
-		
+		Hashtable<Integer, Word> dictionary = new Hashtable<Integer, Word>();
+
 		// get filename
 		do {
 			// no arguments were entered in the command line
@@ -37,10 +32,10 @@ class Program2 {
 				// prompt for file
 				System.out.println("Enter an input file:");
 				input = kbd.readLine();
-				
+
 				// prompt for output file
 				System.out.println("Enter an output file:");
-				
+
 				output = kbd.readLine();
 
 				// an input file was entered in the command line
@@ -66,21 +61,23 @@ class Program2 {
 				// file open fail
 				System.out.println(input);
 				System.out.println(output);
-				System.out.println(e.toString() );
+				System.out.println(e.toString());
 				System.out.println("Cannot open file(s)");
 				fail = true;
 			}
 		} while (fail);
-		//files should be good here, will be easier to handle using these
-		BufferedReader infread = new BufferedReader( new InputStreamReader( inf ) );
-		BufferedWriter oufwrite = new BufferedWriter( new OutputStreamWriter( ouf ));
-		
+		// files should be good here, will be easier to handle using these
+		BufferedReader infread = new BufferedReader(new InputStreamReader(inf));
+		BufferedWriter oufwrite = new BufferedWriter(
+				new OutputStreamWriter(ouf));
+
 		// read file until EOF into inbuffer
-		//we swallow the whole potato instead of chunks
+		// we swallow the whole potato instead of chunks
 		String temp = "";
 		try {
 			do {
-				// stupid to re-add the \n but easier to read 
+				// stupid to re-add the \n but readLine removes it. can screw up
+				// delimiters
 				temp = infread.readLine();
 				inbuffer = inbuffer.concat("\n" + temp);
 			} while (temp != null);
@@ -89,67 +86,69 @@ class Program2 {
 			System.out.println("Error reading file");
 		}
 
-
 		// ------------GETTING THE TOKENS------------
 		StringTokenizer inline = new StringTokenizer(inbuffer, " \t.,\n\r;");
-			// while there are token
-			while (inline.hasMoreTokens()) {
-				// get token
-				String token = inline.nextToken();
+		// while there are token
 
-				// test string for integer
-				try{
-					sum += Integer.parseInt(token);
-				} catch ( NumberFormatException e){
-					//definately not a number
-					//look in dict
-					int hash = token.hashCode();
-					//have word?
-					if( dictionary.containsKey( hash ) ){
-						dictionary.get( hash ).inc();	
-					} 
-					//not have word? add it
-					else {
-						dictionary.put(hash, new Word( token ) );	
-					}
-					
-				}
-				
+		while (inline.hasMoreTokens()) {
+			// get token
+			String token = inline.nextToken();
 
-			} // end while
-
-			// close input file
+			// test string for integer
 			try {
-				inf.close();
-			} catch (IOException e) {
-				System.out.println("Error closing file");
+				sum += Integer.parseInt(token);
+			} catch (NumberFormatException e) {
+				// definately not a number
+				// look in dict
+				int hash = token.hashCode();
+				// have word?
+				if (dictionary.containsKey(hash)) {
+					dictionary.get(hash).inc();
+				}
+				// not have word? add it
+				else {
+					dictionary.put(hash, new Word(token));
+				}
+
 			}
 
-			System.out.println(sum);
-			
+		} // end while
+
+		// close input file
+		try {
+			ouf.close();
+			inf.close();
+		} catch (IOException e) {
+			System.out.println("Error closing files");
+		}
+
+		System.out.println(sum);
+
 	} // end public
 }// end class
 
-class Word{
+class Word {
 	String s;
 	int count;
-	
-	public Word( String w ){
+
+	public Word(String w) {
 		s = w;
 		count = 0;
 	}
-	
-	public void inc(){
+
+	public void inc() {
 		count++;
 	}
-	
-	public String getWord(){
+
+	public String getWord() {
 		return s;
 	}
-	public int hashCode(){
+
+	public int hashCode() {
 		return s.hashCode();
 	}
-	
-	
-}
 
+	public String toString() {
+		return s + ": " + count;
+	}
+}
