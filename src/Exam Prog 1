@@ -1,0 +1,135 @@
+Enter file contents hereimport java.io.*;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.StringTokenizer;
+import java.io.BufferedReader;
+
+//Exam 1, Group 3
+//csc java
+//Laurel Kris Sean
+//MIL1484
+
+class E1G3 {
+	public static void main(String[] args) throws IOException {
+		BufferedReader kbd = new BufferedReader(
+				new InputStreamReader(System.in));
+
+		int sum = 0,choice;
+		boolean fail = false;
+		FileInputStream inf = null;
+
+		// input filename
+		String input = "input";
+		// output filename
+		String output = "output";
+		// declare inbuffer
+		String inbuffer = "";
+		//printwriter tp wrote to the output file
+		PrintWriter pw = null;
+		
+
+		// get filename
+		do {
+			System.out.println("Please use absolute paths");
+			// no arguments were entered in the command line
+			if (args.length == 0) 
+			{
+				// prompt for file
+				System.out.println("Enter an input file:");
+				input = kbd.readLine();
+					
+				// prompt for output file
+				System.out.println("Enter an output file:");
+				output = kbd.readLine();
+				
+				//check if the file exists
+				if(output.exists())
+				{
+					System.out.println("This file does exists");
+					System.out.println("Please chose an option:");
+					System.out.println("1. Enter another output file");
+				    System.out.println("2. Back up the existing file");
+					System.out.println("3. Overwrite the existing file");
+					System.out.println("4. Quit");
+					System.out.println("Enter 1-4: ");
+					choice = Integer.parseInt(kbd.readLine());
+					
+					boolean good = false;
+					switch(choice)
+					{
+						case 1: 
+							//good = false, try again
+							//good = true, we are good
+							while(good = false)
+							{
+							System.out.println("Please enter a different output file or null to quit");
+							output.kbd.readLine();
+								while(output != null)
+								{
+									if(output.exists())
+									{	
+										//file exists, try again
+										good = false;
+									}else
+									{
+										//file does not exists
+										good = true;
+									}//end if
+								}//end while
+							}//end while
+							break;
+						
+						case 2:
+							//back up existing file
+							break;
+						case 3:
+							//overwrite the existing file
+							//delete existing output
+							output.delete();
+							//creates new output file
+							File output = new File;
+							output.createNewFile();
+							break;
+							
+						case 4:
+							System.out.println("Good-bye!");
+							break;
+						default:
+							System.out.println("Invalid choice");
+							break;
+					}//end switch case
+				}//end if
+						
+				// an input file was entered in the command line
+			} else if (args.length == 1) {
+				// prompt for file
+				System.out.println("Enter an output file:");
+				output = kbd.readLine();
+
+				// both an input and output file have been entered
+			} else if (args.length == 2) {
+				input = args[0];
+				output = args[1];
+				System.out.println("Your input file: " + input);
+				System.out.println("Your output file: " + output);
+			}
+
+			// attempt to open files
+			try {
+				inf = new FileInputStream(input);
+				//ouf = new FileOutputStream(output);
+				pw = new PrintWriter(output);
+				fail = false;
+			} catch (FileNotFoundException e) {
+				// file open fail
+				System.out.println(input);
+				System.out.println(output);
+				System.out.println(e.toString());
+				System.out.println("Cannot open file(s)");
+				fail = true;
+			}
+		} while (fail);
+
+
+	} // end public
+}// end class
