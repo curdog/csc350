@@ -1,7 +1,12 @@
 package src;
 
-//package src;
-
+/******************************
+ * Take Home Group Exam 1
+ * Technical Computing Using Java CET 350
+ * Group: 3
+ * Laurel Kris Sean
+ * mil1484@calu.edu fie4795@calu.edu cur3040@calu.edu
+ *****************************/
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -10,6 +15,12 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
+
+/******Exit Codes********
+ *  1- General Error
+ *  2- System file error
+ *  3- User Idiot error
+ */
 
 public class G3E1 {
 
@@ -54,7 +65,12 @@ public class G3E1 {
 		}
 
 		BufferedReader fin = null;
-
+		//check not same file
+		if(filenamei.equals(filenameo)){
+			System.err.println("You can't have the in and out files be the same");
+			System.exit(3);
+		}
+		
 		try {
 			fin = new BufferedReader(new FileReader(new File(filenamei)));
 			fout = new BufferedWriter(new FileWriter(new File(filenameo)));
@@ -104,12 +120,13 @@ public class G3E1 {
 							+ (float) ( sumavg / ticks));
 					fout.write("Avg MPG: "
 							+ (float) (mil - firstmilage / feulUsed)+"\n");
+					totalmileage = mil - lastmil + totalmileage;
 				}
 				lastmil = mil;
 				//number of entries
 				ticks++;
 				//accumulating the total mileage
-					totalmileage = mil + totalmileage;
+					
 
 			}
 			
