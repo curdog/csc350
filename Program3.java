@@ -1,4 +1,4 @@
-package src;
+//package src;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -18,7 +18,7 @@ import java.io.File;
 //Laurel Cris Sean Group 3
 //
 
-class Main extends Frame implements ActionListener, WindowListener {
+class Program3 extends Frame implements ActionListener, WindowListener {
 	
 	GridBagLayout gbl;
 	GridBagConstraints gbc;
@@ -34,13 +34,13 @@ class Main extends Frame implements ActionListener, WindowListener {
 	
 	File curDir;
 	public static void main(String[] args) {
-		Main wind = new Main();
+		Program3 wind = new Program3();
 		wind.setVisible( true);
 		
 
 	}
 	
-	public Main(){
+	public Program3(){
 		
 		curDir = new File( "." );
 		gbl = new GridBagLayout();
