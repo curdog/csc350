@@ -1,3 +1,5 @@
+package src;
+
 //package src;
 
 import java.io.BufferedReader;
@@ -70,10 +72,11 @@ public class G3E1 {
 		String line = null;
 		int lastmil = 0;
 		float totalmileage = 0.0f;
-
+		int mil = 0;
+		
 		try {
 			while ((line = fin.readLine()) != null) {
-				int mil = 0;
+				
 				float con = 0.0f;
 				StringTokenizer linetok = new StringTokenizer(line);
 
@@ -95,10 +98,10 @@ public class G3E1 {
 					//printing & writing the inst MPG
 					System.out.println("Inst MPG: " + t);
 					fout.write("Inst MPG: " + t + "\n");
-
+					sumavg += t;
 					//printing & writing the avg MPG
 					System.out.println("Avg MPG: "
-							+ (float) (mil - firstmilage / feulUsed));
+							+ (float) ( sumavg / ticks));
 					fout.write("Avg MPG: "
 							+ (float) (mil - firstmilage / feulUsed)+"\n");
 				}
