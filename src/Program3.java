@@ -76,7 +76,7 @@ class Program3 extends Frame implements ActionListener, WindowListener {
 		fileListing = new List();
 		gbc.gridx = 0;
 		gbc.gridy = 0;
-		gbc.gridwidth =2;
+		gbc.gridwidth =3;
 		gbc.ipady = 200;
 		this.add( fileListing, gbc );
 		
@@ -101,7 +101,7 @@ class Program3 extends Frame implements ActionListener, WindowListener {
 		gbc.gridx = 1;
 		gbc.gridy = 2;
 		this.add(targetBase);
-		this.pack();
+		//this.pack();
 		
 		//listen
 		srcSelect.addActionListener(this);
