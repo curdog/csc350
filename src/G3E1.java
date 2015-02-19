@@ -1,4 +1,4 @@
-package src;
+//package src;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -24,24 +24,30 @@ public class G3E1 {
 		try {
 			if (args.length == 0) {
 
+				//prompt for the input file
 				System.out.print("Enter Input Filename:  ");
 				filenamei = stdin.readLine();
 
+				//prompt for the output file
 				System.out.print("Enter Output Filename:  ");
 				filenameo = stdin.readLine();
 
+				//if args = 1
 			} else if (args.length == 1) {
 				filenamei = args[0];
 
+				//prompt for output
 				System.out.print("Enter Output Filename:  ");
 				filenameo = stdin.readLine();
 
+			//both arguments were given
 			} else {
 				filenamei = args[0];
 				filenameo = args[1];
 			}
 
 		} catch (IOException e) {
+			//error
 			System.err.println("Input not recognized");
 			System.err.println(e.toString());
 			System.exit(3);
@@ -58,12 +64,14 @@ public class G3E1 {
 			System.err.println(e.toString());
 			System.exit(2);
 		}
+		//declarations
 		int ticks = 0;
 		int firstmilage = 0;
 		float feulUsed = 0.0f;
 		float sumavg = 0.0f;
 		String line = null;
 		int lastmil = 0;
+		float totalmileage = 0.0f;
 
 		try {
 			while ((line = fin.readLine()) != null) {
@@ -76,40 +84,68 @@ public class G3E1 {
 					continue;
 				}
 
+				//convert to an integer
 				mil = Integer.parseInt(linetok.nextToken());
 				if (firstmilage == 0) {
 					firstmilage = mil;
 				}
+				//convert to a float
 				con = Float.parseFloat(linetok.nextToken());
 				feulUsed += con;
 				if (lastmil != 0) {
 					float t = (float) (mil - lastmil) / con;
+					//printing & writing the inst MPG
 					System.out.println("Inst MPG: " + t);
 					fout.write("Inst MPG: " + t + "\n");
 
+					//printing & writing the avg MPG
 					System.out.println("Avg MPG: "
 							+ (float) (mil - firstmilage / feulUsed));
 					fout.write("Avg MPG: "
-							+ (float) (mil - firstmilage / feulUsed));
+							+ (float) (mil - firstmilage / feulUsed)+"\n");
 				}
 				lastmil = mil;
+				//number of entries
 				ticks++;
+				//accumulating the total mileage
+					totalmileage = mil + totalmileage;
 
 			}
 			
-			System.out.println("Total Milage: " + (lastmil - firstmilage) );
+			System.out.println("\n--------------------TOTALS--------------------\n");
+			fout.write("\n--------------------TOTALS--------------------" + "\n" + "\n");
+			//printing the total mileage to the screen
+			System.out.println("Total Distance Driven: " + (lastmil - firstmilage) + " miles" );
+			//writing the total mileage to the out file
+			fout.write("Total Distance Driven: " + (lastmil - firstmilage)+ " miles" +"\n");
 			
-
+			//each entry is 5 minute intervals, mult ticks by 5
+			System.out.println("Total Time Driven: " + (ticks * 5) + " minutes");
+			fout.write("Total Time Driven: " + (ticks * 5) + " minutes" + "\n");
+			
+			//printing & writing total fuel used
+			System.out.println("Total Fuel Used: " + feulUsed);
+			fout.write("Total Fuel Used: " + feulUsed + "\n");
+			
+			//total average MPG from all the data
+			//total mileage / total fuel used
+			System.out.println("Average MPG for all data: " + totalmileage/feulUsed);
+			fout.write("Average MPG for all data: " + totalmileage/feulUsed);
+			
+			
 		} catch (IOException e) {
+			//error
 			System.err.println("IO Error");
 			System.err.println(e.toString());
 			System.exit(3);
 		}
 
 		try {
+			//closing the files
 			fin.close();
 			fout.close();
 		} catch (IOException e) {
+			//error
 			System.err.println("File Error");
 			System.err.println(e.toString());
 			System.exit(2);
