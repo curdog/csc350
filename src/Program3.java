@@ -1,4 +1,4 @@
-package src;
+//package src;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -15,7 +15,7 @@ import java.io.File;
 
 //assignment 3
 //csc java
-//Laurel Cris Sean Group 3
+//Laurel Kris Sean Group 3
 //
 
 class Program3 extends Frame implements ActionListener, WindowListener {
@@ -108,6 +108,58 @@ class Program3 extends Frame implements ActionListener, WindowListener {
 		ok.addActionListener(this);
 		fileListing.addActionListener(this);
 	}
+/*	
+	public void display(String name){
+		String[] filenames;
+		int count;
+		
+		if(name != null){
+			//go up a directory 
+			if(name.equals ".."){
+				//get parent
+				curDir = new File(curDir.getParent());
+			}else{
+			//new file	
+			File f = new File(curDir, name);}
+			
+			//if new file is a directory?
+			if(f.isDirectory()){
+				curDirectory = new File(curDir, name)
+				//its a file
+			}else if(){
+					//is it a source?
+					//is it a target?
+			}
+		}else{
+			filenames = curDir.list();
+		}
+		
+		//filename = null?
+		if(filenames = null){
+			filenames = new String[];
+		}else{
+			//update title bar
+			//step through each entry of the filenames
+		}
+		
+		if(current item is a directory){
+			//get new string array of the directory list
+			//check each item child for a directory
+		}
+		
+		//
+		if(directory original get a "+"){
+			//after going through the entire list
+			list.removeAll();
+		}
+		
+		//if curDir parent is null
+		if(curDir.getParent != null){
+			list.add("..");
+			//copy filenames to this list
+		}
+}//display 
+*/
 
 	@Override
 	public void windowActivated(WindowEvent e) {
