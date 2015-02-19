@@ -119,7 +119,7 @@ public class G3E1 {
 					System.out.println("Avg MPG: "
 							+ (float) ( sumavg / ticks));
 					fout.write("Avg MPG: "
-							+ (float) (mil - firstmilage / feulUsed)+"\n");
+							+ (float) ( sumavg / ticks)+"\n");
 					totalmileage = mil - lastmil + totalmileage;
 				}
 				lastmil = mil;
