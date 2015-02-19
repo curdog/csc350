@@ -1,4 +1,4 @@
-//package src;
+package src;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -34,20 +34,43 @@ class Program3 extends Frame implements ActionListener, WindowListener {
 	
 	File curDir;
 	public static void main(String[] args) {
-		Program3 wind = new Program3();
+		File defFile = null;
+		Program3 wind = new Program3(".");
+		
 		wind.setVisible( true);
 		
-
+		//file handling with arguments
+		if(args.length >= 1){
+			defFile = new File(args[0]);
+		} else {
+			//prompt for the directory
+			defFile= new File(".");
+			
+		}
+		
+		if(defFile.isDirectory()){
+			new Program3( defFile.getAbsolutePath() );
+		} else {
+			new Program3(".");
+		}
 	}
 	
-	public Program3(){
+	public Program3( String path){
+		ok = new Button("ok");
+		srcSelect = new Button("sel");
+		fileListing = new List();
+		src=new Label("source");
+		mesg=new Label("message");
+		targetBase=new Label("base");
 		
-		curDir = new File( "." );
+		
+		curDir = new File( path );
 		gbl = new GridBagLayout();
+		
 		gbc = new GridBagConstraints();
 		
 		this.addWindowListener( this );
-		this.setResizable(false);
+		this.setResizable(true);
 		this.setLayout(gbl);
 		
 		fileListing = new List();
@@ -76,10 +99,14 @@ class Program3 extends Frame implements ActionListener, WindowListener {
 		this.add( ok, gbc );
 		
 		gbc.gridx = 1;
+		gbc.gridy = 2;
 		this.add(targetBase);
+		this.pack();
 		
-		gbc.gridx = 2;
-		this.add(targetName);
+		//listen
+		srcSelect.addActionListener(this);
+		ok.addActionListener(this);
+		fileListing.addActionListener(this);
 	}
 
 	@Override
@@ -97,7 +124,7 @@ class Program3 extends Frame implements ActionListener, WindowListener {
 	@Override
 	public void windowClosing(WindowEvent e) {
 		// TODO Auto-generated method stub
-		
+		System.exit(0);
 	}
 
 	@Override
@@ -115,7 +142,7 @@ class Program3 extends Frame implements ActionListener, WindowListener {
 	@Override
 	public void windowIconified(WindowEvent e) {
 		// TODO Auto-generated method stub
-		this.setState(Frame.NORMAL);
+		//this.setState(Frame.NORMAL);
 	}
 
 	@Override
