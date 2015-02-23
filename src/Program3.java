@@ -12,13 +12,18 @@ import java.awt.GridBagLayout;
 import java.awt.Label;
 import java.awt.List;
 import java.awt.TextField;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 
 //assignment 3
-//csc java
+//cet 350 java
 //Laurel Kris Sean Group 3
-//
+//MIL1484, FIE4795, CUR3040
 
 class Program3 extends Frame implements ActionListener, WindowListener {
 	
@@ -73,12 +78,12 @@ class Program3 extends Frame implements ActionListener, WindowListener {
 	}
 	public Program3( String path){
 		//creates GUI options with their readings
-		okButt = new Button("ok");
-		tarSelect = new Button("sel");
+		okButt = new Button("OK");
+		tarSelect = new Button("TARGET");
 		fileListing = new List();
-		src = new Label("source");
+		src = new Label("SOURCE:");
 		mesg = new Label("");
-		targetBase = new Label("base");
+		targetBase = new Label("COPY TO:");
 		fileNameField = new TextField();
 		fileLabel = new Label("File Name: ");
 		srcLabel = new Label("Source: ");
@@ -257,7 +262,10 @@ class Program3 extends Frame implements ActionListener, WindowListener {
 
 		if (e.getSource().equals(okButt)) {
 			//do move file here
-			
+			//set label to targetBase
+			targetBase.setText(curDir.getAbsolutePath()+fileListing.getSelectedItem());
+			//copy file
+			copy();
 			targeted = false;
 
 		} else if (e.getSource().equals(fileListing)) {
@@ -265,17 +273,66 @@ class Program3 extends Frame implements ActionListener, WindowListener {
 		} else if (e.getSource().equals(tarSelect)) {
 			File t = new File(curDir.getAbsolutePath()
 					+ fileListing.getSelectedItem());
+			//current directory is placed in the target label
+			//if target button is selected
+			src.setText(curDir.getAbsolutePath() + fileListing.getSelectedItem());
+			 
 			if (t == null || t.isDirectory()) {
 				// do something for no file/directory
 				mesg.setText("Not a valid target");
 			} else {
+				src.setText(curDir.getAbsolutePath() + fileListing.getSelectedItem());
 				targeted = true;
 			}
 		} else {
 			mesg.setText("Unknown Event Occured");
 		}
-		//readjust labels
+		//adjust
 		this.pack();
 	}
 
+
+//copy files
+public void copy()
+{
+	String buff = null;
+	BufferedReader in = null;
+			PrintWriter out = null;
+	try {
+		in = new BufferedReader(new FileReader(src.getText()));
+	} catch (FileNotFoundException e1) {}
+	
+	try {
+		out = new PrintWriter(new FileWriter(fileNameField.getText()));
+	} catch (IOException e1) {}
+	
+	boolean good = false;
+			
+			while(!good){
+				try {
+					buff = in.readLine();
+				} catch (IOException e1) {}
+				
+				if(buff != null) 
+					out.println(buff);
+				else
+					good = true;
+			}
+	try {
+		in.close();
+	} catch (IOException e1) {}
+	out.close();	
+	mesg.setText("Copied: "+ src.getText()+"  to: /"+ src.getText()+fileNameField.getText());
+	//call clear to reset our textbox and label
+	clear(); 
+}
+
+//clear text box and label
+public void clear()
+{
+	//clear
+	src.setText("");
+	fileNameField.setText("");
+	targetBase.setText("");
+}//end clear function
 }
