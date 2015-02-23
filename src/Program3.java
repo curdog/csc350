@@ -1,4 +1,4 @@
-//package src;
+package src;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -22,17 +22,26 @@ class Program3 extends Frame implements ActionListener, WindowListener {
 	
 	GridBagLayout gbl;
 	GridBagConstraints gbc;
-	Button ok;
-	Button srcSelect;
+	
+	Button okButt;
+	Button tarSelect;
+	
 	List fileListing;
 	
 	Label src;
+	Label srcLabel;
 	Label mesg;
 	Label targetBase;
+	Label fileLabel;
+	Label targetName;
 	
-	TextField targetName;
+	TextField fileNameField;
 	
 	File curDir;
+	File curTarget;
+	File desTarget;
+	
+	boolean targeted = false;
 	public static void main(String[] args) {
 		File defFile = null;
 		Program3 wind = new Program3(".");
@@ -43,7 +52,7 @@ class Program3 extends Frame implements ActionListener, WindowListener {
 		if(args.length >= 1){
 			defFile = new File(args[0]);
 		} else {
-			//prompt for the directory
+			//default to cur Dir
 			defFile= new File(".");
 			
 		}
@@ -56,13 +65,15 @@ class Program3 extends Frame implements ActionListener, WindowListener {
 	}
 	
 	public Program3( String path){
-		ok = new Button("ok");
-		srcSelect = new Button("sel");
+		okButt = new Button("ok");
+		tarSelect = new Button("sel");
 		fileListing = new List();
 		src=new Label("source");
 		mesg=new Label("message");
 		targetBase=new Label("base");
-		
+		fileNameField = new TextField();
+		fileLabel = new Label("File Name: ");
+		srcLabel = new Label("Source: ");
 		
 		curDir = new File( path );
 		gbl = new GridBagLayout();
@@ -78,17 +89,19 @@ class Program3 extends Frame implements ActionListener, WindowListener {
 		gbc.gridy = 0;
 		gbc.gridwidth =3;
 		gbc.ipady = 200;
+		gbc.ipadx = 400;
 		this.add( fileListing, gbc );
-		
+		fileListing.add("..");
 		for( int i = 0; i < curDir.listFiles().length; i++ ){
 			fileListing.add( curDir.listFiles()[i].getName() );
 		}
 		
-		gbc.ipady=0;
+		gbc.ipady = 0;
+		gbc.ipadx = 0;
 		gbc.gridx = 0;
 		gbc.gridy = 1;
 		gbc.gridwidth = 1;
-		this.add( srcSelect, gbc );
+		this.add( srcLabel, gbc );
 		
 		gbc.gridx = 1;
 		gbc.gridy = 1;
@@ -96,19 +109,38 @@ class Program3 extends Frame implements ActionListener, WindowListener {
 		
 		gbc.gridx = 0;
 		gbc.gridy = 2;
-		this.add( ok, gbc );
+		this.add( tarSelect, gbc );
 		
 		gbc.gridx = 1;
 		gbc.gridy = 2;
-		this.add(targetBase);
-		//this.pack();
+		this.add(targetBase, gbc);
+		
+		gbc.gridx = 0;
+		gbc.gridy =3;
+		this.add(fileLabel, gbc);
+		
+		gbc.gridx = 1;
+		gbc.gridy = 3;
+		this.add(fileNameField, gbc);
+		
+		gbc.gridx = 2; 
+		gbc.gridy = 3;
+		this.add(okButt, gbc);
+
+		
+		gbc.gridx = 0;
+		gbc.gridy = 4;
+		this.add( mesg, gbc);
+		
+		this.pack();
 		
 		//listen
-		srcSelect.addActionListener(this);
-		ok.addActionListener(this);
+		tarSelect.addActionListener(this);
+		okButt.addActionListener(this);
 		fileListing.addActionListener(this);
 	}
-/*	
+
+	/*	
 	public void display(String name){
 		String[] filenames;
 		int count;
@@ -204,9 +236,32 @@ class Program3 extends Frame implements ActionListener, WindowListener {
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent arg0) {
-		// TODO Auto-generated method stub
-		
+	public void actionPerformed(ActionEvent e) {
+		if (e.getSource().equals(okButt)){
+			
+		} else if ( e.getSource().equals(fileListing)){
+			if( fileListing.getSelectedItem().equals("..") ){
+				File t =  curDir.getAbsoluteFile().getParentFile();
+				if ( t == null ){
+					mesg.setText("Heirachy Exceeded");
+					return;
+				}
+				curDir = t;
+				fileListing.removeAll();
+				fileListing.add("..");
+				for( int i = 0; i < curDir.listFiles().length; i++ ){
+					
+					fileListing.add( curDir.listFiles()[i].getName() );
+				}
+			} else {
+				
+				
+			}
+		} else if (e.getSource().equals(tarSelect)){
+			
+		} else {
+			mesg.setText("Unknown Event Occuredd");
+		}
 	}
 
 	

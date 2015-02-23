@@ -67,7 +67,7 @@ class Program1 {
 		}
 		
 		//close input (not necessary for a RTE but gets rid of yellow squiggly lines)
-		input.close();
+		//input.close();
 	}
 
 }
