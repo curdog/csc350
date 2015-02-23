@@ -20,191 +20,168 @@ import java.io.IOException;
 //
 
 class Program3 extends Frame implements ActionListener, WindowListener {
-	
+
 	GridBagLayout gbl;
 	GridBagConstraints gbc;
-	
+
 	Button okButt;
 	Button tarSelect;
-	
+
 	List fileListing;
-	
+
 	Label src;
 	Label srcLabel;
 	Label mesg;
 	Label targetBase;
 	Label fileLabel;
 	Label targetName;
-	
+
 	TextField fileNameField;
-	
+
 	File curDir;
 	File curTarget;
 	File desTarget;
-	
+
 	boolean targeted = false;
-	
+
 	public static void main(String[] args) {
 		File defFile = null;
 		Program3 wind = new Program3(".");
-		
-		wind.setVisible( true);
-		
-		//file handling with arguments
-		if(args.length >= 1){
+
+		wind.setVisible(true);
+
+		// file handling with arguments
+		if (args.length >= 1) {
 			defFile = new File(args[0]);
 		} else {
-			//default to cur Dir
-			defFile= new File(".");
-			
+			// default to cur Dir
+			defFile = new File(".");
+
 		}
-		
-		if(defFile.isDirectory()){
-			new Program3( defFile.getAbsolutePath() );
+
+		if (defFile.isDirectory()) {
+			new Program3(defFile.getAbsolutePath());
 		} else {
 			new Program3(".");
 		}
 	}
-	
-	public Program3( String path){
+
+	public Program3(String path) {
 		okButt = new Button("ok");
 		tarSelect = new Button("sel");
 		fileListing = new List();
-		src=new Label("source");
-		mesg=new Label("message");
-		targetBase=new Label("base");
+		src = new Label("source");
+		mesg = new Label("");
+		targetBase = new Label("base");
 		fileNameField = new TextField();
 		fileLabel = new Label("File Name: ");
 		srcLabel = new Label("Source: ");
-		
-		curDir = new File( path );
+
+		curDir = new File(path);
 		gbl = new GridBagLayout();
-		
+
 		gbc = new GridBagConstraints();
-		
-		this.addWindowListener( this );
+
+		this.addWindowListener(this);
 		this.setResizable(true);
 		this.setLayout(gbl);
-		
+
 		fileListing = new List();
 		gbc.gridx = 0;
 		gbc.gridy = 0;
-		gbc.gridwidth =3;
+		gbc.gridwidth = 3;
 		gbc.ipady = 200;
 		gbc.ipadx = 400;
-		this.add( fileListing, gbc );
+		this.add(fileListing, gbc);
 		fileListing.add("..");
-		for( int i = 0; i < curDir.listFiles().length; i++ ){
-			fileListing.add( curDir.listFiles()[i].getName() );
+		for (int i = 0; i < curDir.listFiles().length; i++) {
+			fileListing.add(curDir.listFiles()[i].getName());
 		}
-		
+
 		gbc.ipady = 0;
 		gbc.ipadx = 0;
 		gbc.gridx = 0;
 		gbc.gridy = 1;
 		gbc.gridwidth = 1;
-		this.add( srcLabel, gbc );
-		
+		this.add(srcLabel, gbc);
+
 		gbc.gridx = 1;
 		gbc.gridy = 1;
-		this.add( src, gbc);
-		
+		gbc.gridwidth = gbc.REMAINDER;
+		this.add(src, gbc);
+
+		gbc.gridwidth = 1;
 		gbc.gridx = 0;
 		gbc.gridy = 2;
-		this.add( tarSelect, gbc );
-		
+		this.add(tarSelect, gbc);
+
 		gbc.gridx = 1;
 		gbc.gridy = 2;
+		gbc.gridwidth = gbc.REMAINDER;
 		this.add(targetBase, gbc);
-		
+
+		gbc.gridwidth = 1;
 		gbc.gridx = 0;
-		gbc.gridy =3;
+		gbc.gridy = 3;
 		this.add(fileLabel, gbc);
-		
+
 		gbc.gridx = 1;
 		gbc.gridy = 3;
+		gbc.ipadx = 100;
 		this.add(fileNameField, gbc);
-		
-		gbc.gridx = 2; 
+
+		gbc.ipadx = 0;
+		gbc.gridx = 2;
 		gbc.gridy = 3;
 		this.add(okButt, gbc);
 
-		
 		gbc.gridx = 0;
 		gbc.gridy = 4;
-		this.add( mesg, gbc);
-		
+		this.add(mesg, gbc);
+
 		this.pack();
-		
-		//listen
+
+		this.setTitle(curDir.getAbsolutePath());
+		// listen
 		tarSelect.addActionListener(this);
 		okButt.addActionListener(this);
 		fileListing.addActionListener(this);
 	}
 
-	/*	
-	public void display(String name){
-		String[] filenames;
-		int count;
-		
-		if(name != null){
-			//go up a directory 
-			if(name.equals ".."){
-				//get parent
-				curDir = new File(curDir.getParent());
-			}else{
-			//new file	
-			File f = new File(curDir, name);}
-			
-			//if new file is a directory?
-			if(f.isDirectory()){
-				curDirectory = new File(curDir, name)
-				//its a file
-			}else if(){
-					//is it a source?
-					//is it a target?
-			}
-		}else{
-			filenames = curDir.list();
-		}
-		
-		//filename = null?
-		if(filenames = null){
-			filenames = new String[];
-		}else{
-			//update title bar
-			//step through each entry of the filenames
-		}
-		
-		if(current item is a directory){
-			//get new string array of the directory list
-			//check each item child for a directory
-		}
-		
-		//
-		if(directory original get a "+"){
-			//after going through the entire list
-			list.removeAll();
-		}
-		
-		//if curDir parent is null
-		if(curDir.getParent != null){
-			list.add("..");
-			//copy filenames to this list
-		}
-}//display 
-*/
+	/*
+	 * public void display(String name){ String[] filenames; int count;
+	 * 
+	 * if(name != null){ //go up a directory if(name.equals ".."){ //get parent
+	 * curDir = new File(curDir.getParent()); }else{ //new file File f = new
+	 * File(curDir, name);}
+	 * 
+	 * //if new file is a directory? if(f.isDirectory()){ curDirectory = new
+	 * File(curDir, name) //its a file }else if(){ //is it a source? //is it a
+	 * target? } }else{ filenames = curDir.list(); }
+	 * 
+	 * //filename = null? if(filenames = null){ filenames = new String[]; }else{
+	 * //update title bar //step through each entry of the filenames }
+	 * 
+	 * if(current item is a directory){ //get new string array of the directory
+	 * list //check each item child for a directory }
+	 * 
+	 * // if(directory original get a "+"){ //after going through the entire
+	 * list list.removeAll(); }
+	 * 
+	 * //if curDir parent is null if(curDir.getParent != null){ list.add("..");
+	 * //copy filenames to this list } }//display
+	 */
 
 	@Override
 	public void windowActivated(WindowEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void windowClosed(WindowEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -216,70 +193,81 @@ class Program3 extends Frame implements ActionListener, WindowListener {
 	@Override
 	public void windowDeactivated(WindowEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void windowDeiconified(WindowEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void windowIconified(WindowEvent e) {
 		// TODO Auto-generated method stub
-		//this.setState(Frame.NORMAL);
+		// this.setState(Frame.NORMAL);
 	}
 
 	@Override
 	public void windowOpened(WindowEvent e) {
 		// TODO Auto-generated method stub
-		
+
+	}
+
+	public void listingAction() {
+		if (fileListing.getSelectedItem().equals("..")) {
+			File t = curDir.getAbsoluteFile().getParentFile();
+			if (t == null) {
+				mesg.setText("Top of Hiearchy");
+				return;
+			} else {
+				fileListing.add("..");
+			}
+			curDir = t;
+			fileListing.removeAll();
+
+			for (int i = 0; i < curDir.listFiles().length; i++) {
+
+				fileListing.add(curDir.listFiles()[i].getName());
+			}
+		} else {
+			File t = new File(curDir.getAbsolutePath()
+					+ fileListing.getSelectedItem());
+			if (t == null) {
+				mesg.setText("Bad Entry");
+			} else if (t.isDirectory()) {
+				curDir = t;
+
+				for (int i = 0; i < curDir.listFiles().length; i++) {
+
+					fileListing.add(curDir.listFiles()[i].getName());
+				}
+				this.setTitle(curDir.getAbsolutePath());
+			} else {
+
+				if (!targeted) {
+					src.setText(t.getAbsolutePath());
+				} else {
+					targetBase.setText(t.getAbsolutePath());
+				}
+			}
+		}
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		//clear messages
+		// clear messages
 		mesg.setText("");
-		
-		if (e.getSource().equals(okButt)){
-			
-		} else if ( e.getSource().equals(fileListing)){
-			if( fileListing.getSelectedItem().equals("..") ){
-				File t =  curDir.getAbsoluteFile().getParentFile();
-				if ( t == null ){
-					mesg.setText("Top of Hiearchy");
-					return;
-				} else {
-					fileListing.add("..");
-				}
-				curDir = t;
-				fileListing.removeAll();
-				
-				for( int i = 0; i < curDir.listFiles().length; i++ ){
-					
-					fileListing.add( curDir.listFiles()[i].getName() );
-				}
-			} else {
-				File t = new File( curDir.getAbsolutePath() + "/" +  fileListing.getSelectedItem() );
-				if( t == null){
-					
-				} else {
-					try{
-					if( !targeted ){
-						src.setText( t.getCanonicalPath() );
-					} else {
-						targetBase.setText( t.getCanonicalPath() );
-					}
-					} catch ( IOException ex ){
-						
-					}
-				}
-			}
-		} else if (e.getSource().equals(tarSelect)){
-			File t =  new File( curDir.getAbsolutePath() + "/" +  fileListing.getSelectedItem() );
-			if (t == null || t.isDirectory()){
-				//do something for no file
+
+		if (e.getSource().equals(okButt)) {
+
+		} else if (e.getSource().equals(fileListing)) {
+			listingAction();
+		} else if (e.getSource().equals(tarSelect)) {
+			File t = new File(curDir.getAbsolutePath()
+					+ fileListing.getSelectedItem());
+			if (t == null || t.isDirectory()) {
+				// do something for no file
 				mesg.setText("Not a valid target");
 			} else {
 				targeted = true;
@@ -287,7 +275,7 @@ class Program3 extends Frame implements ActionListener, WindowListener {
 		} else {
 			mesg.setText("Unknown Event Occuredd");
 		}
+		this.pack();
 	}
 
-	
 }
