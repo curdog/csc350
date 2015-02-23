@@ -12,6 +12,7 @@ import java.awt.Label;
 import java.awt.List;
 import java.awt.TextField;
 import java.io.File;
+import java.io.IOException;
 
 //assignment 3
 //csc java
@@ -42,6 +43,7 @@ class Program3 extends Frame implements ActionListener, WindowListener {
 	File desTarget;
 	
 	boolean targeted = false;
+	
 	public static void main(String[] args) {
 		File defFile = null;
 		Program3 wind = new Program3(".");
@@ -237,28 +239,51 @@ class Program3 extends Frame implements ActionListener, WindowListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		//clear messages
+		mesg.setText("");
+		
 		if (e.getSource().equals(okButt)){
 			
 		} else if ( e.getSource().equals(fileListing)){
 			if( fileListing.getSelectedItem().equals("..") ){
 				File t =  curDir.getAbsoluteFile().getParentFile();
 				if ( t == null ){
-					mesg.setText("Heirachy Exceeded");
+					mesg.setText("Top of Hiearchy");
 					return;
+				} else {
+					fileListing.add("..");
 				}
 				curDir = t;
 				fileListing.removeAll();
-				fileListing.add("..");
+				
 				for( int i = 0; i < curDir.listFiles().length; i++ ){
 					
 					fileListing.add( curDir.listFiles()[i].getName() );
 				}
 			} else {
-				
-				
+				File t = new File( curDir.getAbsolutePath() + "/" +  fileListing.getSelectedItem() );
+				if( t == null){
+					
+				} else {
+					try{
+					if( !targeted ){
+						src.setText( t.getCanonicalPath() );
+					} else {
+						targetBase.setText( t.getCanonicalPath() );
+					}
+					} catch ( IOException ex ){
+						
+					}
+				}
 			}
 		} else if (e.getSource().equals(tarSelect)){
-			
+			File t =  new File( curDir.getAbsolutePath() + "/" +  fileListing.getSelectedItem() );
+			if (t == null || t.isDirectory()){
+				//do something for no file
+				mesg.setText("Not a valid target");
+			} else {
+				targeted = true;
+			}
 		} else {
 			mesg.setText("Unknown Event Occuredd");
 		}
