@@ -1,5 +1,6 @@
 package src;
 
+//creates the GUI
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
@@ -20,15 +21,18 @@ import java.io.IOException;
 //
 
 class Program3 extends Frame implements ActionListener, WindowListener {
-
+	
+	//creates the grid lines
 	GridBagLayout gbl;
 	GridBagConstraints gbc;
-
+	
+	//creates buttons on GUI
 	Button okButt;
 	Button tarSelect;
 
 	List fileListing;
 
+	//creates labels on GUI
 	Label src;
 	Label srcLabel;
 	Label mesg;
@@ -37,7 +41,8 @@ class Program3 extends Frame implements ActionListener, WindowListener {
 	Label targetName;
 
 	TextField fileNameField;
-
+	
+	//creates files for file structure
 	File curDir;
 	File curTarget;
 	File desTarget;
@@ -65,8 +70,8 @@ class Program3 extends Frame implements ActionListener, WindowListener {
 			new Program3(".");
 		}
 	}
-
-	public Program3(String path) {
+	public Program3( String path){
+		//creates GUI options with their readings
 		okButt = new Button("ok");
 		tarSelect = new Button("sel");
 		fileListing = new List();
@@ -77,7 +82,8 @@ class Program3 extends Frame implements ActionListener, WindowListener {
 		fileLabel = new Label("File Name: ");
 		srcLabel = new Label("Source: ");
 
-		curDir = new File(path);
+		//sets the current directory
+		curDir = new File( path );
 		gbl = new GridBagLayout();
 
 		gbc = new GridBagConstraints();
