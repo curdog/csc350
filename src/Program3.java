@@ -227,13 +227,16 @@ class Program3 extends Frame implements ActionListener, WindowListener {
 				mesg.setText("Top of Hiearchy");
 				return;
 			} else {
+				fileListing.removeAll();
 				fileListing.add("..");
 			}
-			curDir = t;
-			fileListing.removeAll();
+			
+			
+			
+			//curDir = t.getAbsoluteFile();
+			
 
 			for (int i = 0; i < curDir.listFiles().length; i++) {
-
 				fileListing.add(curDir.listFiles()[i].getName());
 			}
 		} else {
@@ -266,6 +269,7 @@ class Program3 extends Frame implements ActionListener, WindowListener {
 		mesg.setText("");
 
 		if (e.getSource().equals(okButt)) {
+			//do move file here
 
 		} else if (e.getSource().equals(fileListing)) {
 			listingAction();
@@ -279,8 +283,9 @@ class Program3 extends Frame implements ActionListener, WindowListener {
 				targeted = true;
 			}
 		} else {
-			mesg.setText("Unknown Event Occuredd");
+			mesg.setText("Unknown Event Occured");
 		}
+		//readjust labels
 		this.pack();
 	}
 
