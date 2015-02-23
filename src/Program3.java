@@ -22,6 +22,8 @@ import java.io.IOException;
 
 class Program3 extends Frame implements ActionListener, WindowListener {
 	
+	private static final long serialVersionUID = 8881457993993365761L;
+	
 	//creates the grid lines
 	GridBagLayout gbl;
 	GridBagConstraints gbc;
@@ -61,7 +63,6 @@ class Program3 extends Frame implements ActionListener, WindowListener {
 		} else {
 			// default to cur Dir
 			defFile = new File( ".").getParentFile();
-
 		}
 
 		if (defFile.isDirectory()) {
@@ -180,44 +181,31 @@ class Program3 extends Frame implements ActionListener, WindowListener {
 
 	@Override
 	public void windowActivated(WindowEvent e) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void windowClosed(WindowEvent e) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void windowClosing(WindowEvent e) {
-		// TODO Auto-generated method stub
 		System.exit(0);
 	}
 
 	@Override
 	public void windowDeactivated(WindowEvent e) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void windowDeiconified(WindowEvent e) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void windowIconified(WindowEvent e) {
-		// TODO Auto-generated method stub
-		// this.setState(Frame.NORMAL);
 	}
 
 	@Override
 	public void windowOpened(WindowEvent e) {
-		// TODO Auto-generated method stub
-
 	}
 
 	public void listingAction() {
@@ -252,7 +240,7 @@ class Program3 extends Frame implements ActionListener, WindowListener {
 				}
 				this.setTitle(curDir.getAbsolutePath());
 			} else {
-
+				//target toggle
 				if (!targeted) {
 					src.setText(t.getAbsolutePath());
 				} else {
@@ -269,6 +257,8 @@ class Program3 extends Frame implements ActionListener, WindowListener {
 
 		if (e.getSource().equals(okButt)) {
 			//do move file here
+			
+			targeted = false;
 
 		} else if (e.getSource().equals(fileListing)) {
 			listingAction();
@@ -276,7 +266,7 @@ class Program3 extends Frame implements ActionListener, WindowListener {
 			File t = new File(curDir.getAbsolutePath()
 					+ fileListing.getSelectedItem());
 			if (t == null || t.isDirectory()) {
-				// do something for no file
+				// do something for no file/directory
 				mesg.setText("Not a valid target");
 			} else {
 				targeted = true;
