@@ -60,14 +60,14 @@ class Program3 extends Frame implements ActionListener, WindowListener {
 			defFile = new File(args[0]);
 		} else {
 			// default to cur Dir
-			defFile = new File(".");
+			defFile = new File( ".").getParentFile();
 
 		}
 
 		if (defFile.isDirectory()) {
 			new Program3(defFile.getAbsolutePath());
 		} else {
-			new Program3(".");
+			new Program3(System.getenv("user.dir"));
 		}
 	}
 	public Program3( String path){
@@ -223,19 +223,18 @@ class Program3 extends Frame implements ActionListener, WindowListener {
 	public void listingAction() {
 		if (fileListing.getSelectedItem().equals("..")) {
 			File t = curDir.getAbsoluteFile().getParentFile();
+			
 			if (t == null) {
 				mesg.setText("Top of Hiearchy");
 				return;
 			} else {
+				System.out.println( t.getAbsolutePath());
 				fileListing.removeAll();
 				fileListing.add("..");
 			}
 			
+			curDir = t.getAbsoluteFile();
 			
-			
-			//curDir = t.getAbsoluteFile();
-			
-
 			for (int i = 0; i < curDir.listFiles().length; i++) {
 				fileListing.add(curDir.listFiles()[i].getName());
 			}
