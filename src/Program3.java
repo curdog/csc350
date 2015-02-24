@@ -76,6 +76,7 @@ class Program3 extends Frame implements ActionListener, WindowListener {
 			new Program3(System.getenv("user.dir"));
 		}
 	}
+	
 	public Program3( String path){
 		//creates GUI options with their readings
 		okButt = new Button("OK");
@@ -253,6 +254,17 @@ class Program3 extends Frame implements ActionListener, WindowListener {
 				}
 			}
 		}
+//		String[] files = curDir.listFiles();
+//		if(files == null) 									// if no files in the directory
+//			files = new String[1];		
+//		else { 	
+//			this.setTitle(curDir.getAbsolutePath()); 					// set the title
+//					
+//			for(int i = 0; i < files.length; i++) {					//look for a directory and add "+"
+//				if(hasDirectory(files[i]))
+//					files[i]+="+";
+//			}
+//		}	
 	}
 
 	@Override
@@ -263,9 +275,11 @@ class Program3 extends Frame implements ActionListener, WindowListener {
 		if (e.getSource().equals(okButt)) {
 			//do move file here
 			//set label to targetBase
-			targetBase.setText(curDir.getAbsolutePath()+fileListing.getSelectedItem());
+		targetBase.setText(curDir.getAbsolutePath()+fileListing.getSelectedItem());
+			//will copy if conditions are met
+		if(checkCopy())
 			//copy file
-			copy();
+				copy();
 			targeted = false;
 
 		} else if (e.getSource().equals(fileListing)) {
@@ -322,10 +336,47 @@ public void copy()
 		in.close();
 	} catch (IOException e1) {}
 	out.close();	
-	mesg.setText("Copied: "+ src.getText()+"  to: /"+ src.getText()+fileNameField.getText());
+	mesg.setText("Copied: "+ src.getText()+"  to: /"+ targetBase.getText()+fileNameField.getText());
 	//call clear to reset our textbox and label
 	clear(); 
 }
+
+public boolean checkCopy()		//checks to make sure it is good to copy
+{
+	if(src.getText().length()>0) {
+		if(targeted) {
+			if(fileNameField.getText().length()>0) {
+				File file = new File(fileNameField.getText());
+				if(file.exists())
+					return true;
+				else
+					mesg.setText("'"+fileNameField.getText()+"' was not found in current directory.");
+			}
+			else
+				mesg.setText("Select target file");
+		}
+		else
+			mesg.setText("Select target Directory.");
+	}
+	else
+		mesg.setText("Select source file.");
+	return false;
+}
+
+//public boolean hasDirectory(String parent)      // to check for directory for "+"
+//{
+//	File parentFile = new File(curDir, parent);
+//	if(parentFile.isDirectory()) {
+//		String[] directory = parentFile.list();
+//		for(String child : directory) {	
+//				File childFile = new File(parentFile,child);
+//				if(childFile.isDirectory()) 
+//					return true;	
+//		}
+//	}
+//	return false;
+//}
+
 
 //clear text box and label
 public void clear()
