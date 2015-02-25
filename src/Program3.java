@@ -355,19 +355,16 @@ class Program3 extends Frame implements ActionListener, WindowListener {
 		return false;
 	}
 
-	 public boolean hasDirectory(String parent) // to check for directory for "+"
-	 {
-	 File parentFile = new File(curDir, parent);
-	 if(parentFile.isDirectory()) {
-	 String[] directory = parentFile.list(); 
-	 for(String child : directory) {
-	 File childFile = new File(parentFile,child);
-	 if(childFile.isDirectory())
-		 return true;
-	 }
-	 }
-	 return false;
- }
+	public boolean isDirectory(String parent) // to check for directory for "+"
+	{
+		File parentFile = new File(curDir, parent);
+		
+		if (parentFile.isDirectory()) {
+			   return true;
+		}
+		
+		return false;
+	}
 
 	// clear text box and label
 	public void clear() {
