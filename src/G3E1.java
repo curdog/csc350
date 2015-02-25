@@ -67,11 +67,14 @@ public class G3E1 {
 		BufferedReader fin = null;
 		//check not same file
 		if(filenamei.equals(filenameo)){
+			//error, same in/out file
 			System.err.println("You can't have the in and out files be the same");
+			//exit
 			System.exit(3);
 		}
 		
 		try {
+			//declarations
 			File input = new File(filenamei);
 			File output = new File(filenameo);
 			fin = new BufferedReader(new FileReader(input));
@@ -86,6 +89,7 @@ public class G3E1 {
 						//file does not exist, error, exit
 						System.out.println("This file does not exist\n");
 						System.out.println("Good-bye");
+						//exit
 						System.exit(1);
 				}//end if
 					
@@ -99,13 +103,16 @@ public class G3E1 {
 						//outfile does not exist, exit
 						System.out.println("The out file does not exist\n");
 						System.out.println("Good-bye");
+						//exit
 						System.exit(1);
 					}//end if
 					
 		} catch (IOException e) {
 
+			//error, file not found
 			System.err.println("File Not Found");
 			System.err.println(e.toString());
+			//exit
 			System.exit(2);
 		}
 		//declarations
