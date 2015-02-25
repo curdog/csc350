@@ -160,6 +160,7 @@ class Program3 extends Frame implements ActionListener, WindowListener {
 		tarSelect.addActionListener(this);
 		okButt.addActionListener(this);
 		fileListing.addActionListener(this);
+		fileNameField.addActionListener(this);
 	}
 
 	@Override
@@ -261,7 +262,7 @@ class Program3 extends Frame implements ActionListener, WindowListener {
 		// clear messages
 		mesg.setText("");
 
-		if (e.getSource().equals(okButt)) {
+		if (e.getSource().equals(okButt) || e.getSource().equals(fileNameField)) {
 			// do move file here
 			// set label to targetBase
 			targetBase.setText(curDir.getAbsolutePath()
