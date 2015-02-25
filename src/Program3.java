@@ -222,7 +222,7 @@ class Program3 extends Frame implements ActionListener, WindowListener {
 				fileListing.add("..");
 
 				for (int i = 0; i < curDir.listFiles().length; i++) {
-
+					
 					fileListing.add(curDir.listFiles()[i].getName());
 				}
 
@@ -239,18 +239,11 @@ class Program3 extends Frame implements ActionListener, WindowListener {
 				}
 			}
 		}
-		// String[] files = curDir.listFiles();
-		// if(files == null) // if no files in the directory
-		// files = new String[1];
-		// else {
-		// this.setTitle(curDir.getAbsolutePath()); // set the title
-		//
-		// for(int i = 0; i < files.length; i++) { //look for a directory and
-		// add "+"
-		// if(hasDirectory(files[i]))
-		// files[i]+="+";
-		// }
-		// }
+		
+	}
+	
+	public void addListIems(){
+		
 	}
 
 	@Override
@@ -292,6 +285,8 @@ class Program3 extends Frame implements ActionListener, WindowListener {
 			mesg.setText("Unknown Event Occured");
 		}
 		// adjust
+		mesg.setSize(200, mesg.getHeight());
+		this.pack();
 
 	}
 
@@ -306,9 +301,18 @@ class Program3 extends Frame implements ActionListener, WindowListener {
 		}
 
 		try {
-			out = new PrintWriter(new FileWriter(targetBase.getText() + "/"
-					+ fileNameField.getText()));
+			File t = new File( targetBase.getText() + "/"
+					+ fileNameField.getText());
+			System.out.println(fileNameField.getText());
+			
+			if ( !t.createNewFile() ){
+				mesg.setText("can't create file");
+			}
+			
+			out = new PrintWriter(new FileWriter( t ));
+			
 		} catch (IOException e1) {
+			System.out.println( e1.toString() );
 		}
 
 		boolean good = false;
