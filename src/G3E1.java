@@ -72,8 +72,34 @@ public class G3E1 {
 		}
 		
 		try {
-			fin = new BufferedReader(new FileReader(new File(filenamei)));
-			fout = new BufferedWriter(new FileWriter(new File(filenameo)));
+			fin = new BufferedReader(new FileReader(input));
+			fout = new BufferedWriter(new FileWriter(output));
+			
+			//check if the file exists
+				if(input.exists())
+				{
+					//file does exist
+					System.out.println("This file does exists");
+				}else{
+						//file does not exist, error, exit
+						System.out.println("This file does not exists");
+						System.out.println("Good-bye");
+						System.exit(1);
+				}//end if
+					
+				//check if output exists
+					if(output.exists())
+					{
+						//file exists, overwrite
+						System.out.println("The out file exists\n");
+						System.out.println("Overwriting\n");
+					}else{
+						//outfile does not exist, exit
+						System.out.println("The out file does not exit");
+						System.out.println("Good-bye");
+						System.exit(1);
+					}//end if
+					
 		} catch (IOException e) {
 
 			System.err.println("File Not Found");
