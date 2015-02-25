@@ -205,7 +205,9 @@ class Program3 extends Frame implements ActionListener, WindowListener {
 			}
 
 			curDir = t.getAbsoluteFile();
-
+			
+			this.setTitle(curDir.getAbsolutePath());
+			
 			for (int i = 0; i < curDir.listFiles().length; i++) {
 				fileListing.add(curDir.listFiles()[i].getName());
 			}
