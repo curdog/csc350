@@ -301,22 +301,29 @@ class Program3 extends Frame implements ActionListener, WindowListener {
 		}
 
 		try {
-			File t = new File( targetBase.getText() + "/"
-					+ fileNameField.getText());
-			System.out.println(fileNameField.getText());
+			File t = new File( curDir.getAbsolutePath() + "/" + fileNameField.getText());
+			System.out.println(targetBase.getText());
 			
-			if ( !t.createNewFile() ){
+			System.out.println(t.getAbsolutePath());
+			
+			//System.out.println(fileNameField.getText());
+			
+			/*if ( !t.createNewFile() ){
 				mesg.setText("can't create file");
 			}
-			
-			out = new PrintWriter(new FileWriter( t ));
+			*/
+			out = new PrintWriter( t.getAbsolutePath() );
 			
 		} catch (IOException e1) {
 			System.out.println( e1.toString() );
 		}
 
 		boolean good = false;
-
+		if(out == null)
+		{
+			System.out.println("Hello");
+		}
+		
 		while (!good) {
 			try {
 				buff = in.readLine();
