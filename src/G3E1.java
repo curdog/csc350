@@ -1,4 +1,4 @@
-package src;
+//package src;
 
 /******************************
  * Take Home Group Exam 1
@@ -72,17 +72,19 @@ public class G3E1 {
 		}
 		
 		try {
+			File input = new File(filenamei);
+			File output = new File(filenameo);
 			fin = new BufferedReader(new FileReader(input));
 			fout = new BufferedWriter(new FileWriter(output));
 			
-			//check if the file exists
+				//check if the file exists
 				if(input.exists())
 				{
 					//file does exist
-					System.out.println("This file does exists");
+					System.out.println("\nThis file does exist\n");
 				}else{
 						//file does not exist, error, exit
-						System.out.println("This file does not exists");
+						System.out.println("This file does not exist\n");
 						System.out.println("Good-bye");
 						System.exit(1);
 				}//end if
@@ -91,11 +93,11 @@ public class G3E1 {
 					if(output.exists())
 					{
 						//file exists, overwrite
-						System.out.println("The out file exists\n");
-						System.out.println("Overwriting\n");
+						System.out.println("The out file exist\n");
+						System.out.println("OVERWRITING.....\n");
 					}else{
 						//outfile does not exist, exit
-						System.out.println("The out file does not exit");
+						System.out.println("The out file does not exist\n");
 						System.out.println("Good-bye");
 						System.exit(1);
 					}//end if
