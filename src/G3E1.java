@@ -1,4 +1,4 @@
-//package src;
+package src;
 
 /******************************
  * Take Home Group Exam 1
@@ -90,7 +90,7 @@ public class G3E1 {
 						System.out.println("This file does not exist\n");
 						System.out.println("Good-bye");
 						//exit
-						System.exit(1);
+						System.exit(2);
 				}//end if
 					
 				//check if output exists
@@ -102,9 +102,8 @@ public class G3E1 {
 					}else{
 						//outfile does not exist, exit
 						System.out.println("The out file does not exist\n");
-						System.out.println("Good-bye");
-						//exit
-						System.exit(1);
+						System.out.println("Creating");
+						
 					}//end if
 					
 		} catch (IOException e) {
