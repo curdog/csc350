@@ -359,9 +359,9 @@ class Program3 extends Frame implements ActionListener, WindowListener {
 		return false;
 	}
 
-	public boolean isDirectory(String parent) // to check for directory for "+"
+	public boolean isDirectory(String child) // to check for directory for "+"
 	{
-		File parentFile = new File(curDir, parent);
+		File parentFile = new File(curDir, child);
 		
 		if (parentFile.isDirectory()) {
 			   return true;
