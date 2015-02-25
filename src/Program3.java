@@ -213,11 +213,15 @@ class Program3 extends Frame implements ActionListener, WindowListener {
 			this.setTitle(curDir.getAbsolutePath());
 			
 			for (int i = 0; i < curDir.listFiles().length; i++) {
-				fileListing.add(curDir.listFiles()[i].getName());
+				if( isDirectory( curDir.listFiles()[i].getName() )){
+					fileListing.add(curDir.listFiles()[i].getName() + "+");
+				} else {
+					fileListing.add(curDir.listFiles()[i].getName());
+				}
 			}
 		} else {
 			File t = new File(curDir.getAbsolutePath() + "/"
-					+ fileListing.getSelectedItem());
+					+ fileListing.getSelectedItem().replace("+", ""));
 			if (t == null) {
 				mesg.setText("Bad Entry");
 			} else if (t.isDirectory()) {
@@ -227,7 +231,11 @@ class Program3 extends Frame implements ActionListener, WindowListener {
 
 				for (int i = 0; i < curDir.listFiles().length; i++) {
 					
-					fileListing.add(curDir.listFiles()[i].getName());
+					if( isDirectory( curDir.listFiles()[i].getName() )){
+						fileListing.add(curDir.listFiles()[i].getName() + "+");
+					} else {
+						fileListing.add(curDir.listFiles()[i].getName());
+					}
 				}
 
 				if (targeted) {
@@ -246,9 +254,7 @@ class Program3 extends Frame implements ActionListener, WindowListener {
 		
 	}
 	
-	public void addListIems(){
-		
-	}
+	
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -274,15 +280,11 @@ class Program3 extends Frame implements ActionListener, WindowListener {
 					+ fileListing.getSelectedItem());
 			// current directory is placed in the target label
 			// if target button is selected
-			// src.setText(curDir.getAbsolutePath() +
-			// fileListing.getSelectedItem());
 
 			if (t == null || t.isDirectory()) {
 				// do something for no file/directory
 				mesg.setText("Not a valid target");
 			} else {
-				// src.setText(curDir.getAbsolutePath() +
-				// fileListing.getSelectedItem());
 				targeted = true;
 			}
 		} else {
@@ -306,16 +308,6 @@ class Program3 extends Frame implements ActionListener, WindowListener {
 
 		try {
 			File t = new File( curDir.getAbsolutePath() + "/" + fileNameField.getText());
-			System.out.println(targetBase.getText());
-			
-			System.out.println(t.getAbsolutePath());
-			
-			//System.out.println(fileNameField.getText());
-			
-			/*if ( !t.createNewFile() ){
-				mesg.setText("can't create file");
-			}
-			*/
 			out = new PrintWriter( t.getAbsolutePath() );
 			
 		} catch (IOException e1) {
