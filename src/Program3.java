@@ -26,20 +26,20 @@ import java.io.PrintWriter;
 //MIL1484, FIE4795, CUR3040
 
 class Program3 extends Frame implements ActionListener, WindowListener {
-	
+
 	private static final long serialVersionUID = 8881457993993365761L;
-	
-	//creates the grid lines
+
+	// creates the grid lines
 	GridBagLayout gbl;
 	GridBagConstraints gbc;
-	
-	//creates buttons on GUI
+
+	// creates buttons on GUI
 	Button okButt;
 	Button tarSelect;
 
 	List fileListing;
 
-	//creates labels on GUI
+	// creates labels on GUI
 	Label src;
 	Label srcLabel;
 	Label mesg;
@@ -48,8 +48,8 @@ class Program3 extends Frame implements ActionListener, WindowListener {
 	Label targetName;
 
 	TextField fileNameField;
-	
-	//creates files for file structure
+
+	// creates files for file structure
 	File curDir;
 	File curTarget;
 	File desTarget;
@@ -67,7 +67,7 @@ class Program3 extends Frame implements ActionListener, WindowListener {
 			defFile = new File(args[0]);
 		} else {
 			// default to cur Dir
-			defFile = new File( ".").getParentFile();
+			defFile = new File(".").getParentFile();
 		}
 
 		if (defFile.isDirectory()) {
@@ -76,9 +76,9 @@ class Program3 extends Frame implements ActionListener, WindowListener {
 			new Program3(System.getenv("user.dir"));
 		}
 	}
-	
-	public Program3( String path){
-		//creates GUI options with their readings
+
+	public Program3(String path) {
+		// creates GUI options with their readings
 		okButt = new Button("OK");
 		tarSelect = new Button("TARGET");
 		fileListing = new List();
@@ -89,8 +89,8 @@ class Program3 extends Frame implements ActionListener, WindowListener {
 		fileLabel = new Label("File Name: ");
 		srcLabel = new Label("Source: ");
 
-		//sets the current directory
-		curDir = new File( path );
+		// sets the current directory
+		curDir = new File(path);
 		gbl = new GridBagLayout();
 
 		gbc = new GridBagConstraints();
@@ -107,6 +107,7 @@ class Program3 extends Frame implements ActionListener, WindowListener {
 		gbc.ipadx = 400;
 		this.add(fileListing, gbc);
 		fileListing.add("..");
+		// fileListing.
 		for (int i = 0; i < curDir.listFiles().length; i++) {
 			fileListing.add(curDir.listFiles()[i].getName());
 		}
@@ -161,30 +162,6 @@ class Program3 extends Frame implements ActionListener, WindowListener {
 		fileListing.addActionListener(this);
 	}
 
-	/*
-	 * public void display(String name){ String[] filenames; int count;
-	 * 
-	 * if(name != null){ //go up a directory if(name.equals ".."){ //get parent
-	 * curDir = new File(curDir.getParent()); }else{ //new file File f = new
-	 * File(curDir, name);}
-	 * 
-	 * //if new file is a directory? if(f.isDirectory()){ curDirectory = new
-	 * File(curDir, name) //its a file }else if(){ //is it a source? //is it a
-	 * target? } }else{ filenames = curDir.list(); }
-	 * 
-	 * //filename = null? if(filenames = null){ filenames = new String[]; }else{
-	 * //update title bar //step through each entry of the filenames }
-	 * 
-	 * if(current item is a directory){ //get new string array of the directory
-	 * list //check each item child for a directory }
-	 * 
-	 * // if(directory original get a "+"){ //after going through the entire
-	 * list list.removeAll(); }
-	 * 
-	 * //if curDir parent is null if(curDir.getParent != null){ list.add("..");
-	 * //copy filenames to this list } }//display
-	 */
-
 	@Override
 	public void windowActivated(WindowEvent e) {
 	}
@@ -217,54 +194,61 @@ class Program3 extends Frame implements ActionListener, WindowListener {
 	public void listingAction() {
 		if (fileListing.getSelectedItem().equals("..")) {
 			File t = curDir.getAbsoluteFile().getParentFile();
-			
+
 			if (t == null) {
 				mesg.setText("Top of Hiearchy");
 				return;
 			} else {
-				System.out.println( t.getAbsolutePath());
+				System.out.println(t.getAbsolutePath());
 				fileListing.removeAll();
 				fileListing.add("..");
 			}
-			
+
 			curDir = t.getAbsoluteFile();
-			
+
 			for (int i = 0; i < curDir.listFiles().length; i++) {
 				fileListing.add(curDir.listFiles()[i].getName());
 			}
 		} else {
-			File t = new File(curDir.getAbsolutePath()
+			File t = new File(curDir.getAbsolutePath() + "/"
 					+ fileListing.getSelectedItem());
 			if (t == null) {
 				mesg.setText("Bad Entry");
 			} else if (t.isDirectory()) {
 				curDir = t;
+				fileListing.removeAll();
+				fileListing.add("..");
 
 				for (int i = 0; i < curDir.listFiles().length; i++) {
 
 					fileListing.add(curDir.listFiles()[i].getName());
 				}
+
+				if (targeted) {
+					targetBase.setText(t.getAbsolutePath());
+				}
+
 				this.setTitle(curDir.getAbsolutePath());
+				this.validate();
 			} else {
-				//target toggle
+				// target toggle
 				if (!targeted) {
 					src.setText(t.getAbsolutePath());
-				} else {
-					targetBase.setText(t.getAbsolutePath());
 				}
 			}
 		}
-//		String[] files = curDir.listFiles();
-//		if(files == null) 									// if no files in the directory
-//			files = new String[1];		
-//		else { 	
-//			this.setTitle(curDir.getAbsolutePath()); 					// set the title
-//					
-//			for(int i = 0; i < files.length; i++) {					//look for a directory and add "+"
-//				if(hasDirectory(files[i]))
-//					files[i]+="+";
-//			}
-//		}	
+		// String[] files = curDir.listFiles();
+		// if(files == null) // if no files in the directory
+		// files = new String[1];
+		// else {
+		// this.setTitle(curDir.getAbsolutePath()); // set the title
+		//
+		// for(int i = 0; i < files.length; i++) { //look for a directory and
+		// add "+"
+		// if(hasDirectory(files[i]))
+		// files[i]+="+";
+		// }
+		// }
 	}
 
 	@Override
@@ -273,13 +257,15 @@ class Program3 extends Frame implements ActionListener, WindowListener {
 		mesg.setText("");
 
 		if (e.getSource().equals(okButt)) {
-			//do move file here
-			//set label to targetBase
-		targetBase.setText(curDir.getAbsolutePath()+fileListing.getSelectedItem());
-			//will copy if conditions are met
-		if(checkCopy())
-			//copy file
+			// do move file here
+			// set label to targetBase
+			targetBase.setText(curDir.getAbsolutePath()
+					+ fileListing.getSelectedItem());
+			// will copy if conditions are met
+			if (checkCopy())
+				// copy file
 				copy();
+
 			targeted = false;
 
 		} else if (e.getSource().equals(fileListing)) {
@@ -287,103 +273,105 @@ class Program3 extends Frame implements ActionListener, WindowListener {
 		} else if (e.getSource().equals(tarSelect)) {
 			File t = new File(curDir.getAbsolutePath()
 					+ fileListing.getSelectedItem());
-			//current directory is placed in the target label
-			//if target button is selected
-			src.setText(curDir.getAbsolutePath() + fileListing.getSelectedItem());
-			 
+			// current directory is placed in the target label
+			// if target button is selected
+			// src.setText(curDir.getAbsolutePath() +
+			// fileListing.getSelectedItem());
+
 			if (t == null || t.isDirectory()) {
 				// do something for no file/directory
 				mesg.setText("Not a valid target");
 			} else {
-				src.setText(curDir.getAbsolutePath() + fileListing.getSelectedItem());
+				// src.setText(curDir.getAbsolutePath() +
+				// fileListing.getSelectedItem());
 				targeted = true;
 			}
 		} else {
 			mesg.setText("Unknown Event Occured");
 		}
-		//adjust
-		this.pack();
+		// adjust
+
 	}
 
-
-//copy files
-public void copy()
-{
-	String buff = null;
-	BufferedReader in = null;
-			PrintWriter out = null;
-	try {
-		in = new BufferedReader(new FileReader(src.getText()));
-	} catch (FileNotFoundException e1) {}
-	
-	try {
-		out = new PrintWriter(new FileWriter(fileNameField.getText()));
-	} catch (IOException e1) {}
-	
-	boolean good = false;
-			
-			while(!good){
-				try {
-					buff = in.readLine();
-				} catch (IOException e1) {}
-				
-				if(buff != null) 
-					out.println(buff);
-				else
-					good = true;
-			}
-	try {
-		in.close();
-	} catch (IOException e1) {}
-	out.close();	
-	mesg.setText("Copied: "+ src.getText()+"  to: /"+ targetBase.getText()+fileNameField.getText());
-	//call clear to reset our textbox and label
-	clear(); 
-}
-
-public boolean checkCopy()		//checks to make sure it is good to copy
-{
-	if(src.getText().length()>0) {
-		if(targeted) {
-			if(fileNameField.getText().length()>0) {
-				File file = new File(fileNameField.getText());
-				if(file.exists())
-					return true;
-				else
-					mesg.setText("'"+fileNameField.getText()+"' was not found in current directory.");
-			}
-			else
-				mesg.setText("Select target file");
+	// copy files
+	public void copy() {
+		String buff = null;
+		BufferedReader in = null;
+		PrintWriter out = null;
+		try {
+			in = new BufferedReader(new FileReader(src.getText()));
+		} catch (FileNotFoundException e1) {
 		}
-		else
-			mesg.setText("Select target Directory.");
+
+		try {
+			out = new PrintWriter(new FileWriter(targetBase.getText() + "/"
+					+ fileNameField.getText()));
+		} catch (IOException e1) {
+		}
+
+		boolean good = false;
+
+		while (!good) {
+			try {
+				buff = in.readLine();
+			} catch (IOException e1) {
+			}
+
+			if (buff != null)
+				out.println(buff);
+			else
+				good = true;
+		}
+		try {
+			in.close();
+		} catch (IOException e1) {
+		}
+		// out.close();
+		mesg.setText("Copied: " + src.getText() + "  to: /"
+				+ targetBase.getText() + "/" + fileNameField.getText());
+		// call clear to reset our textbox and label
+		clear();
 	}
-	else
-		mesg.setText("Select source file.");
-	return false;
-}
 
-//public boolean hasDirectory(String parent)      // to check for directory for "+"
-//{
-//	File parentFile = new File(curDir, parent);
-//	if(parentFile.isDirectory()) {
-//		String[] directory = parentFile.list();
-//		for(String child : directory) {	
-//				File childFile = new File(parentFile,child);
-//				if(childFile.isDirectory()) 
-//					return true;	
-//		}
-//	}
-//	return false;
-//}
+	public boolean checkCopy() // checks to make sure it is good to copy
+	{
+		if (src.getText().length() > 0) {
+			if (targeted) {
+				if (fileNameField.getText().length() > 0) {
+					File file = new File(src.getText());
+					if (file.exists())
+						return true;
+					else
+						mesg.setText("'" + src.getText()
+								+ "' was not found in current directory.");
+				} else
+					mesg.setText("Select target file");
+			} else
+				mesg.setText("Select target Directory.");
+		} else
+			mesg.setText("Select source file.");
+		return false;
+	}
 
+	 public boolean hasDirectory(String parent) // to check for directory for "+"
+	 {
+	 File parentFile = new File(curDir, parent);
+	 if(parentFile.isDirectory()) {
+	 String[] directory = parentFile.list(); 
+	 for(String child : directory) {
+	 File childFile = new File(parentFile,child);
+	 if(childFile.isDirectory())
+		 return true;
+	 }
+	 }
+	 return false;
+ }
 
-//clear text box and label
-public void clear()
-{
-	//clear
-	src.setText("");
-	fileNameField.setText("");
-	targetBase.setText("");
-}//end clear function
+	// clear text box and label
+	public void clear() {
+		// clear
+		src.setText("Source");
+		fileNameField.setText("");
+		targetBase.setText("Destination");
+	}// end clear function
 }
