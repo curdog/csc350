@@ -1,3 +1,5 @@
+package src;
+
 //Enter file contents hereimport java.applet.Applet;
 import java.applet.Applet;
 import java.awt.Button;
@@ -150,6 +152,7 @@ public Bounce( ) {
 	speed.setLocation(10, HEIGHT);
 	speed.addAdjustmentListener(this);
 	add(speed);
+	
 	//Obj.Start;
 }
 
@@ -162,25 +165,10 @@ public void init(){
 }
 
 public void start(){}
+
 public void stop(){}
+
 public void run(){}
-
-
-public void windowActivated(WindowEvent e) {}
-
-public void windowClosed(WindowEvent e) {}
-
-public void windowClosing(WindowEvent e) {
-	System.exit(0);
-}
-
-public void windowDeactivated(WindowEvent e) {}
-
-public void windowDeiconified(WindowEvent e) {}
-
-public void windowIconified(WindowEvent e) {}
-
-public void windowOpened(WindowEvent e) {}
 
 public void actionPerformed(ActionEvent arg0) {}
 
@@ -246,15 +234,15 @@ class ObjBall{
 	
 	//gets and sets
 	public int getX(){
-		
+		return x -radius;
 	}
 	
 	public int getY(){
-		
-	}
+		return  y - radius;
+	}	
 	
 	public void setRadius( int r) {
-		
+		radius = r;
 	}
 	public Rectangle getBoundingRectange(){
 		
