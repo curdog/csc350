@@ -41,6 +41,10 @@ public class Bounce extends Applet implements ActionListener, AdjustmentListener
 	
 	//scroll bar
 	Scrollbar speed, size;
+	
+	//scroll bar boundaries
+	int MAXIMUM = 100;
+	int MINIMUM = 0;
 
 public static void main(String[] args) {
 	Bounce wind = new Bounce(path);
@@ -166,7 +170,27 @@ public void windowOpened(WindowEvent e) {}
 
 public void actionPerformed(ActionEvent arg0) {}
 
-public void adjustmentValueChanged(AdjustmentEvent arg0) {}
+public void adjustmentValueChanged(AdjustmentEvent arg0) {
+	int v;
+	
+	Scrollbar sb = (Scrollbar) e.getSource();
+	
+	//speed scroll bar
+	if(sb == speed)
+	{
+		//get value
+		v = sb.getValue();
+		if(v > MAXIMUM)
+		{
+			//set max
+			sb.setValue(MAXIMUM)
+		}
+		if(v < MINIMUM)
+		{
+			sb.setValue(MINIMUM);
+		}
+	}
+}
 
 } //end 
 
