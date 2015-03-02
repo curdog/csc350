@@ -1,10 +1,12 @@
-Enter file contents hereimport java.applet.Applet;
+//Enter file contents hereimport java.applet.Applet;
+import java.applet.Applet;
 import java.awt.Button;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Label;
+import java.awt.Rectangle;
 import java.awt.Scrollbar;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -13,9 +15,15 @@ import java.awt.event.AdjustmentListener;
 import java.awt.event.WindowEvent;
 
 
-public class Bounce extends Applet implements ActionListener, AdjustmentListener {
+class Bounce extends Applet implements ActionListener, AdjustmentListener {
 
 	private static final long serialVersionUID = 10L;
+
+	private static final int MAXSPEED = 0;
+
+	private static final int MINSPEED = 0;
+
+	private static final int SPEED = 0;
 	
 	//graphics page
 	private Graphics page;
@@ -46,12 +54,18 @@ public class Bounce extends Applet implements ActionListener, AdjustmentListener
 	int MAXIMUM = 100;
 	int MINIMUM = 0;
 
+	private int currentspeed;
+
+	private int sliderW;
+
+	private int sliderH;
+
 public static void main(String[] args) {
-	Bounce wind = new Bounce(path);
+	Bounce wind = new Bounce( );
 	wind.setVisible(true);
 }
 
-public Bounce(String path) {
+public Bounce( ) {
 	//buttons
 	startstop = new Button("Start");
 	clear = new Button("Clear");
@@ -136,7 +150,7 @@ public Bounce(String path) {
 	speed.setLocation(10, HEIGHT);
 	speed.addAdjustmentListener(this);
 	add(speed);
-	Obj.Start;
+	//Obj.Start;
 }
 
 public void init(){
@@ -144,7 +158,7 @@ public void init(){
 	setVisible(true);
 	setBackground(Color.white);
 	page = getGraphics();
-	obj = new ObjBall (page, getBackground(), Wobj, Hobj, WIDTH, HEIGHT, MAXSPEED, currentspeed, pause, step);
+	//obj = new ObjBall (page, getBackground(), Wobj, Hobj, WIDTH, HEIGHT, MAXSPEED, currentspeed, pause, step);
 }
 
 public void start(){}
@@ -170,7 +184,7 @@ public void windowOpened(WindowEvent e) {}
 
 public void actionPerformed(ActionEvent arg0) {}
 
-public void adjustmentValueChanged(AdjustmentEvent arg0) {
+public void adjustmentValueChanged(AdjustmentEvent e) {
 	int v;
 	
 	Scrollbar sb = (Scrollbar) e.getSource();
@@ -183,7 +197,7 @@ public void adjustmentValueChanged(AdjustmentEvent arg0) {
 		if(v > MAXIMUM)
 		{
 			//set max
-			sb.setValue(MAXIMUM)
+			sb.setValue(MAXIMUM);
 		}
 		if(v < MINIMUM)
 		{
@@ -203,6 +217,7 @@ class ObjBall{
 	int dy = 0;
 	//this is size
 	int radius = 0;
+	
 	
 	public ObjBall(){
 		
@@ -241,7 +256,9 @@ class ObjBall{
 	public void setRadius( int r) {
 		
 	}
-	public int getRadius(){
+	public Rectangle getBoundingRectange(){
+		
+		return new Rectangle(x -radius, y-radius, radius * 2, radius * 2);
 		
 	}
 	/*  this is a absolute for pixel based jump speed
