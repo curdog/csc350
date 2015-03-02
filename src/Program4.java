@@ -169,3 +169,65 @@ public void actionPerformed(ActionEvent arg0) {}
 public void adjustmentValueChanged(AdjustmentEvent arg0) {}
 
 } //end 
+
+class ObjBall{
+	//placement of the ball
+	int x = 0;
+	int y = 0;
+	//these are for speed
+	int dx = 0;   
+	int dy = 0;
+	//this is size
+	int radius = 0;
+	
+	public ObjBall(){
+		
+	}
+	//convience for drawing
+	public void drawBall( Graphics g) {
+		
+	}
+	
+	//convience functions for hiting stuff
+	public void leftWall(){
+		
+	}
+
+	public void rightSide(){
+		
+	}
+	
+	public void bottomSide(){
+		
+	}
+	
+	public void topSide(){
+		
+	}
+	
+	//gets and sets
+	public int getX(){
+		
+	}
+	
+	public int getY(){
+		
+	}
+	
+	public void setRadius( int r) {
+		
+	}
+	public int getRadius(){
+		
+	}
+	/*  this is a absolute for pixel based jump speed
+	*   direction is calculated from scaling the vector [dx dy]
+	*   according to [1 1] 
+	*   aka WARNING: math ahead
+	*
+	*/
+	public void setSpeed( int s ){
+		
+	}
+	
+}
