@@ -14,7 +14,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.AdjustmentEvent;
 import java.awt.event.AdjustmentListener;
-import java.awt.event.WindowEvent;
 
 
 public class Program4 extends Applet implements ActionListener, AdjustmentListener {
@@ -95,9 +94,10 @@ public Program4( ) {
 	//5 by 5 
 	gbc.gridwidth = 5;
 	gbc.gridheight = 5;
+	
 	gbc.ipady = 200;
 	gbc.ipadx = 400;
-	
+	//this.add( null, gbc);
 	//speed label
 	gbc.gridx = 0;
 	gbc.gridy = 3;
