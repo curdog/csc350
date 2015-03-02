@@ -17,7 +17,7 @@ import java.awt.event.AdjustmentListener;
 import java.awt.event.WindowEvent;
 
 
-class Bounce extends Applet implements ActionListener, AdjustmentListener {
+public class Program4 extends Applet implements ActionListener, AdjustmentListener {
 
 	private static final long serialVersionUID = 10L;
 
@@ -63,11 +63,12 @@ class Bounce extends Applet implements ActionListener, AdjustmentListener {
 	private int sliderH;
 
 public static void main(String[] args) {
-	Bounce wind = new Bounce( );
-	wind.setVisible(true);
+	//Bounce wind = new Bounce( );
+    //wind.setVisible(true);
 }
 
-public Bounce( ) {
+public Program4( ) {
+	super();
 	//buttons
 	startstop = new Button("Start");
 	clear = new Button("Clear");
