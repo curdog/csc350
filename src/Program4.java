@@ -1,9 +1,11 @@
 package src;
 
-//Enter file contents hereimport java.applet.Applet;
+//Enter file contents here import java.applet.Applet;
 import java.applet.Applet;
 import java.awt.Button;
 import java.awt.Color;
+import java.awt.Component;
+import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -14,6 +16,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.AdjustmentEvent;
 import java.awt.event.AdjustmentListener;
+
+/*
+<applet code="Bounce.class" width=500 height = 500>
+</applet>
+*/
+
+
 
 
 public class Program4 extends Applet implements ActionListener, AdjustmentListener {
@@ -26,15 +35,17 @@ public class Program4 extends Applet implements ActionListener, AdjustmentListen
 
 	private static final int SPEED = 0;
 	
+	private static final int MAXSIZE = 100;
+	
+	private static final int MINSIZE = 0;
+	
+	private static final int SIZE = 0;
+	
 	//graphics page
 	private Graphics page;
 	
 	//Ball Object
 	private ObjBall obj;
-	
-	// creates the grid lines
-	GridBagLayout gbl;
-	GridBagConstraints gbc;
 
 	// creates buttons on GUI
 	Button startstop;
@@ -43,7 +54,12 @@ public class Program4 extends Applet implements ActionListener, AdjustmentListen
 	Button tails;
 	Button quit;
 
-
+//for scroll bar
+	int MAXIMUM;
+	int MINIMUM;
+	
+	boolean pause, exit;
+	
 	// creates labels on GUI
 	Label speedLabel;
 	Label sizeLabel;
@@ -51,10 +67,6 @@ public class Program4 extends Applet implements ActionListener, AdjustmentListen
 	//scroll bar
 	Scrollbar speed, size;
 	
-	//scroll bar boundaries
-	int MAXIMUM = 100;
-	int MINIMUM = 0;
-
 	private int currentspeed;
 
 	private int sliderW;
@@ -62,13 +74,17 @@ public class Program4 extends Applet implements ActionListener, AdjustmentListen
 	private int sliderH;
 
 public static void main(String[] args) {
-	//Bounce wind = new Bounce( );
-    //wind.setVisible(true);
-	System.out.println("This is an applet.");
+	new Program4();
 }
 
 public Program4( ) {
 	super();
+	
+	setLayout(null);
+	setVisible(true);
+	setBackground(Color.white);
+	page = getGraphics();
+	
 	//buttons
 	startstop = new Button("Start");
 	clear = new Button("Clear");
@@ -80,69 +96,8 @@ public Program4( ) {
 	speedLabel = new Label("Speed:");
 	sizeLabel = new Label("Size:");
 	
-	//grid bag layout
-	gbl = new GridBagLayout();
-	gbc = new GridBagConstraints();
 	
-	//this.addWindowListener(this);
-	//this.setResizable(true);
-	this.setLayout(gbl);
-	
-	//starts at cell 0,0
-	gbc.gridx = 0;
-	gbc.gridy = 0;
-	
-	//5 by 5 
-	gbc.gridwidth = 5;
-	gbc.gridheight = 5;
-	
-	gbc.ipady = 200;
-	gbc.ipadx = 400;
-	//this.add( null, gbc);
-	//speed label
-	gbc.gridx = 0;
-	gbc.gridy = 3;
-	gbc.gridwidth = 2;
-	this.add(speedLabel, gbc);
-
-	//size label
-	gbc.gridx = 0;
-	gbc.gridy = 4;
-	gbc.gridwidth = 2;
-	this.add(sizeLabel, gbc);
-
-	//rect button
-	gbc.gridx = 2;
-	gbc.gridy = 3;
-	gbc.gridwidth = 1;
-	this.add(rect, gbc);
-
-	//tails button
-	gbc.gridx = 3;
-	gbc.gridy = 3;
-	gbc.gridwidth = 1;
-	this.add(tails, gbc);
-
-	//startstop button
-	gbc.gridx = 4;
-	gbc.gridy = 3;
-	gbc.gridwidth = 1;
-	this.add(startstop, gbc);
-
-	//clear button
-	gbc.gridx = 3;
-	gbc.gridy = 4;
-	gbc.gridwidth = 1;
-	this.add(clear, gbc);
-
-	//quit
-	gbc.gridx = 4;
-	gbc.gridy = 4;
-	gbc.gridwidth = 1;
-	this.add(quit, gbc);
-
-	
-	//scroll bars
+	//speed scroll bars
 	speed = new Scrollbar(Scrollbar.HORIZONTAL);
 	speed.setMaximum(MAXSPEED);
 	speed.setMinimum(MINSPEED);
@@ -151,28 +106,104 @@ public Program4( ) {
 	speed.setValue(currentspeed);
 	speed.setBackground(Color.GRAY);
 	speed.setSize(sliderW, sliderH);
-	speed.setLocation(10, HEIGHT);
+	speed.setLocation(150,375);
 	speed.addAdjustmentListener(this);
-	add(speed);
+	this.add(speed);
 	
+	//size scroll bar
+	size = new Scrollbar(Scrollbar.HORIZONTAL);
+	size.setMaximum(MAXSIZE);
+	size.setMinimum(MINSIZE);
+	size.setUnitIncrement(SIZE);
+	size.setBlockIncrement(SIZE*10);
+	size.setValue(currentspeed);
+	size.setBackground(Color.GRAY);
+	size.setSize(sliderW, sliderH);
+	size.setLocation(150, 375);
+	size.addAdjustmentListener(this);
+	this.add(size);
+	
+	
+	//adding buttons to the GUI
+		startstop.setBounds(100,300,75,25);
+		this.add(startstop);
+		tails.setBounds(200,300,75,25);
+		this.add(tails);
+		rect.setBounds(300,300,75,25);
+		this.add(rect);
+		clear.setBounds(400, 300, 75, 25);
+		this.add(clear);
+		quit.setBounds(500,300,75,25);
+		this.add(quit);
+		
+	//adding labels to the GUI
+		speedLabel.setBounds(100,350,130,25);
+		this.add(speedLabel);
+		sizeLabel.setBounds(100,375,130,25);
+		this.add(sizeLabel);
+		
+		
+		this.setSize(500,800);
 	//Obj.Start;
 }
 
 public void init(){
-	setLayout(null);
-	setVisible(true);
-	setBackground(Color.white);
-	page = getGraphics();
 	//obj = new ObjBall (page, getBackground(), Wobj, Hobj, WIDTH, HEIGHT, MAXSPEED, currentspeed, pause, step);
+	pause = true;
+	exit = false;
+	
+	
+	startstop.addActionListener(this);
+	clear.addActionListener(this);
+	quit.addActionListener(this);
+	tails.addActionListener(this);
+	rect.addActionListener(this);
+	size.addAdjustmentListener(this);
+	speed.addAdjustmentListener(this);
+	
+
 }
 
 public void start(){}
 
-public void stop(){}
+public void stop(){
+	
+	//remove listeners
+	clear.removeActionListener(this);
+	quit.removeActionListener(this);
+	startstop.removeActionListener(this);
+	tails.removeActionListener(this);
+	rect.removeActionListener(this);
+	size.removeAdjustmentListener(this);
+	speed.removeAdjustmentListener(this);
+}
 
 public void run(){}
 
-public void actionPerformed(ActionEvent arg0) {}
+public void actionPerformed(ActionEvent e) {
+	
+	Object source = e.getSource();
+	
+	if(source == startstop)
+	{
+		pause = !pause;
+		
+		
+	}else{
+		if(source == clear)
+		{
+			//clear everything
+			
+			
+		}else{
+			if(source == quit)
+			{
+				//exit 
+				exit = true;
+			}
+		}
+	}
+}
 
 public void adjustmentValueChanged(AdjustmentEvent e) {
 	int v;
