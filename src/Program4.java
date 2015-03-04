@@ -1,14 +1,20 @@
+/*******************************************
+
+Sean Curtis, Kris Fielding, Laurel Miller
+CET 350 - Java
+Program 4 - Bounce
+Group Number: 3
+email: MIL1484, FIE4795, CUR3040
+
+*******************************************/
+
 package src;
 
 //Enter file contents here import java.applet.Applet;
 import java.applet.Applet;
 import java.awt.Button;
 import java.awt.Color;
-import java.awt.Component;
-import java.awt.Frame;
 import java.awt.Graphics;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
 import java.awt.Label;
 import java.awt.Rectangle;
 import java.awt.Scrollbar;
@@ -160,9 +166,8 @@ public void init(){
 	rect.addActionListener(this);
 	size.addAdjustmentListener(this);
 	speed.addAdjustmentListener(this);
-	
-
 }
+
 
 public void start(){}
 
@@ -178,7 +183,26 @@ public void stop(){
 	speed.removeAdjustmentListener(this);
 }
 
-public void run(){}
+public void run(){
+	/*
+	 * drawObject();
+	 * while(!done)
+	 * {
+	 * 		if(!pause)
+	 * 		{
+	 * 			if(!tail)
+	 * 			{
+	 * 				eraseObject();
+	 * 				updatePosition();
+	 * 				drawObject();
+	 * 				timeDelay();
+	 * 				moveObject();
+	 *			}
+	 *		}
+	 *	}
+	 */
+	
+}
 
 public void actionPerformed(ActionEvent e) {
 	
@@ -207,6 +231,7 @@ public void actionPerformed(ActionEvent e) {
 
 public void adjustmentValueChanged(AdjustmentEvent e) {
 	int v;
+	int w;
 	
 	Scrollbar sb = (Scrollbar) e.getSource();
 	
@@ -223,9 +248,25 @@ public void adjustmentValueChanged(AdjustmentEvent e) {
 		if(v < MINIMUM)
 		{
 			sb.setValue(MINIMUM);
+		}	
+	}
+	
+	//size scroll bar
+	if(sb == size)
+	{
+		//get value
+		w = sb.getValue();
+		if(w > MAXSIZE)
+		{
+			//set to maxsize
+			sb.setValue(MAXSIZE);
+		}
+		if(w < MINSIZE)
+		{
+			//set to minsize
+			sb.setValue(MINSIZE);
 		}
 	}
-}
 
 } //end 
 
@@ -244,9 +285,7 @@ class ObjBall{
 		
 	}
 	//convience for drawing
-	public void drawBall( Graphics g) {
-		
-	}
+	public void drawBall( Graphics g) {}
 	
 	//convience functions for hiting stuff
 	public void leftWall(){
@@ -292,4 +331,5 @@ class ObjBall{
 		
 	}
 	
+}
 }
