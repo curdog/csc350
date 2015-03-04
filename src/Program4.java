@@ -64,6 +64,7 @@ public class Program4 extends Applet implements ActionListener, AdjustmentListen
 public static void main(String[] args) {
 	//Bounce wind = new Bounce( );
     //wind.setVisible(true);
+	System.out.println("This is an applet.");
 }
 
 public Program4( ) {
