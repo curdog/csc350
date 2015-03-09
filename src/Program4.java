@@ -125,35 +125,32 @@ public Program4( ) {
 	size.setValue(currentspeed);
 	size.setBackground(Color.GRAY);
 	size.setSize(sliderW, sliderH);
-	size.setLocation(150, 375);
+	size.setLocation(200, 675);
 	size.addAdjustmentListener(this);
 	this.add(size);
 	
-	
 	//adding buttons to the GUI
-		startstop.setBounds(100,300,75,25);
+		startstop.setBounds(100,600,75,25);
 		this.add(startstop);
-		tails.setBounds(200,300,75,25);
+		tails.setBounds(200,600,75,25);
 		this.add(tails);
-		rect.setBounds(300,300,75,25);
+		rect.setBounds(300,600,75,25);
 		this.add(rect);
-		clear.setBounds(400, 300, 75, 25);
+		clear.setBounds(400, 600, 75, 25);
 		this.add(clear);
-		quit.setBounds(500,300,75,25);
+		quit.setBounds(500,600,75,25);
 		this.add(quit);
 		
 	//adding labels to the GUI
-		speedLabel.setBounds(100,350,130,25);
+		speedLabel.setBounds(100,650,130,25);
 		this.add(speedLabel);
-		sizeLabel.setBounds(100,375,130,25);
+		sizeLabel.setBounds(100,675,130,25);
 		this.add(sizeLabel);
 		
-		
-		this.setSize(500,800);
 	//Obj.Start;
 }
 
-public void init(){
+public void init(Graphics g){
 	//obj = new ObjBall (page, getBackground(), Wobj, Hobj, WIDTH, HEIGHT, MAXSPEED, currentspeed, pause, step);
 	pause = true;
 	exit = false;
@@ -166,8 +163,53 @@ public void init(){
 	rect.addActionListener(this);
 	size.addAdjustmentListener(this);
 	speed.addAdjustmentListener(this);
+	
+	//draws the rectangle for the frame that the ball will be bouncing in
+	paint(g);
 }
 
+
+//draws the frame for the bouncing ball
+public void paint(Graphics g) {
+	//maybe make these boundaries constants?
+	g.drawRect(100,25,900,490);	
+	
+	int a =150;
+	int b=50;
+	int c=50;
+	int d=50;
+	int m;
+
+for (m=1;m<=10;m++)
+{
+	//draw a ball
+	g.setColor(Color.RED);
+	g.drawOval(a,b,c,d);
+	//g.fillOval(150,50,50,50);
+	pause(500);	
+	
+	if( m == 10)
+	{
+		g.setColor(Color.RED);
+	}else{
+		g.setColor(Color.WHITE);
+		g.drawOval(a,b,c,d);
+		//move circle
+		c = (int)(c*1.25);
+		d=(int)(d*1.25);
+	}//end if
+}//end for
+	
+}//end paint
+
+public static void pause(int time)
+{
+	try{
+		Thread.sleep(time);
+		}
+	catch(InterruptedException e)
+	{}
+}//end pause
 
 public void start(){}
 
@@ -285,7 +327,9 @@ class ObjBall{
 		
 	}
 	//convience for drawing
-	public void drawBall( Graphics g) {}
+	public void drawBall( Graphics g) {
+
+	}
 	
 	//convience functions for hiting stuff
 	public void leftWall(){
