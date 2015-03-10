@@ -228,9 +228,11 @@ public class Program4 extends Applet implements ActionListener,
 		} else if (source.equals(clear)) {
 			// clear everything
 			obj.reset();
+			pause = true;
+			ballmover.suspend();
 		} else if (source == quit) {
 			// exit
-			exit = true;
+			System.exit(0);
 		} else if (source.equals(rect)) {
 			if (rect.getLabel().equals("Rectangle")) {
 				obj.setRectangle(true);
