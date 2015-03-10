@@ -29,7 +29,7 @@ import java.awt.event.AdjustmentListener;
  */
 
 public class Program4 extends Applet implements ActionListener,
-		AdjustmentListener {
+		AdjustmentListener, Runnable {
 
 	private static final long serialVersionUID = 10L;
 
@@ -44,6 +44,9 @@ public class Program4 extends Applet implements ActionListener,
 	private static final int MINSIZE = 0;
 
 	private static final int SIZE = 1;
+
+	public static final int OFFSETX = 100;
+	public static final int OFFSETY = 25;
 
 	// graphics page
 	private Graphics page;
@@ -71,6 +74,9 @@ public class Program4 extends Applet implements ActionListener,
 	// scroll bar
 	Scrollbar speed, size;
 
+	// Thread
+	Thread ballmover;
+
 	private int currentspeed;
 
 	private int sliderW;
@@ -84,6 +90,7 @@ public class Program4 extends Applet implements ActionListener,
 	public Program4() {
 		super();
 
+		ballmover = new Thread(this);
 		setLayout(null);
 		setVisible(true);
 		setBackground(Color.white);
@@ -144,12 +151,12 @@ public class Program4 extends Applet implements ActionListener,
 		this.add(speedLabel);
 		sizeLabel.setBounds(100, 675, 130, 25);
 		this.add(sizeLabel);
-
+		obj = new ObjBall();
 		// Obj.Start;
 		validate();
 	}
 
-	public void init(Graphics g) {
+	public void init() {
 		// obj = new ObjBall (page, getBackground(), Wobj, Hobj, WIDTH, HEIGHT,
 		// MAXSPEED, currentspeed, pause, step);
 		pause = true;
@@ -170,26 +177,13 @@ public class Program4 extends Applet implements ActionListener,
 	// draws the frame for the bouncing ball
 	public void paint(Graphics g) {
 		// maybe make these boundaries constants?
-		g.drawRect(100, 25, 900, 490);
+		g.drawRect(OFFSETX, OFFSETY, 900, 490);
+		obj.drawBall(g);
 
-		int a = 150;
-		int b = 50;
-		int c = 50;
-		int d = 50;
-		int m;
-		// end if
-	}// end for
-
-	// end paint
-
-	public static void pause(int time) {
-		try {
-			Thread.sleep(time);
-		} catch (InterruptedException e) {
-		}
-	}// end pause
+	}
 
 	public void start() {
+		ballmover.start();
 	}
 
 	public void stop() {
@@ -208,12 +202,14 @@ public class Program4 extends Applet implements ActionListener,
 		while (1 == 1) {
 			obj.updatePos();
 			repaint();
+
 			try {
-				this.wait(500);
+				Thread.sleep(300);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+
 		}
 	}
 
@@ -224,17 +220,23 @@ public class Program4 extends Applet implements ActionListener,
 		if (source == startstop) {
 			pause = !pause;
 
-		} else {
-			if (source == clear) {
-				// clear everything
+		} else if (source.equals(clear)) {
+			// clear everything
 
+		} else if (source == quit) {
+			// exit
+			exit = true;
+		} else if (source.equals(rect)) {
+			if (rect.getLabel().equals("Rectangle")) {
+				obj.setRectangle(true);
+				rect.setLabel("Circle");
 			} else {
-				if (source == quit) {
-					// exit
-					exit = true;
-				}
+				obj.setRectangle(false);
+				rect.setLabel("Rectangle");
 			}
 		}
+
+		this.validate();
 	}
 
 	public void adjustmentValueChanged(AdjustmentEvent e) {
@@ -274,15 +276,21 @@ public class Program4 extends Applet implements ActionListener,
 
 	class ObjBall {
 		// placement of the ball
-		int x = 0;
-		int y = 0;
+		int x = OFFSETX + 20;
+		int y = OFFSETY + 20;
 		// these are for speed
-		int dx = 0;
-		int dy = 0;
+		int dx = 1;
+		int dy = 1;
 		// this is size
-		int radius = 0;
+		int radius = 5;
+
+		boolean rectangle = false;
 
 		public ObjBall() {
+
+		}
+
+		public void reset() {
 
 		}
 
@@ -291,26 +299,39 @@ public class Program4 extends Applet implements ActionListener,
 			y += dy;
 		}
 
+		public boolean isRectangle() {
+			return rectangle;
+		}
+
+		public void setRectangle(boolean rectangle) {
+			this.rectangle = rectangle;
+		}
+
 		// convience for drawing
 		public void drawBall(Graphics g) {
-			g.drawOval(arg0, arg1, arg2, arg3);
+
+			if (!rectangle) {
+				g.drawOval(x + radius / 2, y + radius / 2, radius, radius);
+			} else {
+				g.drawRect(x + radius / 2, y + radius / 2, radius, radius);
+			}
 		}
 
 		// convience functions for hiting stuff
-		public void leftWall() {
-
+		public void leftSide() {
+			dy = -dy;
 		}
 
 		public void rightSide() {
-
+			dy = -dy;
 		}
 
 		public void bottomSide() {
-
+			dx = -dx;
 		}
 
 		public void topSide() {
-
+			dx = -dx;
 		}
 
 		// gets and sets
