@@ -219,10 +219,15 @@ public class Program4 extends Applet implements ActionListener,
 
 		if (source == startstop) {
 			pause = !pause;
+			if( pause){
+				ballmover.suspend();
+			} else {
+				ballmover.resume();
+			}
 
 		} else if (source.equals(clear)) {
 			// clear everything
-
+			obj.reset();
 		} else if (source == quit) {
 			// exit
 			exit = true;
@@ -291,7 +296,8 @@ public class Program4 extends Applet implements ActionListener,
 		}
 
 		public void reset() {
-
+			 x = OFFSETX + 20;
+			 y = OFFSETY + 20;
 		}
 
 		public void updatePos() {
