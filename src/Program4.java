@@ -97,7 +97,7 @@ public class Program4 extends Applet implements ActionListener,
 		page = getGraphics();
 
 		// buttons
-		startstop = new Button("Start");
+		startstop = new Button("Stop");
 		clear = new Button("Clear");
 		quit = new Button("Quit");
 		rect = new Button("Rectangle");
@@ -221,8 +221,10 @@ public class Program4 extends Applet implements ActionListener,
 			pause = !pause;
 			if( pause){
 				ballmover.suspend();
+				startstop.setLabel("Start");
 			} else {
 				ballmover.resume();
+				startstop.setLabel("Stop");
 			}
 
 		} else if (source.equals(clear)) {
@@ -230,6 +232,8 @@ public class Program4 extends Applet implements ActionListener,
 			obj.reset();
 			pause = true;
 			ballmover.suspend();
+			startstop.setLabel("Start");
+			repaint();
 		} else if (source == quit) {
 			// exit
 			System.exit(0);
@@ -241,6 +245,7 @@ public class Program4 extends Applet implements ActionListener,
 				obj.setRectangle(false);
 				rect.setLabel("Rectangle");
 			}
+			repaint();
 		}
 
 		this.validate();
