@@ -185,7 +185,9 @@ public class Program4 extends Applet implements ActionListener,
 		int width = 490;
 		Rectangle r = obj.getBoundingRectange();
 		g.drawRect(OFFSETX, OFFSETY, height, width);
+		
 		boolean cheat = false;
+		
 		if( (int)r.getMaxX() >= height){
 			obj.rightSide();
 			cheat = true;
@@ -271,6 +273,16 @@ public class Program4 extends Applet implements ActionListener,
 				rect.setLabel("Rectangle");
 			}
 			repaint();
+		} else if ( source.equals(tails) ){
+			if (tails.getLabel().equals("Tails")) {
+				obj.setDrawTails(true);
+				tails.setLabel("No Tails");
+			} else {
+				obj.setDrawTails(false);
+				tails.setLabel("Tails");
+			}
+			repaint();
+			
 		}
 
 		this.validate();
@@ -297,16 +309,21 @@ public class Program4 extends Applet implements ActionListener,
 		int dy = 1;
 		// this is size
 		int radius = 5;
+		
+		Rectangle[] tails;
 
 		boolean rectangle = false;
-
+		boolean drawTails = false;
+		int t =0;
+		int numTails = 500;
 		public ObjBall() {
-
+			tails = new Rectangle[numTails];
 		}
 
 		public void reset() {
 			x = OFFSETX + 20;
 			y = OFFSETY + 20;
+			tails = new Rectangle[numTails];
 		}
 
 		public void updatePos() {
@@ -321,20 +338,50 @@ public class Program4 extends Applet implements ActionListener,
 		public void setRectangle(boolean rectangle) {
 			this.rectangle = rectangle;
 		}
+		
 
 		// convience for drawing
 		public void drawBall(Graphics g) {
-
+			
 			if (!rectangle) {
-				g.drawOval(x + radius / 2, y + radius / 2, radius, radius);
+				g.drawOval(x + radius / 2, y + radius / 2, radius*2, radius*2);
 			} else {
-				g.drawRect(x + radius / 2, y + radius / 2, radius, radius);
+				g.drawRect(x + radius / 2, y + radius / 2, radius*2, radius*2);
+			}
+			//draw tails, for the furries
+			if( drawTails){
+				//save current
+				tails[t % numTails] = new Rectangle(x + radius / 2, y + radius / 2, radius*2, radius*2);
+				//draw rest
+				for(int i = 0; i < tails.length; i++ ){
+					if( tails[i] != null){
+						if (!rectangle) {
+							g.drawOval(tails[i].x, tails[i].y, tails[i].width, tails[i].height);
+						} else {
+							g.drawRect(tails[i].x, tails[i].y, tails[i].width, tails[i].height);
+						}
+						//g.drawRect( tails[i].x, tails[i].y, tails[i].width, tails[i].height);
+					}
+				}
+				t++;
 			}
 		}
 
 		// convience functions for hiting stuff
 		public void leftSide() {
 			dx = -dx;
+		}
+
+		public boolean isDrawTails() {
+			return drawTails;
+		}
+
+		public void setDrawTails(boolean drawTails) {
+			this.drawTails = drawTails;
+			if( drawTails == false){
+				tails = null;
+				tails= new Rectangle[numTails];
+			}
 		}
 
 		public void rightSide() {
