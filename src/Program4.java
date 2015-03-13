@@ -37,7 +37,7 @@ public class Program4 extends Applet implements ActionListener,
 
 	private static final int MINSPEED = 0;
 
-	private static final int SPEED = 0;
+	private static final int SPEED = 1;
 
 	private static final int MAXSIZE = 100;
 
@@ -47,9 +47,6 @@ public class Program4 extends Applet implements ActionListener,
 
 	public static final int OFFSETX = 100;
 	public static final int OFFSETY = 25;
-
-	// graphics page
-	private Graphics page;
 
 	// Ball Object
 	private ObjBall obj;
@@ -79,22 +76,23 @@ public class Program4 extends Applet implements ActionListener,
 
 	private int currentspeed;
 
-	private int sliderW;
+	private int sliderW = 100;
 
-	private int sliderH;
+	private int sliderH = 25;
 
 	public static void main(String[] args) {
-		new Program4();
+		System.out.println("This is an applet");
 	}
 
-	public Program4() {
-		super();
+	public void init() {
+		// obj = new ObjBall (page, getBackground(), Wobj, Hobj, WIDTH, HEIGHT,
+		// MAXSPEED, currentspeed, pause, step);
 
+		obj = new ObjBall();
 		ballmover = new Thread(this);
 		setLayout(null);
 		setVisible(true);
 		setBackground(Color.white);
-		page = getGraphics();
 
 		// buttons
 		startstop = new Button("Stop");
@@ -108,29 +106,39 @@ public class Program4 extends Applet implements ActionListener,
 		sizeLabel = new Label("Size:");
 
 		// speed scroll bars
-		speed = new Scrollbar(Scrollbar.HORIZONTAL);
+		speed = new Scrollbar(Scrollbar.HORIZONTAL, 0, 1, 1, 100);
+		
 		speed.setMaximum(MAXSPEED);
 		speed.setMinimum(MINSPEED);
 		speed.setUnitIncrement(SPEED);
-		speed.setBlockIncrement(SPEED * 10);
-		speed.setValue(currentspeed);
+		speed.setBlockIncrement( 1);
+		speed.setValue(0);
 		speed.setBackground(Color.GRAY);
 		speed.setSize(sliderW, sliderH);
-		speed.setLocation(200, 375);
+		speed.setLocation(200, 640);
+		speed.setEnabled(true);
+		
 		speed.addAdjustmentListener(this);
 		speed.setVisible(true);
+
 		this.add(speed);
 
 		// size scroll bar
 		// Sc
 		size = new Scrollbar(Scrollbar.HORIZONTAL, 0, 1, 1, 100);
-		/*
-		 * size.setMaximum(MAXSIZE); size.setMinimum(MINSIZE);
-		 * size.setUnitIncrement(SIZE); size.setBlockIncrement(SIZE*10);
-		 * size.setValue(currentspeed); size.setBackground(Color.GRAY);
-		 * size.setSize(sliderW, sliderH); size.setLocation(250, 675);
-		 * size.addAdjustmentListener(this); size.setVisible(true);
-		 */
+
+		size.setMaximum(MAXSIZE);
+		size.setMinimum(MINSIZE);
+		size.setUnitIncrement(SIZE);
+		size.setBlockIncrement( 1);
+		size.setValue(0);
+		size.setBackground(Color.GRAY);
+		size.setSize(sliderW, sliderH);
+		size.setLocation(200, 675);
+		size.setEnabled(true);
+		//size.
+		size.addAdjustmentListener(this);
+		size.setVisible(true);
 
 		this.add(size);
 
@@ -151,14 +159,10 @@ public class Program4 extends Applet implements ActionListener,
 		this.add(speedLabel);
 		sizeLabel.setBounds(100, 675, 130, 25);
 		this.add(sizeLabel);
-		obj = new ObjBall();
+
 		// Obj.Start;
 		validate();
-	}
 
-	public void init() {
-		// obj = new ObjBall (page, getBackground(), Wobj, Hobj, WIDTH, HEIGHT,
-		// MAXSPEED, currentspeed, pause, step);
 		pause = true;
 		exit = false;
 
@@ -167,17 +171,36 @@ public class Program4 extends Applet implements ActionListener,
 		quit.addActionListener(this);
 		tails.addActionListener(this);
 		rect.addActionListener(this);
-		size.addAdjustmentListener(this);
-		speed.addAdjustmentListener(this);
 
 		// draws the rectangle for the frame that the ball will be bouncing in
 		// paint(g);
 	}
 
+	Rectangle bounds;
+
 	// draws the frame for the bouncing ball
 	public void paint(Graphics g) {
 		// maybe make these boundaries constants?
-		g.drawRect(OFFSETX, OFFSETY, 900, 490);
+		int height = 900;
+		int width = 490;
+		Rectangle r = obj.getBoundingRectange();
+		g.drawRect(OFFSETX, OFFSETY, height, width);
+		if( (int)r.getMaxX() >= height){
+			obj.rightSide();
+			return;
+		}
+		if( (int)r.getMinX() <= OFFSETX ){
+			obj.leftSide();
+			return;
+		}
+		if( (int)r.getMaxY() >= width){
+			obj.bottomSide();
+			return;
+		}
+		if( (int)r.getMinY() <= OFFSETY ){
+			obj.topSide();
+			return;
+		}
 		obj.drawBall(g);
 
 	}
@@ -204,7 +227,7 @@ public class Program4 extends Applet implements ActionListener,
 			repaint();
 
 			try {
-				Thread.sleep(300);
+				Thread.sleep(100);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -219,7 +242,7 @@ public class Program4 extends Applet implements ActionListener,
 
 		if (source == startstop) {
 			pause = !pause;
-			if( pause){
+			if (pause) {
 				ballmover.suspend();
 				startstop.setLabel("Start");
 			} else {
@@ -252,36 +275,13 @@ public class Program4 extends Applet implements ActionListener,
 	}
 
 	public void adjustmentValueChanged(AdjustmentEvent e) {
-		int v;
-		int w;
+		int spfac = 100;
+		int sifac = 100;
 
-		Scrollbar sb = (Scrollbar) e.getSource();
-
-		// speed scroll bar
-		if (sb == speed) {
-			// get value
-			v = sb.getValue();
-			if (v > MAXIMUM) {
-				// set max
-				sb.setValue(MAXIMUM);
-			}
-			if (v < MINIMUM) {
-				sb.setValue(MINIMUM);
-			}
-		}
-
-		// size scroll bar
-		if (sb == size) {
-			// get value
-			w = sb.getValue();
-			if (w > MAXSIZE) {
-				// set to maxsize
-				sb.setValue(MAXSIZE);
-			}
-			if (w < MINSIZE) {
-				// set to minsize
-				sb.setValue(MINSIZE);
-			}
+		if( e.getSource().equals(speed) ){
+			obj.setSpeed(size.getValue());
+		} else if ( e.getSource().equals(size)){
+			obj.setRadius(size.getValue()/2 + 1);
 		}
 
 	} // end
@@ -303,8 +303,8 @@ public class Program4 extends Applet implements ActionListener,
 		}
 
 		public void reset() {
-			 x = OFFSETX + 20;
-			 y = OFFSETY + 20;
+			x = OFFSETX + 20;
+			y = OFFSETY + 20;
 		}
 
 		public void updatePos() {
@@ -332,19 +332,19 @@ public class Program4 extends Applet implements ActionListener,
 
 		// convience functions for hiting stuff
 		public void leftSide() {
-			dy = -dy;
+			dx = -dx;
 		}
 
 		public void rightSide() {
-			dy = -dy;
+			dx = -dx;
 		}
 
 		public void bottomSide() {
-			dx = -dx;
+			dy = -dy;
 		}
 
 		public void topSide() {
-			dx = -dx;
+			dy = -dy;
 		}
 
 		// gets and sets
