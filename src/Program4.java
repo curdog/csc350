@@ -185,23 +185,25 @@ public class Program4 extends Applet implements ActionListener,
 		int width = 490;
 		Rectangle r = obj.getBoundingRectange();
 		g.drawRect(OFFSETX, OFFSETY, height, width);
+		boolean cheat = false;
 		if( (int)r.getMaxX() >= height){
 			obj.rightSide();
-			return;
+			cheat = true;
 		}
 		if( (int)r.getMinX() <= OFFSETX ){
 			obj.leftSide();
-			return;
+			cheat = true;
 		}
 		if( (int)r.getMaxY() >= width){
 			obj.bottomSide();
-			return;
+			cheat = true;
 		}
 		if( (int)r.getMinY() <= OFFSETY ){
 			obj.topSide();
-			return;
+			cheat = true;
 		}
-		obj.drawBall(g);
+		if( !cheat)
+			obj.drawBall(g);
 
 	}
 
