@@ -124,7 +124,6 @@ public class Program4 extends Applet implements ActionListener,
 		this.add(speed);
 
 		// size scroll bar
-		// Sc
 		size = new Scrollbar(Scrollbar.HORIZONTAL, 0, 1, 1, 100);
 
 		size.setMaximum(MAXSIZE);
@@ -136,10 +135,8 @@ public class Program4 extends Applet implements ActionListener,
 		size.setSize(sliderW, sliderH);
 		size.setLocation(200, 675);
 		size.setEnabled(true);
-		//size.
 		size.addAdjustmentListener(this);
 		size.setVisible(true);
-
 		this.add(size);
 
 		// adding buttons to the GUI
@@ -166,21 +163,18 @@ public class Program4 extends Applet implements ActionListener,
 		pause = true;
 		exit = false;
 
+		//add listeners
 		startstop.addActionListener(this);
 		clear.addActionListener(this);
 		quit.addActionListener(this);
 		tails.addActionListener(this);
 		rect.addActionListener(this);
-
-		// draws the rectangle for the frame that the ball will be bouncing in
-		// paint(g);
 	}
 
 	Rectangle bounds;
 
 	// draws the frame for the bouncing ball
 	public void paint(Graphics g) {
-		// maybe make these boundaries constants?
 		int height = 900;
 		int width = 490;
 		Rectangle r = obj.getBoundingRectange();
@@ -226,10 +220,12 @@ public class Program4 extends Applet implements ActionListener,
 	}
 
 	public void run() {
+		//infinite loop
 		while (1 == 1) {
 			obj.updatePos();
 			repaint();
 
+			//thread
 			try {
 				Thread.sleep(100);
 			} catch (InterruptedException e) {
@@ -243,13 +239,16 @@ public class Program4 extends Applet implements ActionListener,
 	public void actionPerformed(ActionEvent e) {
 
 		Object source = e.getSource();
-
+		
+		//button selection
 		if (source == startstop) {
 			pause = !pause;
 			if (pause) {
+				//pause the ball
 				ballmover.suspend();
 				startstop.setLabel("Start");
 			} else {
+				//start the ball
 				ballmover.resume();
 				startstop.setLabel("Stop");
 			}
@@ -269,16 +268,20 @@ public class Program4 extends Applet implements ActionListener,
 				obj.setRectangle(true);
 				rect.setLabel("Circle");
 			} else {
+				//set button label
 				obj.setRectangle(false);
 				rect.setLabel("Rectangle");
 			}
 			repaint();
 		} else if ( source.equals(tails) ){
+			//draw tails
 			if (tails.getLabel().equals("Tails")) {
 				obj.setDrawTails(true);
+				//change button label
 				tails.setLabel("No Tails");
 			} else {
 				obj.setDrawTails(false);
+				//change button label
 				tails.setLabel("Tails");
 			}
 			repaint();
@@ -293,12 +296,14 @@ public class Program4 extends Applet implements ActionListener,
 		int sifac = 100;
 
 		if( e.getSource().equals(speed) ){
-			obj.setSpeed(size.getValue());
+			//get speed value
+			obj.setSpeed(speed.getValue());
 		} else if ( e.getSource().equals(size)){
+			//get size
 			obj.setRadius(size.getValue()/2 + 1);
 		}
 
-	} // end
+	}
 
 	class ObjBall {
 		// placement of the ball
@@ -340,7 +345,7 @@ public class Program4 extends Applet implements ActionListener,
 		}
 		
 
-		// convience for drawing
+		// convenice for drawing
 		public void drawBall(Graphics g) {
 			
 			if (!rectangle) {
@@ -356,8 +361,10 @@ public class Program4 extends Applet implements ActionListener,
 				for(int i = 0; i < tails.length; i++ ){
 					if( tails[i] != null){
 						if (!rectangle) {
+							//draw oval
 							g.drawOval(tails[i].x, tails[i].y, tails[i].width, tails[i].height);
 						} else {
+							//draw rect
 							g.drawRect(tails[i].x, tails[i].y, tails[i].width, tails[i].height);
 						}
 						//g.drawRect( tails[i].x, tails[i].y, tails[i].width, tails[i].height);
