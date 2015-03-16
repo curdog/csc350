@@ -422,15 +422,10 @@ public class Program4 extends Applet implements ActionListener,
 
 		}
 
-		/*
-		 * this is a absolute for pixel based jump speed direction is calculated
-		 * from scaling the vector [dx dy] according to [1 1] aka WARNING: math
-		 * ahead
-		 */
-		// TODO: Maths
+		
 		public void setSpeed(int s) {
-			dx = s;
-			dy = s;
+			dx = s * dx / (int)Math.abs(dx);
+			dy = s * dy / (int)Math.abs(dy);
 		}
 
 	}
