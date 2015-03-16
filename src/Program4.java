@@ -180,25 +180,27 @@ public class Program4 extends Applet implements ActionListener,
 		Rectangle r = obj.getBoundingRectange();
 		g.drawRect(OFFSETX, OFFSETY, height, width);
 		
-		boolean cheat = false;
+		boolean draw = false;
 		
-		if( (int)r.getMaxX() >= height){
+		if( (int)r.getMaxX() >= height + OFFSETX - obj.getRadius()){
 			obj.rightSide();
-			cheat = true;
+			//obj.wall((int)r.getMaxX() - height );
+			draw = true;
 		}
-		if( (int)r.getMinX() <= OFFSETX ){
+		if( (int)r.getMinX() <= OFFSETX - obj.getRadius() ){
 			obj.leftSide();
-			cheat = true;
+		//	obj.wall( OFFSETX - (int)r.getMinX(), OFFSETX - (int)r.getMinX());
+			draw = true;
 		}
-		if( (int)r.getMaxY() >= width){
+		if( (int)r.getMaxY() >= width + OFFSETY - obj.getRadius()){
 			obj.bottomSide();
-			cheat = true;
+			draw = true;
 		}
-		if( (int)r.getMinY() <= OFFSETY ){
+		if( (int)r.getMinY() <= OFFSETY - obj.getRadius() ){
 			obj.topSide();
-			cheat = true;
+			draw = true;
 		}
-		if( !cheat)
+		if( !draw)
 			obj.drawBall(g);
 
 	}
@@ -229,7 +231,7 @@ public class Program4 extends Applet implements ActionListener,
 			try {
 				Thread.sleep(100);
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
+				
 				e.printStackTrace();
 			}
 
@@ -325,6 +327,11 @@ public class Program4 extends Applet implements ActionListener,
 			tails = new Rectangle[numTails];
 		}
 
+		public int getRadius() {
+			
+			return radius;
+		}
+
 		public void reset() {
 			x = OFFSETX + 20;
 			y = OFFSETY + 20;
@@ -401,6 +408,10 @@ public class Program4 extends Applet implements ActionListener,
 
 		public void topSide() {
 			dy = -dy;
+		}
+		public void wall( int dx, int dy){
+			x += dx;
+			y += dy;
 		}
 
 		// gets and sets
