@@ -1,3 +1,5 @@
+/*******************************************
+
 Sean Curtis, Kris Fielding, Laurel Miller
 CET 350 - Java
 Program 5 - Bounce2
@@ -28,9 +30,13 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
+import src.Program4.ObjBall;
+
 public class Bounce2 extends Applet implements ActionListener, MouseListener, AdjustmentListener, Runnable, MouseMotionListener{
 
 	private static final long serialVersionUID = 10L;
+	public static final int OFFSETX = 100;
+	public static final int OFFSETY = 25;
 	
 	//scroll bars
 	Scrollbar speed, size;
@@ -44,13 +50,21 @@ public class Bounce2 extends Applet implements ActionListener, MouseListener, Ad
 	//buttons
 	Button start, quit, clear;
 	
+	// Ball Object
+	private ObjBall obj;
+	
 	private Ballc ball;
 	private int delay;
 	boolean p, q;
+	
 	//the thread
 	private Thread theThread;
 	
 	public void init(){
+	p = true;
+	q = false;
+	obj = new ObjBall();
+	theThread = new Thread(this);
 	
 	//sets up the control panel
 	setControlPanel();
@@ -103,6 +117,32 @@ public class Bounce2 extends Applet implements ActionListener, MouseListener, Ad
 		}		
 	
 }
+	
+	class ObjBall {
+		// placement of the ball
+		int x = OFFSETX + 20;
+		int y = OFFSETY + 20;
+		// these are for speed
+		int dx = 1;
+		int dy = 1;
+		// this is size
+		int radius = 5;
+
+		public void reset() {
+			//reset the ball to the start position
+			x = OFFSETX + 20;
+			y = OFFSETY + 20;
+		}
+		
+		public void setSpeed(int s) {
+			dx = s * dx / (int)Math.abs(dx);
+			dy = s * dy / (int)Math.abs(dy);
+		}
+		
+		public void setRadius(int r) {
+			radius = r;
+		}
+	}
 	
 private void setSheetPanel() {
 		
@@ -228,14 +268,15 @@ private void setSheetPanel() {
 	}
 
 	public void stop(){
-	//remove all listeners
+		
+		//remove all listeners
 		clear.removeActionListener(this);
 		quit.removeActionListener(this);
 		start.removeActionListener(this);
 		size.removeAdjustmentListener(this);
 		speed.removeAdjustmentListener(this);
 		
-	//kill the thread
+		//kill the thread
 		Thread.currentThread().setPriority(Thread.MIN_PRIORITY);
 	}
 
@@ -252,16 +293,54 @@ private void setSheetPanel() {
 	}
 
 	@Override
-	public void adjustmentValueChanged(AdjustmentEvent arg0) {
-		// TODO Auto-generated method stub
+	public void adjustmentValueChanged(AdjustmentEvent e) {
+		if( e.getSource().equals(speed) ){
+			//get speed value
+			obj.setSpeed(speed.getValue());
+		} else if ( e.getSource().equals(size)){
+			//get size
+			obj.setRadius(size.getValue()/2 + 1);
+		}
 		
 	}
+	
+	public void actionPerformed(ActionEvent e) {
+		Object source = e.getSource();
+		
+		//button selection
+		if (source == start) {
+			p = !p;
+			if (p) {
+				//pause the ball
+				theThread.suspend();
+				start.setLabel("Start");
+			} else {
+				//start the ball
+				theThread.resume();
+				start.setLabel("Stop");
+			}
 
+		} else if (source.equals(clear)) {
+			// clear everything
+			obj.reset();
+			p = true;
+			theThread.suspend();
+			start.setLabel("Start");
+			repaint();
+		} else if(source == quit) {
+				// exit
+				System.exit(0);
+			}
+			
+		repaint();	
+		this.validate();
+	}
+	
 	public void mouseClicked(MouseEvent arg0) {}
 	public void mouseEntered(MouseEvent e) {}
 	public void mouseExited(MouseEvent e) {}
 	public void mousePressed(MouseEvent e) {}
 	public void mouseReleased(MouseEvent e) {}
-	public void actionPerformed(ActionEvent e) {}
+
 	
 }
