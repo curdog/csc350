@@ -91,7 +91,10 @@ public class Bounce2 extends Applet implements ActionListener, MouseListener, Ad
 		Graphics g;
 		
 		public void paint(Graphics cg){
-		
+			int height = 900;
+			int width = 490;
+			//draws the rectangle for the frame
+			g.drawRect(OFFSETX, OFFSETY, height, width);
 			update (cg);
 		}
 		
