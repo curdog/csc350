@@ -50,9 +50,6 @@ public class Bounce2 extends Applet implements ActionListener, MouseListener, Ad
 	//buttons
 	Button start, quit, clear;
 	
-	// Ball Object
-	private ObjBall obj;
-	
 	private Ballc ball;
 	private int delay;
 	boolean p, q;
@@ -63,7 +60,6 @@ public class Bounce2 extends Applet implements ActionListener, MouseListener, Ad
 	public void init(){
 	p = true;
 	q = false;
-	obj = new ObjBall();
 	theThread = new Thread(this);
 	
 	//sets up the control panel
@@ -114,35 +110,35 @@ public class Bounce2 extends Applet implements ActionListener, MouseListener, Ad
 			
 				g.drawImage(buffer,0,0,null);
 			}
-		}		
+		}
+		// placement of the ball
+				int x = OFFSETX + 20;
+				int y = OFFSETY + 20;
+				// these are for speed
+				int dx = 1;
+				int dy = 1;
+				// this is size
+				int radius = 5;
+
+				public void reset() {
+					//reset the ball to the start position
+					x = OFFSETX + 20;
+					y = OFFSETY + 20;
+				}
+				
+				public void setSpeed(int s) {
+					dx = s * dx / (int)Math.abs(dx);
+					dy = s * dy / (int)Math.abs(dy);
+				}
+				
+				public void setRadius(int r) {
+					radius = r;
+				}
+			}
 	
 }
 	
-	class ObjBall {
-		// placement of the ball
-		int x = OFFSETX + 20;
-		int y = OFFSETY + 20;
-		// these are for speed
-		int dx = 1;
-		int dy = 1;
-		// this is size
-		int radius = 5;
-
-		public void reset() {
-			//reset the ball to the start position
-			x = OFFSETX + 20;
-			y = OFFSETY + 20;
-		}
 		
-		public void setSpeed(int s) {
-			dx = s * dx / (int)Math.abs(dx);
-			dy = s * dy / (int)Math.abs(dy);
-		}
-		
-		public void setRadius(int r) {
-			radius = r;
-		}
-	}
 	
 private void setSheetPanel() {
 		
