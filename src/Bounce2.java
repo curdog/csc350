@@ -199,7 +199,7 @@ public class Bounce2 extends Applet implements ActionListener, MouseListener,
 				// paint
 				ball.repaint();
 				// update, move ball
-				// ball.move();
+				ball.move();
 			}
 
 			try {
@@ -303,30 +303,41 @@ class Ballc extends Canvas {
 
 	private static final long serialVersionUID = 1L;
 	Image buffer;
-	//Graphics g;
 
-	public void paint(Graphics cg) {
+	// Graphics g;
+
+	public Ballc() {
+		super();
+	}
+
+	public void paint(Graphics g) {
+		if (buffer == null) {
+			buffer = createImage(490, 900);
+		}
+
+		Graphics cg = buffer.getGraphics();
+		// eliminate previous drawing;
+		cg.clearRect(0, 0, 490, 900);
+
 		int height = 900;
 		int width = 490;
 		// draws the rectangle for the frame
 		cg.drawRect(Bounce2.OFFSETX, Bounce2.OFFSETY, height, width);
-		update(cg);
+		// update(cg);
+
+		cg.drawRect(x - radius, y - radius, radius * 2, radius * 2);
+
+		g.drawImage(buffer, 0, 0, this);
+	}
+
+	public void move() {
+		x += dx;
+		y += dy;
+
 	}
 
 	public void update(Graphics cg) {
-
-		// passing width and height
-		buffer = createImage((int) cg.getClipBounds().getWidth(), (int) cg
-				.getClipBounds().getHeight());
-
-		if (cg != null) {
-			cg.dispose();
-			cg = buffer.getGraphics();
-			cg.setColor(Color.WHITE);
-			// g.drawRect(arg1, arg2, arg3);
-
-			cg.drawImage(buffer, 0, 0, null);
-		}
+		paint(cg);
 	}
 
 	// placement of the ball
@@ -352,7 +363,9 @@ class Ballc extends Canvas {
 	public void setRadius(int r) {
 		radius = r;
 	}
-}// end Ballc
+}
+
+// end Ballc
 
 /*
  * class ObjBall { // placement of the ball int x = OFFSETX + 20; int y =
