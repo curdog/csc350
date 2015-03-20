@@ -56,7 +56,7 @@ public class Bounce2 extends Applet implements ActionListener, MouseListener,
 	Vector<Rectangle> Walls;
 
 	private Ballc ball;
-	private int delay;
+	private int delay = 20;
 	boolean p, q;
 
 	// the thread
@@ -71,7 +71,7 @@ public class Bounce2 extends Applet implements ActionListener, MouseListener,
 		p = true;
 		q = false;
 
-		theThread = new Thread(this);
+	//	theThread = new Thread(this);
 
 		// sets up the control panel
 		setControlPanel();
@@ -99,9 +99,11 @@ public class Bounce2 extends Applet implements ActionListener, MouseListener,
 		sheet = new Panel();
 		sheet.setVisible(true);
 		sheet.setLayout(new BorderLayout(0, 0));
+		sheet.setSize(900, 490);
 		// ball = new Ballc(w,h,rectangle screen);
 		ball.addMouseListener(this);
 		ball.addMouseMotionListener(this);
+		ball.setSize(900, 490);
 		sheet.add("Center", ball);
 		sheet.setBackground(Color.WHITE);
 	}
@@ -190,17 +192,18 @@ public class Bounce2 extends Applet implements ActionListener, MouseListener,
 		}
 	}
 
+	private boolean more = true;
 	public void run() {
-		boolean more = true;
-		Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
+		
+		//Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
 
 		while (more) {
-			if (!p) {
+			//if (!p) {
 				// paint
 				ball.repaint();
 				// update, move ball
 				ball.move();
-			}
+			//}
 
 			try {
 				// wait
@@ -208,7 +211,7 @@ public class Bounce2 extends Applet implements ActionListener, MouseListener,
 			} catch (InterruptedException e) {
 			}
 		}
-		stop();
+		
 	}
 
 	public void stop() {
@@ -223,7 +226,7 @@ public class Bounce2 extends Applet implements ActionListener, MouseListener,
 		ball.removeMouseMotionListener(this);
 
 		// kill the thread
-		Thread.currentThread().setPriority(Thread.MIN_PRIORITY);
+		more = false;
 	}
 
 	@Override
@@ -312,21 +315,21 @@ class Ballc extends Canvas {
 
 	public void paint(Graphics g) {
 		if (buffer == null) {
-			buffer = createImage(490, 900);
+			buffer = createImage(900, 490);
 		}
 
 		Graphics cg = buffer.getGraphics();
 		// eliminate previous drawing;
-		cg.clearRect(0, 0, 490, 900);
+		cg.clearRect(0, 0, 900, 490);
 
-		int height = 900;
-		int width = 490;
+		int height = 890;
+		int width = 480;
 		// draws the rectangle for the frame
-		cg.drawRect(Bounce2.OFFSETX, Bounce2.OFFSETY, height, width);
+		cg.drawRect(5, 5, height, width);
 		// update(cg);
 
 		cg.drawRect(x - radius, y - radius, radius * 2, radius * 2);
-
+		//buffer.
 		g.drawImage(buffer, 0, 0, this);
 	}
 
@@ -337,6 +340,7 @@ class Ballc extends Canvas {
 	}
 
 	public void update(Graphics cg) {
+		
 		paint(cg);
 	}
 
@@ -344,8 +348,8 @@ class Ballc extends Canvas {
 	int x = Bounce2.OFFSETX + 20;
 	int y = Bounce2.OFFSETY + 20;
 	// these are for speed
-	int dx = 1;
-	int dy = 1;
+	int dx = 10;
+	int dy = 10;
 	// this is size
 	int radius = 5;
 
