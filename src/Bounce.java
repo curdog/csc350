@@ -24,11 +24,14 @@ import java.awt.event.AdjustmentEvent;
 import java.awt.event.AdjustmentListener;
 
 /*
- <applet code="Bounce.class" width=500 height = 500>
- </applet>
- */
+   //Bounce
+  //cet 350 java
+ //Laurel Kris Sean Group 3
+//MIL1484, FIE4795, CUR3040
 
-public class Program4 extends Applet implements ActionListener,
+*/
+
+public class Bounce extends Applet implements ActionListener,
 		AdjustmentListener, Runnable {
 
 	private static final long serialVersionUID = 10L;
