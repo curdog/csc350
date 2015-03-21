@@ -392,16 +392,26 @@ class Ballc extends Canvas {
 			Ballc.drawBall(g);
 	}//end paint
 	
-	public Rectangle getBoundingRectangle() {
-
-		return new Rectangle(x - radius, y - radius, radius * 2, radius * 2);
+/************ GETS AND SETS ************/
+	public int getX() {
+		return x - radius;
 	}
-	
+
+	public int getY() {
+		return y - radius;
+	}
+
 	public int getRadius() {
 		
 		return radius;
 	}
 	
+	public Rectangle getBoundingRectangle() {
+
+		return new Rectangle(x - radius, y - radius, radius * 2, radius * 2);
+	}
+	
+/************ WALLS ************/
 	public void leftSide() {
 		dx = -dx;
 	}
@@ -421,11 +431,17 @@ class Ballc extends Canvas {
 		x += dx;
 		y += dy;
 	}
+	
 	public void move() {
 		x += dx;
 		y += dy;
 	}
 
+	public void updatePos() {
+		x += dx;
+		y += dy;
+	} 
+	
 	public void update(Graphics cg) {
 		
 		paint(cg);
