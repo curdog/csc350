@@ -22,6 +22,7 @@ import java.awt.GridBagLayout;
 import java.awt.Image;
 import java.awt.Label;
 import java.awt.Panel;
+import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Scrollbar;
 import java.awt.event.ActionEvent;
@@ -40,6 +41,9 @@ public class Bounce2 extends Applet implements ActionListener, MouseListener,
 	public static final int OFFSETX = 100;
 	public static final int OFFSETY = 25;
 
+	//points
+	Point x1,x2;
+	
 	// scroll bars
 	Scrollbar speed, size;
 
@@ -54,6 +58,10 @@ public class Bounce2 extends Applet implements ActionListener, MouseListener,
 
 	// vector
 	Vector<Rectangle> Walls;
+	
+	//good = true, mouse on screen
+	//good - false, mouse not on screen
+	boolean good,drag;
 
 	private Ballc ball;
 	private int delay = 20;
@@ -230,12 +238,6 @@ public class Bounce2 extends Applet implements ActionListener, MouseListener,
 	}
 
 	@Override
-	public void mouseDragged(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
 	public void mouseMoved(MouseEvent e) {
 		// TODO Auto-generated method stub
 
@@ -285,22 +287,48 @@ public class Bounce2 extends Applet implements ActionListener, MouseListener,
 		this.validate();
 	}
 
-	public void mouseClicked(MouseEvent arg0) {
+	public void mouseClicked(MouseEvent e) {
+			Point pt = new Point(e.getPoint());
+	}
+	
+	public void mouseDragged(MouseEvent e) {
+			//if we are on the screen to draw
+			if(good)
+			{
+				//we are dragging
+				drag=true;
+				//get x2 point
+				x2 = e.getPoint();
+			}
 	}
 
+	
 	public void mouseEntered(MouseEvent e) {
+		//mouse is on the screen to draw
+		good = true;
 	}
-
 	public void mouseExited(MouseEvent e) {
+		//mouse is not on screen to draw
+		good = false;
 	}
-
 	public void mousePressed(MouseEvent e) {
+		//if mouse is on the screen to draw
+		if(good)
+		{
+			//get x1 point
+			x1 = e.getPoint();
+		}
 	}
-
 	public void mouseReleased(MouseEvent e) {
+		//if mouse is on the screen to draw
+		if(good)
+		{
+			//done dragging
+			drag= false;
+			x2 = e.getPoint();
+		}
 	}
-
-}
+}//end Bounce2	
 
 class Ballc extends Canvas {
 
@@ -319,24 +347,83 @@ class Ballc extends Canvas {
 		}
 
 		Graphics cg = buffer.getGraphics();
+		
 		// eliminate previous drawing;
 		cg.clearRect(0, 0, 900, 490);
 
 		int height = 890;
 		int width = 480;
+/*		
+	    // these are for speed
+		int dx = 1;
+		int dy = 1;
+*/		
+		// this is size
+		int radius = 5;
+		
 		// draws the rectangle for the frame
 		cg.drawRect(5, 5, height, width);
-		// update(cg);
-
 		cg.drawRect(x - radius, y - radius, radius * 2, radius * 2);
-		//buffer.
+		
+		//buffer
 		g.drawImage(buffer, 0, 0, this);
+		Rectangle r = Ballc.getBoundingRectangle();
+		
+		//checking the walls
+		boolean draw = false;
+	
+		if( (int)r.getMaxX() >= height + Bounce2.OFFSETX - Ballc.getRadius()){
+			Ballc.rightSide();
+			draw = true;
+		}
+		if( (int)r.getMinX() <= Bounce2.OFFSETX - Ballc.getRadius() ){
+			Ballc.leftSide();
+			draw = true;
+		}
+		if( (int)r.getMaxY() >= width + Bounce2.OFFSETY - Ballc.getRadius()){
+			Ballc.bottomSide();
+			draw = true;
+		}
+		if( (int)r.getMinY() <= Bounce2.OFFSETY - Ballc.getRadius() ){
+			Ballc.topSide();
+			draw = true;
+		}
+		if( !draw)
+			Ballc.drawBall(g);
+	}//end paint
+	
+	public Rectangle getBoundingRectangle() {
+
+		return new Rectangle(x - radius, y - radius, radius * 2, radius * 2);
+	}
+	
+	public int getRadius() {
+		
+		return radius;
+	}
+	
+	public void leftSide() {
+		dx = -dx;
+	}
+	public void rightSide() {
+		dx = -dx;
 	}
 
+	public void bottomSide() {
+		dy = -dy;
+	}
+
+	public void topSide() {
+		dy = -dy;
+	}
+	
+	public void wall( int dx, int dy){
+		x += dx;
+		y += dy;
+	}
 	public void move() {
 		x += dx;
 		y += dy;
-
 	}
 
 	public void update(Graphics cg) {
@@ -367,9 +454,8 @@ class Ballc extends Canvas {
 	public void setRadius(int r) {
 		radius = r;
 	}
-}
-
-// end Ballc
+}//end Ballc
+	
 
 /*
  * class ObjBall { // placement of the ball int x = OFFSETX + 20; int y =
