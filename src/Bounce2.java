@@ -360,6 +360,12 @@ class Ballc extends Canvas {
 	public void paint(Graphics g) {
 		if (buffer == null) {
 			buffer = createImage(900, 490);
+			
+			//if drag is true, get rect points
+			if(drag)
+			{
+				g.drawRect(returnx1(), returnx2(), returny1(), returny2());
+			}
 		}
 
 		Graphics cg = buffer.getGraphics();
