@@ -367,29 +367,29 @@ class Ballc extends Canvas {
 		
 		//buffer
 		g.drawImage(buffer, 0, 0, this);
-		Rectangle r = Ballc.getBoundingRectangle();
+		Rectangle r = getBoundingRectangle();
 		
 		//checking the walls
 		boolean draw = false;
 	
-		if( (int)r.getMaxX() >= height + Bounce2.OFFSETX - Ballc.getRadius()){
-			Ballc.rightSide();
+		if( (int)r.getMaxX() >= height + Bounce2.OFFSETX - getRadius()){
+			rightSide();
 			draw = true;
 		}
-		if( (int)r.getMinX() <= Bounce2.OFFSETX - Ballc.getRadius() ){
-			Ballc.leftSide();
+		if( (int)r.getMinX() <= Bounce2.OFFSETX - getRadius() ){
+			leftSide();
 			draw = true;
 		}
-		if( (int)r.getMaxY() >= width + Bounce2.OFFSETY - Ballc.getRadius()){
-			Ballc.bottomSide();
+		if( (int)r.getMaxY() >= width + Bounce2.OFFSETY - getRadius()){
+			bottomSide();
 			draw = true;
 		}
-		if( (int)r.getMinY() <= Bounce2.OFFSETY - Ballc.getRadius() ){
-			Ballc.topSide();
+		if( (int)r.getMinY() <= Bounce2.OFFSETY - getRadius() ){
+			topSide();
 			draw = true;
 		}
-		if( !draw)
-			Ballc.drawBall(g);
+		//if( !draw)
+		//	drawBall(g);
 	}//end paint
 	
 /************ GETS AND SETS ************/
