@@ -411,7 +411,9 @@ class Ballc extends Canvas {
 	}
 
 	public void addRectangle(int x, int y, int width, int height) {
-		boxes.add(new Rectangle(x, y, width, height));
+		Rectangle temp = new Rectangle(x, y, width, height);
+		if( !temp.intersects(getBoundingRectangle()))
+			boxes.add( temp );
 	}
 
 	public void paint(Graphics g) {
@@ -451,17 +453,13 @@ class Ballc extends Canvas {
 		//check for interections
 		for( int i = 0; i < boxes.size(); i ++){
 			Rectangle inter;
-			if( (inter = boxes.get(i).intersection( getBoundingRectangle()) ) != null ){
-				if( inter.x > this.x){
-					rightSide();
-				}
-				if( inter.y > this.y ){
+			if(  boxes.get(i).intersects(r) ){
+				inter = boxes.get(i).intersection(r);
+				
+				if( inter.width >= inter.height ){
 					topSide();
 				}
-				if( inter.y == this.y){
-					bottomSide();
-				}
-				if( inter.x == this.x){
+				else if( inter.height >= inter.width ){
 					leftSide();
 				}
 				
