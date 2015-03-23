@@ -38,8 +38,8 @@ public class Bounce2 extends Applet implements ActionListener, MouseListener,
 		AdjustmentListener, Runnable, MouseMotionListener {
 
 	private static final long serialVersionUID = 10L;
-	public static final int OFFSETX = 100;
-	public static final int OFFSETY = 25;
+	public static final int OFFSETX = 5;
+	public static final int OFFSETY = 5;
 
 	//points
 	Point x1,x2;
@@ -132,9 +132,32 @@ public class Bounce2 extends Applet implements ActionListener, MouseListener,
 		control.setLayout(gbl);
 
 		// scroll bars
-		speed = new Scrollbar(Scrollbar.HORIZONTAL);
-		size = new Scrollbar(Scrollbar.HORIZONTAL);
+		speed = new Scrollbar(Scrollbar.HORIZONTAL, 0, 1, 1, 100);
+		size = new Scrollbar(Scrollbar.HORIZONTAL, 0, 1, 1, 100);
+		size.setMaximum(100);
+		speed.setMaximum(50);
+		
+		size.setBlockIncrement(2);
+		speed.setBlockIncrement(2);
+		
+		size.setMinimum(5);
+		speed.setMinimum(0);
+		
+		size.setUnitIncrement(1);
+		speed.setUnitIncrement(1);
+		
+		size.setSize(100, 25);
+		speed.setSize(100, 25);
+		
+		size.setBackground(Color.BLUE);
+		speed.setBackground(Color.RED);
+		
+		size.setEnabled(true);
+		speed.setEnabled(true);
 
+		size.validate();
+		speed.validate();
+		
 		// set text for the labels
 		speedLabel = new Label("Speed:");
 		sizeLabel = new Label("Size:");
@@ -145,7 +168,7 @@ public class Bounce2 extends Applet implements ActionListener, MouseListener,
 		start = new Button("START");
 
 		/********* SETTING UP THE GUI *************/
-
+		
 		// SIZE LABEL
 		gbc.gridx = 2;
 		gbc.gridy = 1;
@@ -176,16 +199,19 @@ public class Bounce2 extends Applet implements ActionListener, MouseListener,
 		gbc.gridwidth = 1;
 		control.add(clear, gbc);
 
+		//scrollbars
+		gbc.gridwidth = 3;
+		gbc.ipadx = 100;
+		
 		// SIZE SCROLL BAR
 		gbc.gridx = 3;
 		gbc.gridy = 1;
-		gbc.gridwidth = 1;
+		
 		control.add(size, gbc);
 
 		// SPEED SCROLL BAR
 		gbc.gridx = 3;
 		gbc.gridy = 2;
-		gbc.gridwidth = 1;
 		control.add(speed, gbc);
 
 	}
@@ -398,7 +424,7 @@ class Ballc extends Canvas {
 			rightSide();
 			draw = true;
 		}
-		if( (int)r.getMinX() <= Bounce2.OFFSETX - getRadius() ){
+		if( (int)r.getMinX() <= Bounce2.OFFSETX + getRadius() ){
 			leftSide();
 			draw = true;
 		}
@@ -406,7 +432,7 @@ class Ballc extends Canvas {
 			bottomSide();
 			draw = true;
 		}
-		if( (int)r.getMinY() <= Bounce2.OFFSETY - getRadius() ){
+		if( (int)r.getMinY() <= Bounce2.OFFSETY + getRadius() ){
 			topSide();
 			draw = true;
 		}
