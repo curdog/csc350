@@ -328,6 +328,22 @@ public class Bounce2 extends Applet implements ActionListener, MouseListener,
 			x2 = e.getPoint();
 		}
 	}
+	/************ RETURN VALUES TO DRAW ************/
+	public int returnx1() {
+		return (int)Math.min(x1.getX(), x2.getX());
+		}
+
+	public int returny1() {
+		return (int)Math.min(x1.getY(), x2.getY());
+		}
+
+	public int returnx2() {
+		return (int)Math.min(x2.getX(), -x1.getX());
+		}
+	public int returny2() {
+		return (int)Math.min(x2.getY(), -x1.getY());
+		}
+
 }//end Bounce2	
 
 class Ballc extends Canvas {
@@ -470,6 +486,9 @@ class Ballc extends Canvas {
 	public void setRadius(int r) {
 		radius = r;
 	}
+	
+
+
 }//end Ballc
 	
 
