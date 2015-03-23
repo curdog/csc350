@@ -79,7 +79,8 @@ public class Bounce2 extends Applet implements ActionListener, MouseListener,
 		// pause, quit
 		p = true;
 		q = false;
-
+		drag = false;
+		good = false;
 	//	theThread = new Thread(this);
 
 		// sets up the control panel
