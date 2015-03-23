@@ -61,7 +61,7 @@ public class Bounce2 extends Applet implements ActionListener, MouseListener,
 	
 	//good = true, mouse on screen
 	//good - false, mouse not on screen
-	boolean good,drag;
+	public static boolean good,drag;
 
 	private Ballc ball;
 	private int delay = 20;
@@ -75,6 +75,7 @@ public class Bounce2 extends Applet implements ActionListener, MouseListener,
 		// vector
 		Walls = new Vector<Rectangle>();
 		ball = new Ballc();
+		ball.setRef(this);
 		// pause, quit
 		p = true;
 		q = false;
@@ -379,6 +380,12 @@ class Ballc extends Canvas {
 
 	// Graphics g;
 
+	Bounce2 ref;
+	
+	public void setRef( Bounce2 ref ){
+		this.ref = ref;
+	}
+	
 	public Ballc() {
 		super();
 	}
@@ -388,9 +395,9 @@ class Ballc extends Canvas {
 			buffer = createImage(900, 490);
 			
 			//if drag is true, get rect points
-			if(drag)
+			if(Bounce2.drag)
 			{
-				g.drawRect(returnx1(), returnx2(), returny1(), returny2());
+				g.drawRect(ref.returnx1(), ref.returnx2(), ref.returny1(), ref.returny2());
 			}
 		}
 
