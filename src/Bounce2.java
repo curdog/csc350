@@ -319,7 +319,12 @@ public class Bounce2 extends Applet implements ActionListener, MouseListener,
 	}
 
 	public void mouseClicked(MouseEvent e) {
-		Point pt = new Point(e.getPoint());
+		//make sure your points are not null
+		if(x1 != null && x2 != null){
+			//remove shape from the array
+			remove(boxes[i]);
+		}
+		
 	}
 
 	public void mouseDragged(MouseEvent e) {
@@ -440,7 +445,7 @@ class Ballc extends Canvas {
 		cg.drawRect(5, 5, height, width);
 		cg.drawRect(x - radius, y - radius, radius * 2, radius * 2);
 
-		// draw obsticles
+		// draw obstacles
 		for (int i = 0; i < boxes.size(); i++) {
 			Rectangle d = boxes.get(i);
 			cg.fillRect(d.x, d.y, d.width, d.height);
@@ -450,7 +455,7 @@ class Ballc extends Canvas {
 		g.drawImage(buffer, 0, 0, this);
 		Rectangle r = getBoundingRectangle();
 
-		//check for interections
+		//check for intersections
 		for( int i = 0; i < boxes.size(); i ++){
 			Rectangle inter;
 			if(  boxes.get(i).intersects(r) ){
