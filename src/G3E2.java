@@ -1,13 +1,15 @@
 import java.applet.Applet;
-import java.awt.Button;
 import java.awt.Color;
+import java.awt.GradientPaint;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Label;
 import java.awt.Scrollbar;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.AdjustmentEvent;
 import java.awt.event.AdjustmentListener;
+import java.awt.geom.Rectangle2D;
 
 
 public class G3E2 extends Applet implements ActionListener,
@@ -92,17 +94,24 @@ AdjustmentListener, Runnable{
 		this.add(RminLabel);
 		RmaxLabel.setBounds(450, 350, 130, 25);
 		this.add(RmaxLabel);
-		KminLabel.setBounds(10, 50, 130, 25);
+		KminLabel.setBounds(10, 50, 100, 25);
 		this.add(KminLabel);
-		KmaxLabel.setBounds(10, 350, 130, 25);
+		KmaxLabel.setBounds(10, 350, 100, 25);
 		this.add(KmaxLabel);
 
 	}
 
-
-	@Override
-	public void run() {
-		// TODO Auto-generated method stub
+//setting up the gradient
+	public void paint(Graphics g) {
+		Graphics2D g2 = (Graphics2D) g;
+		//creating the gradient
+		GradientPaint redblue = new GradientPaint(200, 200, Color.RED,
+				300, 100, Color.BLUE);
+		g2.setPaint(redblue);
+		//filling the rectangles with color
+		g2.fill(new Rectangle2D.Double(125,100,300,300));
+		g2.setPaint(redblue);
+		g2.fill(new Rectangle2D.Double(125,100,300,300));
 		
 	}
 
@@ -116,6 +125,13 @@ AdjustmentListener, Runnable{
 
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void run() {
 		// TODO Auto-generated method stub
 		
 	}
