@@ -15,13 +15,7 @@ import java.awt.geom.Rectangle2D;
 public class G3E2 extends Applet implements ActionListener,
 AdjustmentListener, Runnable{
 
-	private static final long serialVersionUID = 10L;
-
-	private static final int MAXSPEED = 100;
-	private static final int MINSPEED = 0;
-	private static final int SPEED = 1;
-	private static final int MAXSIZE = 100;
-	private static final int MINSIZE = 0;
+	private static final long serialVersionUID = 10L;	
 	private static final int SIZE = 1;
 	public static final int OFFSETX = 100;
 	public static final int OFFSETY = 25;
@@ -32,11 +26,26 @@ AdjustmentListener, Runnable{
 		Label KminLabel;
 		Label KmaxLabel;
 		
+	//lists temp from scollbar value
+		Label RValueLabel;
+		Label KValueLabel;
+		
 	// scroll bar
 		Scrollbar rankin, kelvin;
-		
 		private int sliderW = 25;
 		private int sliderH = 240;
+		
+		//convert double to int
+		//min -50 Fahrenheit
+		//max 250 Fahrenheit
+		Double KELVINMIN = new Double(227.594);
+		int KMIN = KELVINMIN.intValue();
+		Double KELVINMAX = new Double(394.261);
+		int KMAX = KELVINMAX.intValue();
+		Double RANKINMIN = new Double(409.67);
+		int RMIN = RANKINMIN.intValue();
+		Double RANKINMAX = new Double(709.67);
+		int RMAX = RANKINMAX.intValue();
 	
 		
 	public void init() {
@@ -50,15 +59,17 @@ AdjustmentListener, Runnable{
 		RmaxLabel = new Label("Rankin Maximum");
 		KminLabel = new Label("Kelvin Minimum");
 		KmaxLabel = new Label("Kelvin Maximum");
-
+		RValueLabel = new Label("Temp:");
+		KValueLabel = new Label("Temp:");
+		
 		// speed scroll bars
 		kelvin = new Scrollbar(Scrollbar.VERTICAL, 0, 1, 1, 100);
 		rankin = new Scrollbar(Scrollbar.VERTICAL, 0, 1, 1, 100);
 		
 		//kelvin scroll bar
-		kelvin.setMaximum(MAXSPEED);
-		kelvin.setMinimum(MINSPEED);
-		kelvin.setUnitIncrement(SPEED);
+		kelvin.setMaximum(KMIN);
+		kelvin.setMinimum(KMAX);
+		kelvin.setUnitIncrement(1);
 		kelvin.setBlockIncrement( 1);
 		kelvin.setValue(0);
 		kelvin.setBackground(Color.GRAY);
@@ -70,9 +81,9 @@ AdjustmentListener, Runnable{
 		this.add(kelvin);
 
 		//rankin scroll bar
-		rankin.setMaximum(MAXSIZE);
-		rankin.setMinimum(MINSIZE);
-		rankin.setUnitIncrement(SIZE);
+		rankin.setMaximum(RMAX);
+		rankin.setMinimum(RMIN);
+		rankin.setUnitIncrement(1);
 		rankin.setBlockIncrement( 1);
 		rankin.setValue(0);
 		rankin.setBackground(Color.GRAY);
@@ -92,7 +103,10 @@ AdjustmentListener, Runnable{
 		this.add(KminLabel);
 		KmaxLabel.setBounds(75, 380, 100, 25);
 		this.add(KmaxLabel);
-
+		KValueLabel.setBounds(0,0,300,25);
+		this.add(RValueLabel);
+		RValueLabel.setBounds(500,0,300,25);
+		this.add(KValueLabel);
 	}
 
 //setting up the gradient
@@ -110,9 +124,13 @@ AdjustmentListener, Runnable{
 	}
 
 
-	@Override
 	public void adjustmentValueChanged(AdjustmentEvent e) {
-		// TODO Auto-generated method stub
+		//get rankin temp from scrollbar
+		if(e.getSource().equals(rankin)){
+			RValueLabel.setText("Temp: " + rankin.getValue());
+		}else if(e.getSource().equals(kelvin)){
+			KValueLabel.setText("Temp: " + kelvin.getValue());
+		}
 		
 	}
 
@@ -129,5 +147,6 @@ AdjustmentListener, Runnable{
 		// TODO Auto-generated method stub
 		
 	}
+
 	
 }
