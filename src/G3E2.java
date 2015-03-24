@@ -1,6 +1,7 @@
 import java.applet.Applet;
 import java.awt.Button;
 import java.awt.Color;
+import java.awt.Graphics;
 import java.awt.Label;
 import java.awt.Scrollbar;
 import java.awt.event.ActionEvent;
@@ -49,15 +50,16 @@ AdjustmentListener, Runnable{
 		setBackground(Color.white);
 		
 		// labels
-		RminLabel = new Label("Min:");
-		RmaxLabel = new Label("Max:");
-		KminLabel = new Label("Min:");
-		KmaxLabel = new Label("Max:");
+		RminLabel = new Label("Rankin Minimum:");
+		RmaxLabel = new Label("Rankin Maximum:");
+		KminLabel = new Label("Kelvin Minimum:");
+		KmaxLabel = new Label("Kelvin Maximum:");
 
 		// speed scroll bars
 		kelvin = new Scrollbar(Scrollbar.VERTICAL, 0, 1, 1, 100);
 		rankin = new Scrollbar(Scrollbar.VERTICAL, 0, 1, 1, 100);
 		
+		//kelvin scroll bar
 		kelvin.setMaximum(MAXSPEED);
 		kelvin.setMinimum(MINSPEED);
 		kelvin.setUnitIncrement(SPEED);
@@ -65,15 +67,13 @@ AdjustmentListener, Runnable{
 		kelvin.setValue(0);
 		kelvin.setBackground(Color.GRAY);
 		kelvin.setSize(sliderW, sliderH);
-		kelvin.setLocation(200, 640);
+		kelvin.setLocation(10, 100);
 		kelvin.setEnabled(true);
-		
 		kelvin.addAdjustmentListener(this);
 		kelvin.setVisible(true);
-
 		this.add(kelvin);
 
-
+		//rankin scroll bar
 		rankin.setMaximum(MAXSIZE);
 		rankin.setMinimum(MINSIZE);
 		rankin.setUnitIncrement(SIZE);
@@ -81,21 +81,21 @@ AdjustmentListener, Runnable{
 		rankin.setValue(0);
 		rankin.setBackground(Color.GRAY);
 		rankin.setSize(sliderW, sliderH);
-		rankin.setLocation(200, 675);
+		rankin.setLocation(450, 100);
 		rankin.setEnabled(true);
 		rankin.addAdjustmentListener(this);
 		rankin.setVisible(true);
 		this.add(rankin);
 
 		// adding labels to the GUI
-		RminLabel.setBounds(100, 650, 130, 25);
+		RminLabel.setBounds(450, 50, 130, 25);
 		this.add(RminLabel);
-		RmaxLabel.setBounds(100, 675, 130, 25);
+		RmaxLabel.setBounds(450, 350, 130, 25);
 		this.add(RmaxLabel);
-		KminLabel.setBounds(100, 650, 130, 25);
-		this.add(RminLabel);
-		KmaxLabel.setBounds(100, 650, 130, 25);
-		this.add(RminLabel);
+		KminLabel.setBounds(10, 50, 130, 25);
+		this.add(KminLabel);
+		KmaxLabel.setBounds(10, 350, 130, 25);
+		this.add(KmaxLabel);
 
 	}
 
