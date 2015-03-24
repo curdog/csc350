@@ -16,7 +16,6 @@ public class G3E2 extends Applet implements ActionListener,
 AdjustmentListener, Runnable{
 
 	private static final long serialVersionUID = 10L;	
-	private static final int SIZE = 1;
 	public static final int OFFSETX = 100;
 	public static final int OFFSETY = 25;
 	
@@ -25,6 +24,8 @@ AdjustmentListener, Runnable{
 		Label RmaxLabel;
 		Label KminLabel;
 		Label KmaxLabel;
+		Label HotLabel;
+		Label ColdLabel;
 		
 	//lists temp from scollbar value
 		Label RValueLabel;
@@ -61,14 +62,16 @@ AdjustmentListener, Runnable{
 		KmaxLabel = new Label("Kelvin Maximum");
 		RValueLabel = new Label("Temp:");
 		KValueLabel = new Label("Temp:");
+		HotLabel = new Label("HOT");
+		ColdLabel = new Label("COLD");
 		
 		// speed scroll bars
 		kelvin = new Scrollbar(Scrollbar.VERTICAL, 0, 1, 1, 100);
 		rankin = new Scrollbar(Scrollbar.VERTICAL, 0, 1, 1, 100);
 		
 		//kelvin scroll bar
-		kelvin.setMaximum(KMIN);
-		kelvin.setMinimum(KMAX);
+		kelvin.setMaximum(KMAX);
+		kelvin.setMinimum(KMIN);
 		kelvin.setUnitIncrement(1);
 		kelvin.setBlockIncrement( 1);
 		kelvin.setValue(0);
@@ -103,18 +106,23 @@ AdjustmentListener, Runnable{
 		this.add(KminLabel);
 		KmaxLabel.setBounds(75, 380, 100, 25);
 		this.add(KmaxLabel);
-		KValueLabel.setBounds(0,0,300,25);
+		KValueLabel.setBounds(0, 0, 300, 25);
 		this.add(RValueLabel);
-		RValueLabel.setBounds(500,0,300,25);
+		RValueLabel.setBounds(500, 0, 300, 25);
 		this.add(KValueLabel);
+		HotLabel.setBounds(335, 50, 100, 25);
+		this.add(HotLabel);
+		ColdLabel.setBounds(335, 430, 100, 25);
+		this.add(ColdLabel);
+		
 	}
 
 //setting up the gradient
 	public void paint(Graphics g) {
 		Graphics2D g2 = (Graphics2D) g;
 		//creating the gradient
-		GradientPaint redblue = new GradientPaint(200, 200, Color.RED,
-				300, 100, Color.BLUE);
+		GradientPaint redblue = new GradientPaint(300, 100, Color.RED,
+				200, 200, Color.BLUE);
 		g2.setPaint(redblue);
 		//filling the rectangles with color
 		g2.fill(new Rectangle2D.Double(200,100,300,300));
@@ -128,6 +136,7 @@ AdjustmentListener, Runnable{
 		//get rankin temp from scrollbar
 		if(e.getSource().equals(rankin)){
 			RValueLabel.setText("Temp: " + rankin.getValue());
+		//get kalvin temp from scrollbar
 		}else if(e.getSource().equals(kelvin)){
 			KValueLabel.setText("Temp: " + kelvin.getValue());
 		}
