@@ -63,7 +63,7 @@ AdjustmentListener, Runnable{
 		kelvin.setValue(0);
 		kelvin.setBackground(Color.GRAY);
 		kelvin.setSize(sliderW, sliderH);
-		kelvin.setLocation(40, 100);
+		kelvin.setLocation(100, 100);
 		kelvin.setEnabled(true);
 		kelvin.addAdjustmentListener(this);
 		kelvin.setVisible(true);
@@ -77,20 +77,20 @@ AdjustmentListener, Runnable{
 		rankin.setValue(0);
 		rankin.setBackground(Color.GRAY);
 		rankin.setSize(sliderW, sliderH);
-		rankin.setLocation(490, 100);
+		rankin.setLocation(575, 100);
 		rankin.setEnabled(true);
 		rankin.addAdjustmentListener(this);
 		rankin.setVisible(true);
 		this.add(rankin);
 
 		// adding labels to the GUI
-		RminLabel.setBounds(450, 50, 130, 25);
+		RminLabel.setBounds(525, 60, 130, 25);
 		this.add(RminLabel);
-		RmaxLabel.setBounds(450, 380, 130, 25);
+		RmaxLabel.setBounds(530, 380, 130, 25);
 		this.add(RmaxLabel);
-		KminLabel.setBounds(10, 50, 100, 25);
+		KminLabel.setBounds(75, 50, 100, 25);
 		this.add(KminLabel);
-		KmaxLabel.setBounds(10, 380, 100, 25);
+		KmaxLabel.setBounds(75, 380, 100, 25);
 		this.add(KmaxLabel);
 
 	}
@@ -103,9 +103,9 @@ AdjustmentListener, Runnable{
 				300, 100, Color.BLUE);
 		g2.setPaint(redblue);
 		//filling the rectangles with color
-		g2.fill(new Rectangle2D.Double(125,100,300,300));
+		g2.fill(new Rectangle2D.Double(200,100,300,300));
 		g2.setPaint(redblue);
-		g2.fill(new Rectangle2D.Double(125,100,300,300));
+		g2.fill(new Rectangle2D.Double(200,100,300,300));
 		
 	}
 
