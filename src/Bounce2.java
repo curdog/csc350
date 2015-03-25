@@ -316,13 +316,15 @@ public class Bounce2 extends Applet implements ActionListener, MouseListener,
 	}
 
 	public void mouseClicked(MouseEvent e) {
-		//make sure your points are not null
-		if(x1 != null && x2 != null){
-			//remove shape from the array
-			remove(boxes[i]);
+		Point p = new Point(e.getPoint());
+		int i = 0;
+		
+		if(boxes.contains(p))
+		{
+			boxes.removeElement(i);
 		}
 		
-	}
+}
 
 	public void mouseDragged(MouseEvent e) {
 		// if we are on the screen to draw
