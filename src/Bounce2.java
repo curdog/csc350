@@ -318,7 +318,7 @@ public class Bounce2 extends Applet implements ActionListener, MouseListener,
 
 	public void mouseClicked(MouseEvent e) {
 		Point p = new Point(e.getPoint());
-		ListIterator<Rectangle> i = boxes.listIterator;
+		ListIterator<Rectangle> i = ball.getRectangles().listIterator();
 		
 		while(i.hasNext())
 		{
@@ -428,10 +428,16 @@ class Ballc extends Canvas {
 
 	public void addRectangle(int x, int y, int width, int height) {
 		Rectangle temp = new Rectangle(x, y, width, height);
+		//check bounds and intersections
 		if( !temp.intersects(getBoundingRectangle()))
-			boxes.add( temp );
+			if( x > 5  &&  y > 5 && x + width < 890 && y + height < 480 )
+				boxes.add( temp );
 	}
 
+	public Vector<Rectangle> getRectangles(){
+		return boxes;
+	}
+	
 	public void paint(Graphics g) {
 		if (buffer == null)
 			buffer = createImage(900, 490);
@@ -571,73 +577,4 @@ class Ballc extends Canvas {
 		radius = r;
 	}
 
-}// end Ballc
-
-/*
- * class ObjBall { // placement of the ball int x = OFFSETX + 20; int y =
- * OFFSETY + 20; // these are for speed int dx = 1; int dy = 1; // this is size
- * int radius = 5;
- * 
- * Rectangle[] tails;
- * 
- * boolean rectangle = false; boolean drawTails = false; int t =0; int numTails
- * = 500; public ObjBall() { tails = new Rectangle[numTails]; }
- * 
- * public int getRadius() {
- * 
- * return radius; }
- * 
- * public void reset() { x = OFFSETX + 20; y = OFFSETY + 20; tails = new
- * Rectangle[numTails]; }
- * 
- * public void updatePos() { x += dx; y += dy; }
- * 
- * public boolean isRectangle() { return rectangle; }
- * 
- * public void setRectangle(boolean rectangle) { this.rectangle = rectangle; }
- * 
- * 
- * // convenice for drawing public void drawBall(Graphics g) {
- * 
- * if (!rectangle) { g.drawOval(x + radius / 2, y + radius / 2, radius*2,
- * radius*2); } else { g.drawRect(x + radius / 2, y + radius / 2, radius*2,
- * radius*2); } //draw tails, for the furries if( drawTails){ //save current
- * tails[t % numTails] = new Rectangle(x + radius / 2, y + radius / 2, radius*2,
- * radius*2); //draw rest for(int i = 0; i < tails.length; i++ ){ if( tails[i]
- * != null){ if (!rectangle) { //draw oval g.drawOval(tails[i].x, tails[i].y,
- * tails[i].width, tails[i].height); } else { //draw rect g.drawRect(tails[i].x,
- * tails[i].y, tails[i].width, tails[i].height); } //g.drawRect( tails[i].x,
- * tails[i].y, tails[i].width, tails[i].height); } } t++; } }
- * 
- * // convience functions for hiting stuff public void leftSide() { dx = -dx; }
- * 
- * public boolean isDrawTails() { return drawTails; }
- * 
- * public void setDrawTails(boolean drawTails) { this.drawTails = drawTails; if(
- * drawTails == false){ tails = null; tails= new Rectangle[numTails]; } }
- * 
- * public void rightSide() { dx = -dx; }
- * 
- * public void bottomSide() { dy = -dy; }
- * 
- * public void topSide() { dy = -dy; } public void wall( int dx, int dy){ x +=
- * dx; y += dy; }
- * 
- * // gets and sets public int getX() { return x - radius; }
- * 
- * public int getY() { return y - radius; }
- * 
- * public void setRadius(int r) { radius = r; }
- * 
- * public Rectangle getBoundingRectange() {
- * 
- * return new Rectangle(x - radius, y - radius, radius * 2, radius * 2);
- * 
- * }
- * 
- * 
- * public void setSpeed(int s) { dx = s * dx / (int)Math.abs(dx); dy = s * dy /
- * (int)Math.abs(dy); }
- * 
- * } }
- */
+}
