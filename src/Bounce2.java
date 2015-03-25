@@ -59,8 +59,6 @@ public class Bounce2 extends Applet implements ActionListener, MouseListener,
 	// buttons
 	Button start, quit, clear;
 
-
-
 	// good = true, mouse on screen
 	// good - false, mouse not on screen
 	public static boolean good, drag;
@@ -72,31 +70,30 @@ public class Bounce2 extends Applet implements ActionListener, MouseListener,
 	// the thread
 	private Thread theThread;
 
-	public int getStartx(){
+	public int getStartx() {
 		String s = getParameter("startx");
-		if( s != null ){
+		if (s != null) {
 			return Integer.parseInt(s);
 		}
 		return 100;
 	}
-	
-	public int getStarty(){
-		String s =getParameter("starty");
-		if( s != null ){
+
+	public int getStarty() {
+		String s = getParameter("starty");
+		if (s != null) {
 			return Integer.parseInt(s);
 		}
 		return 100;
 	}
-	
-	public int getStartSize(){
-		String s =getParameter("startsize");
-		if( s != null ){
+
+	public int getStartSize() {
+		String s = getParameter("startsize");
+		if (s != null) {
 			return Integer.parseInt(s);
 		}
 		return 5;
 	}
-	
-	
+
 	public void init() {
 
 		ball = new Ballc();
@@ -294,7 +291,6 @@ public class Bounce2 extends Applet implements ActionListener, MouseListener,
 
 	@Override
 	public void mouseMoved(MouseEvent e) {
-		
 
 	}
 
@@ -326,7 +322,7 @@ public class Bounce2 extends Applet implements ActionListener, MouseListener,
 			}
 
 		} else if (source.equals(clear)) {
-			
+
 			ball.reset();
 			p = true;
 			// theThread.suspend();
@@ -344,25 +340,15 @@ public class Bounce2 extends Applet implements ActionListener, MouseListener,
 	public void mouseClicked(MouseEvent e) {
 		Point p = new Point(e.getPoint());
 		ListIterator<Rectangle> i = ball.getRectangles().listIterator();
-		
-		while(i.hasNext())
-		{
+
+		while (i.hasNext()) {
 			Rectangle rect = i.next();
-			
-			if(rect.contains(p)){
+
+			if (rect.contains(p)) {
 				i.remove();
 			}
 		}
-}
-		
-		/*Point p = new Point(e.getPoint());
-		int i = 0;
-		
-		if(boxes.contains(p))
-		{
-			boxes.removeElement(i);
-		}*/
-		
+	}
 
 	public void mouseDragged(MouseEvent e) {
 		// if we are on the screen to draw
@@ -387,13 +373,12 @@ public class Bounce2 extends Applet implements ActionListener, MouseListener,
 	public void mousePressed(MouseEvent e) {
 		// if mouse is on the screen to draw
 		// get x1 point
-		if( x1 == null ){
-			x1 = (Point)e.getPoint().clone();
+		if (x1 == null) {
+			x1 = (Point) e.getPoint().clone();
 			x2 = x1;
-		}
-		else
-			x2  = (Point)e.getPoint().clone();
-		
+		} else
+			x2 = (Point) e.getPoint().clone();
+
 		System.out.println(e.getPoint().toString());
 		drag = true;
 
@@ -401,15 +386,15 @@ public class Bounce2 extends Applet implements ActionListener, MouseListener,
 
 	public void mouseReleased(MouseEvent e) {
 		// if mouse is on the screen to draw
-		
+
 		// done dragging
 		drag = false;
-		x2 = (Point)e.getPoint().clone();
+		x2 = (Point) e.getPoint().clone();
 		System.out.println(e.getPoint().toString());
-		
-		ball.addRectangle(returnx1(), returny1(), returnx2()-returnx1(),
-				returny2()-returny1());
-		
+
+		ball.addRectangle(returnx1(), returny1(), returnx2() - returnx1(),
+				returny2() - returny1());
+
 		x1 = null;
 		x2 = null;
 
@@ -444,6 +429,9 @@ class Ballc extends Canvas {
 
 	public void setRef(Bounce2 ref) {
 		this.ref = ref;
+		this.radius = ref.getStartSize();
+		this.x = ref.getStartx();
+		this.y = ref.getStarty();
 	}
 
 	public Ballc() {
@@ -453,38 +441,39 @@ class Ballc extends Canvas {
 
 	public void addRectangle(int x, int y, int width, int height) {
 		Rectangle temp = new Rectangle(x, y, width, height);
-		//check bounds and intersections
-		if( !temp.intersects(getBoundingRectangle()))
-			if( x > 5  &&  y > 5 && x + width < 890 && y + height < 480 )
-				boxes.add( temp );
-		
-		//check for dominatrix
+		// check bounds and intersections
+		if (!temp.intersects(getBoundingRectangle()))
+			if (x > 5 && y > 5 && x + width < 890 && y + height < 480)
+				boxes.add(temp);
+
+		// check for dominatrix
 		Iterator<Rectangle> r = boxes.iterator();
-		while( r.hasNext() ){
+		while (r.hasNext()) {
 			Rectangle rr = r.next();
-			if( temp.contains(rr) && !temp.equals(rr)){
+			if (temp.contains(rr) && !temp.equals(rr)) {
 				boxes.remove(rr);
 			}
 		}
-			
+
 	}
 
-	public Vector<Rectangle> getRectangles(){
+	public Vector<Rectangle> getRectangles() {
 		return boxes;
 	}
-	
+
 	public void paint(Graphics g) {
 		if (buffer == null)
 			buffer = createImage(900, 490);
-		
+
 		Graphics cg = buffer.getGraphics();
-		
+
 		// eliminate previous drawing;
 		cg.clearRect(0, 0, 900, 490);
 
 		if (Bounce2.drag) {
-			cg.drawRect(ref.returnx1(), ref.returny1(), ref.returnx2()-ref.returnx1(),
-					ref.returny2()-ref.returny1());
+			cg.drawRect(ref.returnx1(), ref.returny1(),
+					ref.returnx2() - ref.returnx1(),
+					ref.returny2() - ref.returny1());
 		}
 
 		int height = 890;
@@ -492,7 +481,7 @@ class Ballc extends Canvas {
 
 		// draw ball
 		cg.drawRect(5, 5, height, width);
-		cg.drawRect(x - radius, y - radius, radius * 2, radius * 2);
+		cg.drawOval(x - radius, y - radius, radius * 2, radius * 2);
 
 		// draw obstacles
 		for (int i = 0; i < boxes.size(); i++) {
@@ -504,33 +493,31 @@ class Ballc extends Canvas {
 		g.drawImage(buffer, 0, 0, this);
 		Rectangle r = getBoundingRectangle();
 
-		//check for intersections
-		for( int i = 0; i < boxes.size(); i ++){
+		// check for intersections
+		for (int i = 0; i < boxes.size(); i++) {
 			Rectangle inter;
-			if(  boxes.get(i).intersects(r) ){
+			if (boxes.get(i).intersects(r)) {
 				inter = boxes.get(i).intersection(r);
-				
-				if( inter.width >= inter.height ){
+
+				if (inter.width >= inter.height) {
 					topSide();
-				}
-				else if( inter.height >= inter.width ){
+				} else if (inter.height >= inter.width) {
 					leftSide();
 				}
-				
+
 			}
 		}
-		
-		
-		if ((int) r.getMaxX() >= height + Bounce2.OFFSETX - getRadius()) {
+
+		if ((int) r.getMaxX() >= height + Bounce2.OFFSETX + getRadius() - 1) {
 			rightSide();
 		}
-		if ((int) r.getMinX() <= Bounce2.OFFSETX + getRadius()) {
+		if ((int) r.getMinX() <= Bounce2.OFFSETX + getRadius() + 1) {
 			leftSide();
 		}
-		if ((int) r.getMaxY() >= width + Bounce2.OFFSETY - getRadius()) {
+		if ((int) r.getMaxY() >= width + Bounce2.OFFSETY + getRadius() - 1) {
 			bottomSide();
 		}
-		if ((int) r.getMinY() <= Bounce2.OFFSETY + getRadius()) {
+		if ((int) r.getMinY() <= Bounce2.OFFSETY + getRadius() + 1) {
 			topSide();
 		}
 
