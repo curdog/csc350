@@ -33,6 +33,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.ListIterator;
 import java.util.Vector;
 
@@ -71,6 +72,31 @@ public class Bounce2 extends Applet implements ActionListener, MouseListener,
 	// the thread
 	private Thread theThread;
 
+	public int getStartx(){
+		String s = getParameter("startx");
+		if( s != null ){
+			return Integer.parseInt(s);
+		}
+		return 100;
+	}
+	
+	public int getStarty(){
+		String s =getParameter("starty");
+		if( s != null ){
+			return Integer.parseInt(s);
+		}
+		return 100;
+	}
+	
+	public int getStartSize(){
+		String s =getParameter("startsize");
+		if( s != null ){
+			return Integer.parseInt(s);
+		}
+		return 5;
+	}
+	
+	
 	public void init() {
 
 		ball = new Ballc();
@@ -268,17 +294,16 @@ public class Bounce2 extends Applet implements ActionListener, MouseListener,
 
 	@Override
 	public void mouseMoved(MouseEvent e) {
-		// TODO Auto-generated method stub
+		
 
 	}
 
 	@Override
 	public void adjustmentValueChanged(AdjustmentEvent e) {
 		if (e.getSource().equals(speed)) {
-			// TODO get speed value
+			
 			ball.setSpeed(speed.getValue());
 		} else if (e.getSource().equals(size)) {
-			// TODO get size
 			ball.setRadius(size.getValue() / 2 + 1);
 		}
 
@@ -301,7 +326,7 @@ public class Bounce2 extends Applet implements ActionListener, MouseListener,
 			}
 
 		} else if (source.equals(clear)) {
-			// TODO clear everything
+			
 			ball.reset();
 			p = true;
 			// theThread.suspend();
@@ -432,6 +457,16 @@ class Ballc extends Canvas {
 		if( !temp.intersects(getBoundingRectangle()))
 			if( x > 5  &&  y > 5 && x + width < 890 && y + height < 480 )
 				boxes.add( temp );
+		
+		//check for dominatrix
+		Iterator<Rectangle> r = boxes.iterator();
+		while( r.hasNext() ){
+			Rectangle rr = r.next();
+			if( temp.contains(rr) && !temp.equals(rr)){
+				boxes.remove(rr);
+			}
+		}
+			
 	}
 
 	public Vector<Rectangle> getRectangles(){
