@@ -57,8 +57,7 @@ public class Bounce2 extends Applet implements ActionListener, MouseListener,
 	// buttons
 	Button start, quit, clear;
 
-	// vector
-	Vector<Rectangle> Walls;
+
 
 	// good = true, mouse on screen
 	// good - false, mouse not on screen
@@ -73,8 +72,6 @@ public class Bounce2 extends Applet implements ActionListener, MouseListener,
 
 	public void init() {
 
-		// vector
-		Walls = new Vector<Rectangle>();
 		ball = new Ballc();
 		ball.setRef(this);
 		// pause, quit
@@ -402,8 +399,7 @@ class Ballc extends Canvas {
 	private static final long serialVersionUID = 1L;
 	Image buffer;
 
-	// Graphics g;
-	ArrayList<Rectangle> boxes;
+	Vector<Rectangle> boxes;
 	Bounce2 ref;
 
 	public void setRef(Bounce2 ref) {
@@ -412,7 +408,7 @@ class Ballc extends Canvas {
 
 	public Ballc() {
 		super();
-		boxes = new ArrayList<Rectangle>();
+		boxes = new Vector<Rectangle>();
 	}
 
 	public void addRectangle(int x, int y, int width, int height) {
@@ -424,8 +420,6 @@ class Ballc extends Canvas {
 	public void paint(Graphics g) {
 		if (buffer == null)
 			buffer = createImage(900, 490);
-
-		// if drag is true, get rect points
 		
 		Graphics cg = buffer.getGraphics();
 		
@@ -437,7 +431,6 @@ class Ballc extends Canvas {
 					ref.returny2()-ref.returny1());
 		}
 
-		
 		int height = 890;
 		int width = 480;
 
@@ -551,7 +544,7 @@ class Ballc extends Canvas {
 		x = Bounce2.OFFSETX + 20;
 		y = Bounce2.OFFSETY + 20;
 		radius = 5;
-		boxes = new ArrayList<Rectangle>();
+		boxes.clear();
 	}
 
 	public void setSpeed(int s) {
