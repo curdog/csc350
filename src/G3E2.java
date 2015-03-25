@@ -121,14 +121,13 @@ AdjustmentListener, Runnable{
 	public void paint(Graphics g) {
 		Graphics2D g2 = (Graphics2D) g;
 		//creating the gradient
-		GradientPaint redblue = new GradientPaint(300, 100, Color.RED,
-				200, 200, Color.BLUE);
+		GradientPaint redblue = new GradientPaint(300,200, Color.RED,
+				300, 300, Color.BLUE);
 		g2.setPaint(redblue);
 		//filling the rectangles with color
 		g2.fill(new Rectangle2D.Double(200,100,300,300));
 		g2.setPaint(redblue);
 		g2.fill(new Rectangle2D.Double(200,100,300,300));
-		
 	}
 
 
@@ -136,11 +135,15 @@ AdjustmentListener, Runnable{
 		//get rankin temp from scrollbar
 		if(e.getSource().equals(rankin)){
 			RValueLabel.setText("Temp: " + rankin.getValue());
+			//synchronize scroll bars
+			
 		//get kalvin temp from scrollbar
 		}else if(e.getSource().equals(kelvin)){
 			KValueLabel.setText("Temp: " + kelvin.getValue());
+			//synchronize scroll bars
 		}
 		
+	
 	}
 
 
