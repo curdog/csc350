@@ -33,6 +33,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
+import java.util.ListIterator;
 import java.util.Vector;
 
 public class Bounce2 extends Applet implements ActionListener, MouseListener,
@@ -317,14 +318,26 @@ public class Bounce2 extends Applet implements ActionListener, MouseListener,
 
 	public void mouseClicked(MouseEvent e) {
 		Point p = new Point(e.getPoint());
+		ListIterator<Rectangle> i = boxes.listIterator;
+		
+		while(i.hasNext())
+		{
+			Rectangle rect = i.next();
+			
+			if(rect.contains(p)){
+				i.remove();
+			}
+		}
+}
+		
+		/*Point p = new Point(e.getPoint());
 		int i = 0;
 		
 		if(boxes.contains(p))
 		{
 			boxes.removeElement(i);
-		}
+		}*/
 		
-}
 
 	public void mouseDragged(MouseEvent e) {
 		// if we are on the screen to draw
