@@ -18,6 +18,10 @@ AdjustmentListener, Runnable{
 	private static final long serialVersionUID = 10L;	
 	public static final int OFFSETX = 100;
 	public static final int OFFSETY = 25;
+	public static final int MIN = -50;
+	public static final int MAX = 252;
+
+
 	
 	// creates labels on GUI
 		Label RminLabel;
@@ -36,9 +40,7 @@ AdjustmentListener, Runnable{
 		private int sliderW = 25;
 		private int sliderH = 240;
 		
-		//convert double to int
-		//min -50 Fahrenheit
-		//max 250 Fahrenheit
+/*		//convert double to int
 		Double KELVINMIN = new Double(227.594);
 		int KMIN = KELVINMIN.intValue();
 		Double KELVINMAX = new Double(394.261);
@@ -47,7 +49,7 @@ AdjustmentListener, Runnable{
 		int RMIN = RANKINMIN.intValue();
 		Double RANKINMAX = new Double(709.67);
 		int RMAX = RANKINMAX.intValue();
-	
+*/	
 		
 	public void init() {
 
@@ -70,8 +72,8 @@ AdjustmentListener, Runnable{
 		rankin = new Scrollbar(Scrollbar.VERTICAL, 0, 1, 1, 100);
 		
 		//kelvin scroll bar
-		kelvin.setMaximum(KMAX);
-		kelvin.setMinimum(KMIN);
+		kelvin.setMaximum(MAX);
+		kelvin.setMinimum(MIN);
 		kelvin.setUnitIncrement(1);
 		kelvin.setBlockIncrement( 1);
 		kelvin.setValue(0);
@@ -84,8 +86,8 @@ AdjustmentListener, Runnable{
 		this.add(kelvin);
 
 		//rankin scroll bar
-		rankin.setMaximum(RMAX);
-		rankin.setMinimum(RMIN);
+		rankin.setMaximum(MAX);
+		rankin.setMinimum(MIN);
 		rankin.setUnitIncrement(1);
 		rankin.setBlockIncrement( 1);
 		rankin.setValue(0);
@@ -132,15 +134,42 @@ AdjustmentListener, Runnable{
 
 
 	public void adjustmentValueChanged(AdjustmentEvent e) {
+		int val1, val2;
+		
 		//get rankin temp from scrollbar
 		if(e.getSource().equals(rankin)){
-			RValueLabel.setText("Temp: " + rankin.getValue());
-			//synchronize scroll bars
+			val1 = rankin.getValue();
+			
+			//conversion
+			Double RConversion = new Double(459.67);
+			int RConv = RConversion.intValue();
+			
+			//ranking to kelvin conversion
+			kelvin.setValue(val1 = val1 + RConv);
+			
+			System.out.println(val1);
+			
+			//convert val1 integer to double
+			double temp1 = (double)val1;
+			
+			
+			//put value in Kelvin temp label
+			//KValueLabel.setText(String.format("Temp: %.1f", val1));
+			
+					
+			//display 1 decimal place to label
+			RValueLabel.setText(String.format("Temp: %.1f", temp1));
 			
 		//get kalvin temp from scrollbar
 		}else if(e.getSource().equals(kelvin)){
-			KValueLabel.setText("Temp: " + kelvin.getValue());
-			//synchronize scroll bars
+			//get value of the scroll bar
+			val2 = kelvin.getValue();
+			
+			//convert integer to double
+			double temp2 = (double)val2;
+			
+			//display 1 decimal place in label
+			KValueLabel.setText(String.format("Temp: %.1f", temp2));
 		}
 		
 	
