@@ -147,16 +147,11 @@ AdjustmentListener, Runnable{
 			//ranking to kelvin conversion
 			kelvin.setValue(val1 = val1 + RConv);
 			
-			System.out.println(val1);
+			//System.out.println(val1);
 			
 			//convert val1 integer to double
 			double temp1 = (double)val1;
-			
-			
-			//put value in Kelvin temp label
-			//KValueLabel.setText(String.format("Temp: %.1f", val1));
-			
-					
+								
 			//display 1 decimal place to label
 			RValueLabel.setText(String.format("Temp: %.1f", temp1));
 			
@@ -164,6 +159,15 @@ AdjustmentListener, Runnable{
 		}else if(e.getSource().equals(kelvin)){
 			//get value of the scroll bar
 			val2 = kelvin.getValue();
+			
+			Double KConversion = new Double(459.67);
+			int KConv = KConversion.intValue();
+			
+			//kelvin to rankin conversion
+			val2 = val2 + KConv;
+			rankin.setValue(val2 = val2 * (5/9));
+			
+			System.out.println(val2);
 			
 			//convert integer to double
 			double temp2 = (double)val2;
