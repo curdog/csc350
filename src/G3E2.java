@@ -100,7 +100,7 @@ AdjustmentListener, Runnable{
 		this.add(rankin);
 
 		// adding labels to the GUI
-		RminLabel.setBounds(525, 60, 130, 25);
+		RminLabel.setBounds(525, 50, 130, 25);
 		this.add(RminLabel);
 		RmaxLabel.setBounds(530, 380, 130, 25);
 		this.add(RmaxLabel);
@@ -108,9 +108,10 @@ AdjustmentListener, Runnable{
 		this.add(KminLabel);
 		KmaxLabel.setBounds(75, 380, 100, 25);
 		this.add(KmaxLabel);
-		KValueLabel.setBounds(0, 0, 300, 25);
+		//moving the labels with the scroll bar
+		KValueLabel.setBounds(10, (100 + rankin.getValue()), 100, 25);
 		this.add(RValueLabel);
-		RValueLabel.setBounds(500, 0, 300, 25);
+		RValueLabel.setBounds(610, (100 + kelvin.getValue()), 100, 25);
 		this.add(KValueLabel);
 		HotLabel.setBounds(335, 50, 100, 25);
 		this.add(HotLabel);
@@ -130,6 +131,11 @@ AdjustmentListener, Runnable{
 		g2.fill(new Rectangle2D.Double(200,100,300,300));
 		g2.setPaint(redblue);
 		g2.fill(new Rectangle2D.Double(200,100,300,300));
+		
+		//draw bar graph over gradient
+		g.drawRect(400, 150, 50, 200);
+		g.setColor(Color.WHITE);
+		g.fillRect(400, 150, 50, 200);
 	}
 
 
@@ -145,9 +151,9 @@ AdjustmentListener, Runnable{
 			int RConv = RConversion.intValue();
 			
 			//ranking to kelvin conversion
+			//val1=val1 + RConv;
 			kelvin.setValue(val1 = val1 + RConv);
-			
-			//System.out.println(val1);
+			System.out.println(val1);
 			
 			//convert val1 integer to double
 			double temp1 = (double)val1;
@@ -155,19 +161,26 @@ AdjustmentListener, Runnable{
 			//display 1 decimal place to label
 			RValueLabel.setText(String.format("Temp: %.1f", temp1));
 			
-		//get kalvin temp from scrollbar
-		}else if(e.getSource().equals(kelvin)){
+		
+		}
+		
+		//get kelvin temp from scrollbar
+		if(e.getSource().equals(kelvin)){
 			//get value of the scroll bar
 			val2 = kelvin.getValue();
 			
 			Double KConversion = new Double(459.67);
 			int KConv = KConversion.intValue();
 			
+			Double m = new Double(.555555);
+			int m2 = m.intValue();
+			
 			//kelvin to rankin conversion
 			val2 = val2 + KConv;
-			rankin.setValue(val2 = val2 * (5/9));
+			val2 = val2 * m2;
 			
-			System.out.println(val2);
+			rankin.setValue(val2);
+			//System.out.println(val2);
 			
 			//convert integer to double
 			double temp2 = (double)val2;
