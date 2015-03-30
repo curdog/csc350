@@ -39,6 +39,12 @@ public class G3E2 extends Applet implements ActionListener, AdjustmentListener
 	private int sliderW = 25;
 	private int sliderH = 300;
 
+	
+	public static float KMAX = 394.3f;
+	public static float RMAX = 709.7f;
+	
+	public static float KMIN = 227.6f;
+	public static float RMIN = 409.7f;
 	public void init() {
 
 		setLayout(null);
@@ -52,8 +58,8 @@ public class G3E2 extends Applet implements ActionListener, AdjustmentListener
 		KmaxLabel = new Label("Kelvin Maximum");
 		RValueLabel = new Label("Temp:");
 		KValueLabel = new Label("Temp:");
-		HotLabel = new Label("COLD");
-		ColdLabel = new Label("HOT");
+		HotLabel = new Label("HOT");
+		ColdLabel = new Label("COLD");
 
 		// speed scroll bars
 		kelvin = new Scrollbar(Scrollbar.VERTICAL, 0, 1, 2276, 3943);
@@ -96,7 +102,6 @@ public class G3E2 extends Applet implements ActionListener, AdjustmentListener
 		ColdLabel.setBounds(335, 430, 100, 25);
 		this.add(ColdLabel);
 
-		// TODO
 		// how to get parameter
 		String deg = getParameter("Deg");
 		String un = getParameter("Unit");
@@ -140,24 +145,21 @@ public class G3E2 extends Applet implements ActionListener, AdjustmentListener
 	public void paint(Graphics g) {
 		Graphics2D g2 = (Graphics2D) g;
 		// creating the gradient
-		GradientPaint redblue = new GradientPaint(300, 200, Color.BLUE, 300,
-				300, Color.RED);
+		GradientPaint redblue = new GradientPaint(300, 200, Color.RED, 300,
+				300, Color.BLUE);
 		g2.setPaint(redblue);
 		// filling the rectangles with color
 		g2.fill(new Rectangle2D.Double(200, 100, 300, 300));
 		g2.setPaint(redblue);
 		g2.fill(new Rectangle2D.Double(200, 100, 300, 300));
 
-		// TODO: clean up
 		// draw bar graph over gradient
 		g.setColor(Color.BLACK);
 		g.drawRect(250, 100, 200, yval - 100);
 
-		// g.fillRect(250, 100, 200, yval - 150);
 	}
 
 	public void adjustmentValueChanged(AdjustmentEvent e) {
-		int val1, val2;
 
 		// conversions
 		float rankinv = 0.0f;
@@ -168,16 +170,12 @@ public class G3E2 extends Applet implements ActionListener, AdjustmentListener
 
 		// get rankin temp from scrollbar
 		if (e.getSource().equals(rankin)) {
-
 			kelvin.setValue((int) (kelvinv * 10.0f));
-
 		}
 
 		// get kelvin temp from scrollbar
 		if (e.getSource().equals(kelvin)) {
-
 			rankin.setValue((int) (rankinv * 10.0f));
-
 		}
 
 		yval = (int) (280.0f
@@ -192,8 +190,8 @@ public class G3E2 extends Applet implements ActionListener, AdjustmentListener
 		RValueLabel.setLocation(RValueLabel.getX(), yval);
 		KValueLabel.setLocation(KValueLabel.getX(), yval);
 
-		RValueLabel.setText(String.format("Temp: %.1f", rankinv));
-		KValueLabel.setText(String.format("Temp: %.1f", kelvinv));
+		RValueLabel.setText(String.format("Temp: %.1f", RMIN + RMAX - rankinv));
+		KValueLabel.setText(String.format("Temp: %.1f", KMIN + KMAX - kelvinv));
 
 		this.add(RValueLabel);
 		this.add(KValueLabel);
@@ -205,7 +203,7 @@ public class G3E2 extends Applet implements ActionListener, AdjustmentListener
 
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
-		// TODO Auto-generated method stub
+		
 
 	}
 
