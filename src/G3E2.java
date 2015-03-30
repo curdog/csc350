@@ -1,3 +1,5 @@
+package src;
+
 import java.applet.Applet;
 import java.awt.Color;
 import java.awt.GradientPaint;
@@ -11,52 +13,38 @@ import java.awt.event.AdjustmentEvent;
 import java.awt.event.AdjustmentListener;
 import java.awt.geom.Rectangle2D;
 
+public class G3E2 extends Applet implements ActionListener, AdjustmentListener,
+ {
 
-public class G3E2 extends Applet implements ActionListener,
-AdjustmentListener, Runnable{
-
-	private static final long serialVersionUID = 10L;	
+	private static final long serialVersionUID = 10L;
 	public static final int OFFSETX = 100;
 	public static final int OFFSETY = 25;
 	public static final int MIN = -50;
 	public static final int MAX = 252;
 
-
-	
 	// creates labels on GUI
-		Label RminLabel;
-		Label RmaxLabel;
-		Label KminLabel;
-		Label KmaxLabel;
-		Label HotLabel;
-		Label ColdLabel;
-		
-	//lists temp from scollbar value
-		Label RValueLabel;
-		Label KValueLabel;
-		
+	Label RminLabel;
+	Label RmaxLabel;
+	Label KminLabel;
+	Label KmaxLabel;
+	Label HotLabel;
+	Label ColdLabel;
+
+	// lists temp from scollbar value
+	Label RValueLabel;
+	Label KValueLabel;
+
 	// scroll bar
-		Scrollbar rankin, kelvin;
-		private int sliderW = 25;
-		private int sliderH = 240;
-		
-/*		//convert double to int
-		Double KELVINMIN = new Double(227.594);
-		int KMIN = KELVINMIN.intValue();
-		Double KELVINMAX = new Double(394.261);
-		int KMAX = KELVINMAX.intValue();
-		Double RANKINMIN = new Double(409.67);
-		int RMIN = RANKINMIN.intValue();
-		Double RANKINMAX = new Double(709.67);
-		int RMAX = RANKINMAX.intValue();
-*/	
-		
+	Scrollbar rankin, kelvin;
+	private int sliderW = 25;
+	private int sliderH = 300;
+
 	public void init() {
 
 		setLayout(null);
 		setVisible(true);
 		setBackground(Color.white);
-		
+
 		// labels
 		RminLabel = new Label("Rankin Minimum");
 		RmaxLabel = new Label("Rankin Maximum");
@@ -64,19 +52,14 @@ AdjustmentListener, Runnable{
 		KmaxLabel = new Label("Kelvin Maximum");
 		RValueLabel = new Label("Temp:");
 		KValueLabel = new Label("Temp:");
-		HotLabel = new Label("HOT");
-		ColdLabel = new Label("COLD");
-		
+		HotLabel = new Label("COLD");
+		ColdLabel = new Label("HOT");
+
 		// speed scroll bars
-		kelvin = new Scrollbar(Scrollbar.VERTICAL, 0, 1, 1, 100);
-		rankin = new Scrollbar(Scrollbar.VERTICAL, 0, 1, 1, 100);
-		
-		//kelvin scroll bar
-		kelvin.setMaximum(MAX);
-		kelvin.setMinimum(MIN);
-		kelvin.setUnitIncrement(1);
-		kelvin.setBlockIncrement( 1);
-		kelvin.setValue(0);
+		kelvin = new Scrollbar(Scrollbar.VERTICAL, 0, 1, 2276, 3943);
+		rankin = new Scrollbar(Scrollbar.VERTICAL, 0, 1, 4097, 7097);
+
+		kelvin.setValue(300);
 		kelvin.setBackground(Color.GRAY);
 		kelvin.setSize(sliderW, sliderH);
 		kelvin.setLocation(100, 100);
@@ -85,12 +68,7 @@ AdjustmentListener, Runnable{
 		kelvin.setVisible(true);
 		this.add(kelvin);
 
-		//rankin scroll bar
-		rankin.setMaximum(MAX);
-		rankin.setMinimum(MIN);
-		rankin.setUnitIncrement(1);
-		rankin.setBlockIncrement( 1);
-		rankin.setValue(0);
+		rankin.setValue(500);
 		rankin.setBackground(Color.GRAY);
 		rankin.setSize(sliderW, sliderH);
 		rankin.setLocation(575, 100);
@@ -102,109 +80,134 @@ AdjustmentListener, Runnable{
 		// adding labels to the GUI
 		RminLabel.setBounds(525, 50, 130, 25);
 		this.add(RminLabel);
-		RmaxLabel.setBounds(530, 380, 130, 25);
+		RmaxLabel.setBounds(530, 420, 130, 25);
 		this.add(RmaxLabel);
 		KminLabel.setBounds(75, 50, 100, 25);
 		this.add(KminLabel);
-		KmaxLabel.setBounds(75, 380, 100, 25);
+		KmaxLabel.setBounds(75, 420, 100, 25);
 		this.add(KmaxLabel);
-		//moving the labels with the scroll bar
-		KValueLabel.setBounds(10, (100 + rankin.getValue()), 100, 25);
+		// moving the labels with the scroll bar
+		KValueLabel.setBounds(10, (100 + 100), 100, 25);
 		this.add(RValueLabel);
-		RValueLabel.setBounds(610, (100 + kelvin.getValue()), 100, 25);
+		RValueLabel.setBounds(610, (100 + 100), 100, 25);
 		this.add(KValueLabel);
 		HotLabel.setBounds(335, 50, 100, 25);
 		this.add(HotLabel);
 		ColdLabel.setBounds(335, 430, 100, 25);
 		this.add(ColdLabel);
-		
+
+		// TODO
+		// how to get parameter
+		String deg = getParameter("Deg");
+		String un = getParameter("Unit");
+
+		double inideg = (deg != null ) ? Double.parseDouble(deg) : 300;
+
+		if (un != null) {
+			if (un.equals("K")) {
+				if( inideg * 10 > 2276 && inideg * 10 < 3943 ){
+					kelvin.setValue( (int)(inideg * 10));
+					this.adjustmentValueChanged( new AdjustmentEvent(kelvin, 0, 0, 0));
+				}
+				else{
+					kelvin.setValue(  3000);
+					this.adjustmentValueChanged( new AdjustmentEvent(kelvin, 0, 0, 0));
+				}
+
+			} else if (un.equals("R")) {
+				if( inideg * 10 > 4097 && inideg * 10 < 7097 ){
+					rankin.setValue( (int)(inideg * 10));
+					this.adjustmentValueChanged( new AdjustmentEvent(rankin, 0, 0, 0));
+				}
+				else{
+					rankin.setValue(  3000);
+					this.adjustmentValueChanged( new AdjustmentEvent(rankin, 0, 0, 0));
+				}
+			} else {
+				rankin.setValue(  3000);
+				this.adjustmentValueChanged( new AdjustmentEvent(rankin, 0, 0, 0));
+			}
+
+		} else {
+			rankin.setValue(  3000);
+			this.adjustmentValueChanged( new AdjustmentEvent(rankin, 0, 0, 0));
+		}
 	}
 
-//setting up the gradient
+	private int yval = 0;
+
+	// setting up the gradient
 	public void paint(Graphics g) {
 		Graphics2D g2 = (Graphics2D) g;
-		//creating the gradient
-		GradientPaint redblue = new GradientPaint(300,200, Color.RED,
-				300, 300, Color.BLUE);
+		// creating the gradient
+		GradientPaint redblue = new GradientPaint(300, 200, Color.BLUE, 300,
+				300, Color.RED);
 		g2.setPaint(redblue);
-		//filling the rectangles with color
-		g2.fill(new Rectangle2D.Double(200,100,300,300));
+		// filling the rectangles with color
+		g2.fill(new Rectangle2D.Double(200, 100, 300, 300));
 		g2.setPaint(redblue);
-		g2.fill(new Rectangle2D.Double(200,100,300,300));
-		
-		//draw bar graph over gradient
-		g.drawRect(400, 150, 50, 200);
-		g.setColor(Color.WHITE);
-		g.fillRect(400, 150, 50, 200);
-	}
+		g2.fill(new Rectangle2D.Double(200, 100, 300, 300));
 
+		// TODO: clean up
+		// draw bar graph over gradient
+		g.setColor(Color.BLACK);
+		g.drawRect(250, 100, 200, yval - 100);
+
+		// g.fillRect(250, 100, 200, yval - 150);
+	}
 
 	public void adjustmentValueChanged(AdjustmentEvent e) {
 		int val1, val2;
-		
-		//get rankin temp from scrollbar
-		if(e.getSource().equals(rankin)){
-			val1 = rankin.getValue();
-			
-			//conversion
-			Double RConversion = new Double(459.67);
-			int RConv = RConversion.intValue();
-			
-			//ranking to kelvin conversion
-			//val1=val1 + RConv;
-			kelvin.setValue(val1 = val1 + RConv);
-			System.out.println(val1);
-			
-			//convert val1 integer to double
-			double temp1 = (double)val1;
-								
-			//display 1 decimal place to label
-			RValueLabel.setText(String.format("Temp: %.1f", temp1));
-			
-		
-		}
-		
-		//get kelvin temp from scrollbar
-		if(e.getSource().equals(kelvin)){
-			//get value of the scroll bar
-			val2 = kelvin.getValue();
-			
-			Double KConversion = new Double(459.67);
-			int KConv = KConversion.intValue();
-			
-			Double m = new Double(.555555);
-			int m2 = m.intValue();
-			
-			//kelvin to rankin conversion
-			val2 = val2 + KConv;
-			val2 = val2 * m2;
-			
-			rankin.setValue(val2);
-			//System.out.println(val2);
-			
-			//convert integer to double
-			double temp2 = (double)val2;
-			
-			//display 1 decimal place in label
-			KValueLabel.setText(String.format("Temp: %.1f", temp2));
-		}
-		
-	
-	}
 
+		// conversions
+		float rankinv = 0.0f;
+		float kelvinv = 0.0f;
+
+		rankinv = (float) kelvin.getValue() / 10.0f * 9.0f / 5.0f;
+		kelvinv = (float) rankin.getValue() / 10.0f * 5.0f / 9.0f;
+
+		// get rankin temp from scrollbar
+		if (e.getSource().equals(rankin)) {
+
+			kelvin.setValue((int) (kelvinv * 10.0f));
+
+		}
+
+		// get kelvin temp from scrollbar
+		if (e.getSource().equals(kelvin)) {
+
+			rankin.setValue((int) (rankinv * 10.0f));
+
+		}
+
+		yval = (int) (280.0f
+				/ ((float) (rankin.getMaximum() / 10 - rankin.getMinimum() / 10))
+				* (float) rankin.getValue() / 10 - 280);
+
+		//System.out.println("Ybal" + yval);
+
+		this.remove(RValueLabel);
+		this.remove(KValueLabel);
+
+		RValueLabel.setLocation(RValueLabel.getX(), yval);
+		KValueLabel.setLocation(KValueLabel.getX(), yval);
+
+		RValueLabel.setText(String.format("Temp: %.1f", rankinv));
+		KValueLabel.setText(String.format("Temp: %.1f", kelvinv));
+
+		this.add(RValueLabel);
+		this.add(KValueLabel);
+
+		this.invalidate();
+		this.validate();
+
+	}
 
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 
-	@Override
-	public void run() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	
 }
