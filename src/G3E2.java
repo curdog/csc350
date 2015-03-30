@@ -13,7 +13,7 @@ import java.awt.event.AdjustmentEvent;
 import java.awt.event.AdjustmentListener;
 import java.awt.geom.Rectangle2D;
 
-public class G3E2 extends Applet implements ActionListener, AdjustmentListener,
+public class G3E2 extends Applet implements ActionListener, AdjustmentListener
  {
 
 	private static final long serialVersionUID = 10L;
