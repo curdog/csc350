@@ -2,6 +2,7 @@ package src;
 
 import java.awt.Button;
 import java.awt.CheckboxMenuItem;
+import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -9,14 +10,17 @@ import java.awt.Label;
 import java.awt.Menu;
 import java.awt.MenuBar;
 import java.awt.MenuItem;
+import java.awt.MenuShortcut;
 import java.awt.Panel;
 import java.awt.Scrollbar;
+import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.AdjustmentEvent;
 import java.awt.event.AdjustmentListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.awt.event.KeyEvent;
 
 public class CannonVSBall extends java.applet.Applet implements Runnable,
 		AdjustmentListener, ActionListener, ItemListener {
@@ -36,7 +40,7 @@ public class CannonVSBall extends java.applet.Applet implements Runnable,
 	//sub elements
 	Menu control, parameters, size, speed, env;
 	MenuItem pause, run, restart;
-	MenuItem sizee,speede;
+	CheckboxMenuItem xsm_size, sm_size, nor_size, lg_size, xlg_size, barn_size;
 	CheckboxMenuItem mercuryp, venusp, earthp, marsp,
 		jupiterp, saturnp, uranusp,
 		neptunep, plutop, planet_xp;
@@ -75,7 +79,10 @@ public class CannonVSBall extends java.applet.Applet implements Runnable,
 		velocity = new Scrollbar(Scrollbar.HORIZONTAL, 400, 1,100,1200);
 		menu = new MenuBar();
 		menuSetup();
-		
+		Object f = getParent();
+		while (!(f instanceof Frame))
+			f = ((Component) f).getParent();
+		((Frame) f).setMenuBar( menu );
 		//listen
 		
 		
@@ -85,7 +92,30 @@ public class CannonVSBall extends java.applet.Applet implements Runnable,
 	}
 	
 	public void menuSetup(){
+		menu.add(control = new Menu("Control"));
+		menu.add(size = new Menu("Size"));
+		menu.add( speed = new Menu("Speed"));
+		/*	
+		menu.add(parameters);
+		menu.add(size);
+		menu.add(env);
+		*/
+		control.add(pause = new MenuItem("Pause", 
+				new MenuShortcut( KeyEvent.getExtendedKeyCodeForChar('P'))));
+		control.add(run = new MenuItem("Run", 
+				new MenuShortcut( KeyEvent.getExtendedKeyCodeForChar('R'))));
 		
+		control.addSeparator();
+		
+		control.add(restart = new MenuItem("Restart", 
+				new MenuShortcut( KeyEvent.getExtendedKeyCodeForChar('O'))));
+		
+		size.add(xsm_size = new CheckboxMenuItem("X-Small"));
+		size.add(sm_size = new CheckboxMenuItem("Small"));
+		size.add(nor_size = new CheckboxMenuItem("Normal"));
+		size.add(lg_size = new CheckboxMenuItem("Large"));
+		size.add(xlg_size = new CheckboxMenuItem("X-Large"));
+		size.add(barn_size = new CheckboxMenuItem("Barn"));
 	}
 	
 	public void start(){
