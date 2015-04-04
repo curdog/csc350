@@ -1,5 +1,13 @@
-package src;
+/* Laurel Miller, Sean Curtis, Kris Fielding
+ * CET 350 - Java, Group 3
+ * Program 6 - CannonVSBall
+ * MIL1484, FIE4795, CUR3040
+ */
 
+
+//package src;
+
+import java.awt.BorderLayout;
 import java.awt.Button;
 import java.awt.CheckboxMenuItem;
 import java.awt.Component;
@@ -21,19 +29,26 @@ import java.awt.event.AdjustmentListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 public class CannonVSBall extends java.applet.Applet implements Runnable,
-		AdjustmentListener, ActionListener, ItemListener {
+		AdjustmentListener, ActionListener, ItemListener, MouseListener {
 
+	private static final long serialVersionUID = 1L;
+	
 	//main elements
 	MenuBar menu;
-	Button fire;
+	Button fire, quit;
 	Label fireLabel;
 	Label angleLabel;
 	Label velocLabel;
+	Label computer;
+	Label user;
+	
 	Scrollbar angle;
 	Scrollbar velocity;
-	Panel game;
+	Panel game, ctrl;
 	GridBagLayout gblayout;
 	GridBagConstraints gbc;
 	
@@ -51,8 +66,12 @@ public class CannonVSBall extends java.applet.Applet implements Runnable,
 	float tar_velocity;
 	float gun_velocity;
 	
-	//constant values
+	Thread theThread;
+	boolean p,q;
+	private Ballc ball;
+	private int delay = 20;
 	
+	//constant values
 	public static final float MERCURY 	= 3.59f;
 	public static final float VENUS 	= 8.87f;
 	public static final float EARTH 	= 9.81f;
@@ -65,10 +84,24 @@ public class CannonVSBall extends java.applet.Applet implements Runnable,
 	public static final float MOON 		= 1.62f;
 	public static final float PLANET_X	= -3.14f;
 	
+	//angle boundaries, in degrees
+	private final int MaxAng = 100;
+	private final int MinAng = 0;
+	
+	//velocity boundaries, in feet/sec
+	private final int MaxVel = 1210;
+	private final int MinVel = 100;
+	
 	public void init(){
+		p = true;
+		q = false;
+		setControlPanel();
+		ball = new Ballc();
+		
 		//crap
 		gblayout = new GridBagLayout();
 		gbc = new GridBagConstraints();
+		
 		
 		//create
 		fire = new Button("Fire");
@@ -88,9 +121,101 @@ public class CannonVSBall extends java.applet.Applet implements Runnable,
 		
 		//show
 		
+		game.add(BorderLayout.CENTER,game);
+		ctrl.add(ctrl,BorderLayout.SOUTH);
+		
+		//add listeners
+		fire.addActionListener(this);
+		quit.addActionListener(this);
+		angle.addAdjustmentListener(this);
+		velocity.addAdjustmentListener(this);
+		
 		this.setLayout(gblayout);
 	}
 	
+	private void setControlPanel() {
+		ctrl = new Panel();
+		
+		GridBagLayout gbl;
+		GridBagConstraints gbc;
+		
+		gbc = new GridBagConstraints();
+		gbl = new GridBagLayout();
+		
+		ctrl.setVisible(true);
+		ctrl.setLayout(gbl);
+		
+		
+		angle.setBlockIncrement(2);
+		velocity.setBlockIncrement(2);
+		
+		angle.setMinimum(5);
+		velocity.setMinimum(2);
+		
+		angle.setUnitIncrement(1);
+		velocity.setUnitIncrement(1);
+		
+		angle.setSize(100,25);
+		velocity.setSize(100,25);
+		
+		angle.setEnabled(true);
+		velocity.setEnabled(true);
+		
+		angle.validate();
+		velocity.validate();
+		
+		computer = new Label("Computer:");
+		user = new Label("User:");
+		fireLabel = new Label("Fire:");
+		angleLabel = new Label("Angle:");
+		velocLabel = new Label("Velocity:");
+		
+		quit = new Button("QUIT");
+		fire = new Button("FIRE");
+		
+		/********** SETTING UP THE GUI **********/
+		
+		//fire, angle label
+		gbc.gridx = 2;
+		gbc.gridy = 1;
+		gbc.gridwidth = 1;
+		ctrl.add(fireLabel,gbc);
+		
+		gbc.gridx = 2;
+		gbc.gridy = 2;
+		gbc.gridwidth = 1;
+		ctrl.add(angleLabel,gbc);
+		
+		//buttons
+		gbc.gridx = 2;
+		gbc.gridy = 3;
+		gbc.gridwidth = 1;
+		ctrl.add(fire,gbc);
+		
+		gbc.gridx = 4;
+		gbc.gridy = 3;
+		gbc.gridwidth = 1;
+		ctrl.add(quit,gbc);
+		
+		//scroll bars
+		gbc.gridx = 3;
+		gbc.gridy = 1;
+		angle.setMaximum(MaxAng);
+		angle.setMinimum(MinAng);
+		ctrl.add(angle,gbc);
+		
+		gbc.gridx = 3;
+		gbc.gridy = 2;
+		velocity.setMaximum(MaxVel);
+		velocity.setMaximum(MaxVel);
+		ctrl.add(velocity, gbc);
+		
+		//score labels
+		ctrl.add(computer,gbc);
+		ctrl.add(user,gbc);
+		
+	}
+
 	public void menuSetup(){
 		menu.add(control = new Menu("Control"));
 		menu.add(size = new Menu("Size"));
@@ -119,8 +244,14 @@ public class CannonVSBall extends java.applet.Applet implements Runnable,
 	}
 	
 	public void start(){
+		if(theThread == null){
+			theThread = new Thread(this);
+			theThread.start();
+		}
 		
 	}
+	
+	private boolean more = true;
 	
 	public void update(Graphics g){
 		paint( g );
@@ -143,10 +274,22 @@ public class CannonVSBall extends java.applet.Applet implements Runnable,
 		// TODO Auto-generated method stub
 
 	}
+	
+	public void stop(){
+		//remove listeners
+		angle.removeAdjustmentListener(this);
+		velocity.removeAdjustmentListener(this);
+		game.removeMouseListener(this);
+		game.removeMouseListener(this);
+		quit.removeActionListener(this);
+		fire.removeActionListener(this);
+		
+		//kill the thread
+		more = false;
+	}
 
 	@Override
-	public void adjustmentValueChanged(AdjustmentEvent arg0) {
-		// TODO Auto-generated method stub
+	public void adjustmentValueChanged(AdjustmentEvent e) {
 
 	}
 
@@ -156,12 +299,52 @@ public class CannonVSBall extends java.applet.Applet implements Runnable,
 	 */
 	@Override
 	public void run() {
-		// TODO Auto-generated method stub
+		while(more){
+			ball.repaint();
+			
+			if(!p){
+				ball.move();
+			}
+			
+			try{
+				theThread.sleep(delay);
+			} catch (InterruptedException e){}
+		}
 
 	}
 
 	@Override
 	public void itemStateChanged(ItemEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseExited(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mousePressed(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent arg0) {
 		// TODO Auto-generated method stub
 		
 	}
