@@ -5,7 +5,7 @@
  */
 
 
-//package src;
+package src;
 
 import java.awt.BorderLayout;
 import java.awt.Button;
@@ -105,14 +105,10 @@ public class CannonVSBall extends java.applet.Applet implements Runnable,
 		p = true;
 		q = false;
 		
-		setControlPanel();
-		setGamePanel();
-		
 		//ball = new Ballc();
 		
 		setLayout(new BorderLayout(0,0));
 		setVisible(true);
-		
 		
 		//Menu Bar
 		menu = new MenuBar();
@@ -127,69 +123,65 @@ public class CannonVSBall extends java.applet.Applet implements Runnable,
 		
 		
 		//show
-		
+		setControlPanel();
+		setGamePanel();
 		
 		//add listeners
 		fire.addActionListener(this);
 		angle.addAdjustmentListener(this);
 		velocity.addAdjustmentListener(this);
+		
 		add(ControlPanel, BorderLayout.CENTER);
 		add(GamePanel, BorderLayout.SOUTH);
 		
-		this.setLayout(gblayout);
+		//ControlPanel.setLayout(gblayout);
 	}
 	
 	private void setGamePanel() {
 		GamePanel = new Panel();
 		GamePanel.setVisible(true);
 		GamePanel.setLayout(new BorderLayout(0,0));
-		GamePanel.setSize(900,490);
+		GamePanel.setSize(900,400);
 		//ball.setSize(900,490);
 		//GamePanel.add("Center",ball);
 		GamePanel.setBackground(Color.WHITE);
 	}
 
+	
 	private void setControlPanel() {
 		
 		ControlPanel = new Panel();
-		
-		GridBagLayout gbl;
-		GridBagConstraints gbc;
-		
+			
 		gbc = new GridBagConstraints();
-		gbl = new GridBagLayout();
+		gblayout = new GridBagLayout();
 		
 		ControlPanel.setVisible(true);
-		ControlPanel.setLayout(gbl);
+		ControlPanel.setLayout(gblayout);
 		
 		angle = new Scrollbar(Scrollbar.HORIZONTAL, 45, 1, 0, 90);
-		velocity = new Scrollbar(Scrollbar.HORIZONTAL, 400, 1,100,1200);
+		velocity = new Scrollbar(Scrollbar.HORIZONTAL, 400, 100,100,1200);
 		
-		
-		angle.setBlockIncrement(2);
-		velocity.setBlockIncrement(2);
+		/*
+		angle.setBlockIncrement(1);
+		velocity.setBlockIncrement(1);
 		
 		angle.setMinimum(5);
 		velocity.setMinimum(2);
 		
 		angle.setUnitIncrement(1);
 		velocity.setUnitIncrement(1);
-		
+		*/
 		angle.setSize(100,25);
 		velocity.setSize(100,25);
 		
+		angle.setVisible(true);
+		velocity.setVisible(true);
 		angle.setEnabled(true);
 		velocity.setEnabled(true);
 		
-		angle.validate();
-		velocity.validate();
-		
 		//labels
-		fireLabel = new Label("PIC");
 		angleLabel = new Label("45");
 		velocLabel = new Label("400");
-		computer = new Label("Computer:");
-		user = new Label("User:");
 		
 		//fire button
 		fire = new Button("Fire");
@@ -198,39 +190,33 @@ public class CannonVSBall extends java.applet.Applet implements Runnable,
 		
 		/********** SETTING UP THE GUI **********/
 		
-		//fire, angle label
-		gbc.gridx = 2;
-		gbc.gridy = 1;
-		gbc.gridwidth = 1;
-		ControlPanel.add(fireLabel,gbc);
 		
-		gbc.gridx = 2;
-		gbc.gridy = 2;
+		gbc.gridx = 0;
+		gbc.gridy = 0;
 		gbc.gridwidth = 1;
 		ControlPanel.add(angleLabel,gbc);
 		
 		//buttons
-		gbc.gridx = 2;
-		gbc.gridy = 3;
+		gbc.gridx = 3;
+		gbc.gridy = 1;
 		gbc.gridwidth = 1;
 		ControlPanel.add(fire,gbc);
 		
 		//scroll bars
-		gbc.gridx = 0;
+		gbc.gridx = 1;
 		gbc.gridy = 0;
+		gbc.gridwidth = 2;
 		angle.setMaximum(MaxAng);
 		angle.setMinimum(MinAng);
 		ControlPanel.add(angle,gbc);
 		
-		gbc.gridx = 3;
-		gbc.gridy = 2;
+		gbc.gridx = 5;
+		gbc.gridy = 0;
+		gbc.gridwidth = 2;
 		velocity.setMaximum(MaxVel);
 		velocity.setMaximum(MaxVel);
 		ControlPanel.add(velocity, gbc);
 		
-		//score labels
-		ControlPanel.add(computer,gbc);
-		ControlPanel.add(user,gbc);
 		
 	}
 
@@ -254,12 +240,18 @@ public class CannonVSBall extends java.applet.Applet implements Runnable,
 		control.add(restart = new MenuItem("Restart", 
 				new MenuShortcut( KeyEvent.getExtendedKeyCodeForChar('O'))));
 		
-		size.add(xsm_size = new CheckboxMenuItem("X-Small"));
+		size.add(xsm_size = (new CheckboxMenuItem("X-Small")));
+		xsm_size.addItemListener(this);
 		size.add(sm_size = new CheckboxMenuItem("Small"));
+		sm_size.addItemListener(this);
 		size.add(med_size = new CheckboxMenuItem("Medium"));
+		med_size.addItemListener(this);
 		size.add(lg_size = new CheckboxMenuItem("Large"));
+		lg_size.addItemListener(this);
 		size.add(xlg_size = new CheckboxMenuItem("X-Large"));
+		xlg_size.addItemListener(this);
 		size.add(barn_size = new CheckboxMenuItem("Barn"));
+		barn_size.addItemListener(this);
 		
 		env.add(mercuryp = new CheckboxMenuItem("Mercury"));
 		env.add(venusp = new CheckboxMenuItem("Venus"));
@@ -297,12 +289,12 @@ public class CannonVSBall extends java.applet.Applet implements Runnable,
 	public void paint( Graphics g){
 		if(buffer == null)
 			buffer = createImage(900,490);
-		
+		Graphics gpg = GamePanel.getGraphics();
 		int height = 890;
 		int width = 480;
 		
 		//draw frame
-		g.drawRect(5,5,height,width);
+		gpg.drawRect(5,5,height,width);
 	}
 	
 	public void render( ){
@@ -365,7 +357,7 @@ public class CannonVSBall extends java.applet.Applet implements Runnable,
 	 * 
 	 */
 	public void run() {
-		while(more){
+	/*	while(more){
 			ball.repaint();
 			
 			if(!p){
@@ -376,39 +368,50 @@ public class CannonVSBall extends java.applet.Applet implements Runnable,
 				theThread.sleep(delay);
 			} catch (InterruptedException e){}
 		}
-
+*/
 	}
 
 	@Override
 	public void itemStateChanged(ItemEvent e) {
 		Object o = e.getSource();
-		
+		System.out.println("Got an event");
 		//do not allow more than one check box to be selected for size
 		if(o == xsm_size){
 			sm_size.setState(false);
 			med_size.setState(false);
 			lg_size.setState(false);
 			xlg_size.setState(false);
+			barn_size.setState(false);
 		}else if(o == sm_size){
 			xsm_size.setState(false);
 			med_size.setState(false);
 			lg_size.setState(false);
 			xlg_size.setState(false);
+			barn_size.setState(false);
 		}else if(o == med_size){
 			xsm_size.setState(false);
 			sm_size.setState(false);
 			lg_size.setState(false);
 			xlg_size.setState(false);
+			barn_size.setState(false);
 		}else if(o == lg_size){
 			xsm_size.setState(false);
 			sm_size.setState(false);
 			med_size.setState(false);
 			xlg_size.setState(false);
+			barn_size.setState(false);
 		}else if(o == xlg_size){
 			xsm_size.setState(false);
 			sm_size.setState(false);
 			lg_size.setState(false);
 			med_size.setState(false);
+			barn_size.setState(false);
+		}else if( o == barn_size){
+			xsm_size.setState(false);
+			sm_size.setState(false);
+			lg_size.setState(false);
+			med_size.setState(false);
+			xlg_size.setState(false);
 		}
 		
 		//do not allow more than one check box to be selected for the environment
