@@ -34,6 +34,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
+import javax.swing.text.StyleContext.SmallAttributeSet;
+
 public class CannonVSBall extends java.applet.Applet implements Runnable,
 		AdjustmentListener, ActionListener, ItemListener, MouseListener {
 
@@ -57,7 +59,7 @@ public class CannonVSBall extends java.applet.Applet implements Runnable,
 	//sub elements
 	Menu control, parameters, size, speed, env;
 	MenuItem pause, run, restart;
-	CheckboxMenuItem xsm_size, sm_size, nor_size, lg_size, xlg_size, barn_size;
+	CheckboxMenuItem xsm_size, sm_size, med_size, lg_size, xlg_size, barn_size;
 	CheckboxMenuItem mercuryp, venusp, earthp, marsp,
 		jupiterp, saturnp, uranusp,
 		neptunep, plutop, planet_xp;
@@ -254,7 +256,7 @@ public class CannonVSBall extends java.applet.Applet implements Runnable,
 		
 		size.add(xsm_size = new CheckboxMenuItem("X-Small"));
 		size.add(sm_size = new CheckboxMenuItem("Small"));
-		size.add(nor_size = new CheckboxMenuItem("Normal"));
+		size.add(med_size = new CheckboxMenuItem("Medium"));
 		size.add(lg_size = new CheckboxMenuItem("Large"));
 		size.add(xlg_size = new CheckboxMenuItem("X-Large"));
 		size.add(barn_size = new CheckboxMenuItem("Barn"));
@@ -379,8 +381,147 @@ public class CannonVSBall extends java.applet.Applet implements Runnable,
 
 	@Override
 	public void itemStateChanged(ItemEvent e) {
-		// TODO Auto-generated method stub
+		Object o = e.getSource();
 		
+		//do not allow more than one check box to be selected for size
+		if(o == xsm_size){
+			sm_size.setState(false);
+			med_size.setState(false);
+			lg_size.setState(false);
+			xlg_size.setState(false);
+		}else if(o == sm_size){
+			xsm_size.setState(false);
+			med_size.setState(false);
+			lg_size.setState(false);
+			xlg_size.setState(false);
+		}else if(o == med_size){
+			xsm_size.setState(false);
+			sm_size.setState(false);
+			lg_size.setState(false);
+			xlg_size.setState(false);
+		}else if(o == lg_size){
+			xsm_size.setState(false);
+			sm_size.setState(false);
+			med_size.setState(false);
+			xlg_size.setState(false);
+		}else if(o == xlg_size){
+			xsm_size.setState(false);
+			sm_size.setState(false);
+			lg_size.setState(false);
+			med_size.setState(false);
+		}
+		
+		//do not allow more than one check box to be selected for the environment
+		if(o == mercuryp){
+			venusp.setState(false);
+			earthp.setState(false);
+			plutop.setState(false);
+			uranusp.setState(false);
+			jupiterp.setState(false);
+			marsp.setState(false);
+			saturnp.setState(false);
+			neptunep.setState(false);
+		}else if(o == venusp){
+			mercuryp.setState(false);
+			earthp.setState(false);
+			plutop.setState(false);
+			uranusp.setState(false);
+			jupiterp.setState(false);
+			marsp.setState(false);
+			saturnp.setState(false);
+			neptunep.setState(false);	
+		}else if(o == earthp){
+			venusp.setState(false);
+			mercuryp.setState(false);
+			plutop.setState(false);
+			uranusp.setState(false);
+			jupiterp.setState(false);
+			marsp.setState(false);
+			saturnp.setState(false);
+			neptunep.setState(false);	
+		}else if(o == plutop){
+			venusp.setState(false);
+			earthp.setState(false);
+			mercuryp.setState(false);
+			uranusp.setState(false);
+			jupiterp.setState(false);
+			marsp.setState(false);
+			saturnp.setState(false);
+			neptunep.setState(false);	
+		}else if( o == uranusp){
+			venusp.setState(false);
+			earthp.setState(false);
+			plutop.setState(false);
+			mercuryp.setState(false);
+			jupiterp.setState(false);
+			marsp.setState(false);
+			saturnp.setState(false);
+			neptunep.setState(false);	
+		}else if(o == jupiterp){
+			venusp.setState(false);
+			earthp.setState(false);
+			plutop.setState(false);
+			uranusp.setState(false);
+			mercuryp.setState(false);
+			marsp.setState(false);
+			saturnp.setState(false);
+			neptunep.setState(false);	
+		}else if(o == marsp){
+			venusp.setState(false);
+			earthp.setState(false);
+			plutop.setState(false);
+			uranusp.setState(false);
+			jupiterp.setState(false);
+			mercuryp.setState(false);
+			saturnp.setState(false);
+			neptunep.setState(false);	
+		}else if(o == saturnp){
+			venusp.setState(false);
+			earthp.setState(false);
+			plutop.setState(false);
+			uranusp.setState(false);
+			jupiterp.setState(false);
+			marsp.setState(false);
+			mercuryp.setState(false);
+			neptunep.setState(false);	
+		}else if(o == neptunep){
+			venusp.setState(false);
+			earthp.setState(false);
+			plutop.setState(false);
+			uranusp.setState(false);
+			jupiterp.setState(false);
+			marsp.setState(false);
+			saturnp.setState(false);
+			mercuryp.setState(false);	
+		}
+		
+		//do not allow more than one speed to be selected 
+		if(o == xslow){
+			slow.setState(false);
+			avg.setState(false);
+			fast.setState(false);
+			xfast.setState(false);
+		}else if(o == slow){
+			xslow.setState(false);
+			avg.setState(false);
+			fast.setState(false);
+			xfast.setState(false);
+		}else if(o == avg){
+			slow.setState(false);
+			xslow.setState(false);
+			fast.setState(false);
+			xfast.setState(false);
+		}else if(o == fast){
+			slow.setState(false);
+			avg.setState(false);
+			xslow.setState(false);
+			xfast.setState(false);
+		}else if(o == xfast){
+			slow.setState(false);
+			avg.setState(false);
+			fast.setState(false);
+			xslow.setState(false);
+		}
 	}
 
 	public void mouseClicked(MouseEvent arg0) {}
