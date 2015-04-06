@@ -10,10 +10,12 @@
 import java.awt.BorderLayout;
 import java.awt.Button;
 import java.awt.CheckboxMenuItem;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Image;
 import java.awt.Label;
 import java.awt.Menu;
 import java.awt.MenuBar;
@@ -39,7 +41,7 @@ public class CannonVSBall extends java.applet.Applet implements Runnable,
 	
 	//main elements
 	MenuBar menu;
-	Button fire, quit;
+	Button fire;
 	Label fireLabel;
 	Label angleLabel;
 	Label velocLabel;
@@ -48,7 +50,7 @@ public class CannonVSBall extends java.applet.Applet implements Runnable,
 	
 	Scrollbar angle;
 	Scrollbar velocity;
-	Panel game, ctrl;
+	Panel GamePanel, ControlPanel;
 	GridBagLayout gblayout;
 	GridBagConstraints gbc;
 	
@@ -59,6 +61,7 @@ public class CannonVSBall extends java.applet.Applet implements Runnable,
 	CheckboxMenuItem mercuryp, venusp, earthp, marsp,
 		jupiterp, saturnp, uranusp,
 		neptunep, plutop, planet_xp;
+	CheckboxMenuItem xslow, slow, avg, fast, xfast;
 	
 	//game values
 	boolean gravity_en;
@@ -68,8 +71,11 @@ public class CannonVSBall extends java.applet.Applet implements Runnable,
 	
 	Thread theThread;
 	boolean p,q;
-	private Ballc ball;
+	//private Ballc ball;
 	private int delay = 20;
+	
+	//for double buffering
+	Image buffer;
 	
 	//constant values
 	public static final float MERCURY 	= 3.59f;
@@ -93,26 +99,25 @@ public class CannonVSBall extends java.applet.Applet implements Runnable,
 	private final int MinVel = 100;
 	
 	public void init(){
+		//pause, quit
 		p = true;
 		q = false;
+		
 		setControlPanel();
-		ball = new Ballc();
+		setGamePanel();
 		
-		//crap
-		gblayout = new GridBagLayout();
-		gbc = new GridBagConstraints();
+		//ball = new Ballc();
+		
+		setLayout(new BorderLayout(0,0));
+		setVisible(true);
 		
 		
-		//create
-		fire = new Button("Fire");
-		fireLabel = new Label("PIC");
-		angleLabel = new Label("45");
-		velocLabel = new Label("400");
-		angle = new Scrollbar(Scrollbar.HORIZONTAL, 45, 1, 0, 90);
-		velocity = new Scrollbar(Scrollbar.HORIZONTAL, 400, 1,100,1200);
+		//Menu Bar
 		menu = new MenuBar();
 		menuSetup();
+		
 		Object f = getParent();
+		
 		while (!(f instanceof Frame))
 			f = ((Component) f).getParent();
 		((Frame) f).setMenuBar( menu );
@@ -121,20 +126,30 @@ public class CannonVSBall extends java.applet.Applet implements Runnable,
 		
 		//show
 		
-		game.add(BorderLayout.CENTER,game);
-		ctrl.add(ctrl,BorderLayout.SOUTH);
 		
 		//add listeners
 		fire.addActionListener(this);
-		quit.addActionListener(this);
 		angle.addAdjustmentListener(this);
 		velocity.addAdjustmentListener(this);
+		add(ControlPanel, BorderLayout.CENTER);
+		add(GamePanel, BorderLayout.SOUTH);
 		
 		this.setLayout(gblayout);
 	}
 	
+	private void setGamePanel() {
+		GamePanel = new Panel();
+		GamePanel.setVisible(true);
+		GamePanel.setLayout(new BorderLayout(0,0));
+		GamePanel.setSize(900,490);
+		//ball.setSize(900,490);
+		//GamePanel.add("Center",ball);
+		GamePanel.setBackground(Color.WHITE);
+	}
+
 	private void setControlPanel() {
-		ctrl = new Panel();
+		
+		ControlPanel = new Panel();
 		
 		GridBagLayout gbl;
 		GridBagConstraints gbc;
@@ -142,8 +157,11 @@ public class CannonVSBall extends java.applet.Applet implements Runnable,
 		gbc = new GridBagConstraints();
 		gbl = new GridBagLayout();
 		
-		ctrl.setVisible(true);
-		ctrl.setLayout(gbl);
+		ControlPanel.setVisible(true);
+		ControlPanel.setLayout(gbl);
+		
+		angle = new Scrollbar(Scrollbar.HORIZONTAL, 45, 1, 0, 90);
+		velocity = new Scrollbar(Scrollbar.HORIZONTAL, 400, 1,100,1200);
 		
 		
 		angle.setBlockIncrement(2);
@@ -164,14 +182,17 @@ public class CannonVSBall extends java.applet.Applet implements Runnable,
 		angle.validate();
 		velocity.validate();
 		
+		//labels
+		fireLabel = new Label("PIC");
+		angleLabel = new Label("45");
+		velocLabel = new Label("400");
 		computer = new Label("Computer:");
 		user = new Label("User:");
-		fireLabel = new Label("Fire:");
-		angleLabel = new Label("Angle:");
-		velocLabel = new Label("Velocity:");
 		
-		quit = new Button("QUIT");
-		fire = new Button("FIRE");
+		//fire button
+		fire = new Button("Fire");
+		
+
 		
 		/********** SETTING UP THE GUI **********/
 		
@@ -179,40 +200,35 @@ public class CannonVSBall extends java.applet.Applet implements Runnable,
 		gbc.gridx = 2;
 		gbc.gridy = 1;
 		gbc.gridwidth = 1;
-		ctrl.add(fireLabel,gbc);
+		ControlPanel.add(fireLabel,gbc);
 		
 		gbc.gridx = 2;
 		gbc.gridy = 2;
 		gbc.gridwidth = 1;
-		ctrl.add(angleLabel,gbc);
+		ControlPanel.add(angleLabel,gbc);
 		
 		//buttons
 		gbc.gridx = 2;
 		gbc.gridy = 3;
 		gbc.gridwidth = 1;
-		ctrl.add(fire,gbc);
-		
-		gbc.gridx = 4;
-		gbc.gridy = 3;
-		gbc.gridwidth = 1;
-		ctrl.add(quit,gbc);
+		ControlPanel.add(fire,gbc);
 		
 		//scroll bars
-		gbc.gridx = 3;
-		gbc.gridy = 1;
+		gbc.gridx = 0;
+		gbc.gridy = 0;
 		angle.setMaximum(MaxAng);
 		angle.setMinimum(MinAng);
-		ctrl.add(angle,gbc);
+		ControlPanel.add(angle,gbc);
 		
 		gbc.gridx = 3;
 		gbc.gridy = 2;
 		velocity.setMaximum(MaxVel);
 		velocity.setMaximum(MaxVel);
-		ctrl.add(velocity, gbc);
+		ControlPanel.add(velocity, gbc);
 		
 		//score labels
-		ctrl.add(computer,gbc);
-		ctrl.add(user,gbc);
+		ControlPanel.add(computer,gbc);
+		ControlPanel.add(user,gbc);
 		
 	}
 
@@ -220,10 +236,11 @@ public class CannonVSBall extends java.applet.Applet implements Runnable,
 		menu.add(control = new Menu("Control"));
 		menu.add(size = new Menu("Size"));
 		menu.add( speed = new Menu("Speed"));
+		menu.add(env = new Menu ("Environment"));
 		/*	
 		menu.add(parameters);
 		menu.add(size);
-		menu.add(env);
+		
 		*/
 		control.add(pause = new MenuItem("Pause", 
 				new MenuShortcut( KeyEvent.getExtendedKeyCodeForChar('P'))));
@@ -241,10 +258,27 @@ public class CannonVSBall extends java.applet.Applet implements Runnable,
 		size.add(lg_size = new CheckboxMenuItem("Large"));
 		size.add(xlg_size = new CheckboxMenuItem("X-Large"));
 		size.add(barn_size = new CheckboxMenuItem("Barn"));
+		
+		env.add(mercuryp = new CheckboxMenuItem("Mercury"));
+		env.add(venusp = new CheckboxMenuItem("Venus"));
+		env.add(marsp = new CheckboxMenuItem("Mars"));
+		env.add(earthp = new CheckboxMenuItem("Earth"));
+		env.add(jupiterp = new CheckboxMenuItem("Jupiter"));
+		env.add(saturnp = new CheckboxMenuItem("Saturn"));
+		env.add(uranusp = new CheckboxMenuItem("Uranus"));
+		env.add(neptunep = new CheckboxMenuItem("Neptune"));
+		env.add(plutop = new CheckboxMenuItem("Pluto"));
+		
+		speed.add(xslow = new CheckboxMenuItem("X-Slow"));
+		speed.add(slow = new CheckboxMenuItem("Slow"));
+		speed.add(avg = new CheckboxMenuItem("Average"));
+		speed.add(fast = new CheckboxMenuItem("Fast"));
+		speed.add(xfast = new CheckboxMenuItem("X-Fast"));
 	}
 	
 	public void start(){
 		if(theThread == null){
+			//create thread
 			theThread = new Thread(this);
 			theThread.start();
 		}
@@ -254,11 +288,19 @@ public class CannonVSBall extends java.applet.Applet implements Runnable,
 	private boolean more = true;
 	
 	public void update(Graphics g){
+		
 		paint( g );
 	}
 	
 	public void paint( Graphics g){
+		if(buffer == null)
+			buffer = createImage(900,490);
 		
+		int height = 890;
+		int width = 480;
+		
+		//draw frame
+		g.drawRect(5,5,height,width);
 	}
 	
 	public void render( ){
@@ -270,18 +312,41 @@ public class CannonVSBall extends java.applet.Applet implements Runnable,
 	}
 	
 	@Override
-	public void actionPerformed(ActionEvent arg0) {
-		// TODO Auto-generated method stub
-
-	}
+	public void actionPerformed(ActionEvent e) {
+		Object source = e.getSource();
+		
+		// button selection
+				if (source == "Quit") {
+					q = true;
+					System.exit(0);
+					
+				}else if(source == "Run"){
+					
+					if(p){
+						p = false;
+					}
+					
+				}else if(source == "Start"){
+					
+					if(p){
+						p = false;
+					}
+				}else if(source == "Pause"){
+					if(!p){
+						p = true;
+					}
+				}
+				
+				repaint();
+				this.validate();
+}
 	
 	public void stop(){
 		//remove listeners
 		angle.removeAdjustmentListener(this);
 		velocity.removeAdjustmentListener(this);
-		game.removeMouseListener(this);
-		game.removeMouseListener(this);
-		quit.removeActionListener(this);
+		GamePanel.removeMouseListener(this);
+		GamePanel.removeMouseListener(this);
 		fire.removeActionListener(this);
 		
 		//kill the thread
@@ -297,7 +362,6 @@ public class CannonVSBall extends java.applet.Applet implements Runnable,
 	 * For rendering the game, 
 	 * 
 	 */
-	@Override
 	public void run() {
 		while(more){
 			ball.repaint();
@@ -319,35 +383,11 @@ public class CannonVSBall extends java.applet.Applet implements Runnable,
 		
 	}
 
-	@Override
-	public void mouseClicked(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mouseEntered(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mouseExited(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mousePressed(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mouseReleased(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void mouseClicked(MouseEvent arg0) {}
+	public void mouseEntered(MouseEvent arg0) {}
+	public void mouseExited(MouseEvent arg0) {}
+	public void mousePressed(MouseEvent arg0) {}
+	public void mouseReleased(MouseEvent arg0) {}
 
 }
 
