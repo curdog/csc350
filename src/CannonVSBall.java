@@ -5,7 +5,7 @@
  */
 
 
-package src;
+//package src;
 
 import java.awt.BorderLayout;
 import java.awt.Button;
@@ -230,7 +230,7 @@ public class CannonVSBall extends java.applet.Applet implements Runnable,
 	public void menuSetup(){
 		menu.add(control = new Menu("Control"));
 		menu.add(size = new Menu("Size"));
-		menu.add( speed = new Menu("Speed"));
+		menu.add(speed = new Menu("Speed"));
 		menu.add(env = new Menu ("Environment"));
 		/*	
 		menu.add(parameters);
@@ -261,20 +261,34 @@ public class CannonVSBall extends java.applet.Applet implements Runnable,
 		barn_size.addItemListener(this);
 		
 		env.add(mercuryp = new CheckboxMenuItem("Mercury"));
+		mercuryp.addItemListener(this);
 		env.add(venusp = new CheckboxMenuItem("Venus"));
+		venusp.addItemListener(this);
 		env.add(marsp = new CheckboxMenuItem("Mars"));
+		marsp.addItemListener(this);
 		env.add(earthp = new CheckboxMenuItem("Earth"));
+		earthp.addItemListener(this);
 		env.add(jupiterp = new CheckboxMenuItem("Jupiter"));
+		jupiterp.addItemListener(this);
 		env.add(saturnp = new CheckboxMenuItem("Saturn"));
+		saturnp.addItemListener(this);
 		env.add(uranusp = new CheckboxMenuItem("Uranus"));
+		uranusp.addItemListener(this);
 		env.add(neptunep = new CheckboxMenuItem("Neptune"));
+		neptunep.addItemListener(this);
 		env.add(plutop = new CheckboxMenuItem("Pluto"));
+		plutop.addItemListener(this);
 		
 		speed.add(xslow = new CheckboxMenuItem("X-Slow"));
+		xslow.addItemListener(this);
 		speed.add(slow = new CheckboxMenuItem("Slow"));
+		slow.addItemListener(this);
 		speed.add(avg = new CheckboxMenuItem("Average"));
+		avg.addItemListener(this);
 		speed.add(fast = new CheckboxMenuItem("Fast"));
+		fast.addItemListener(this);
 		speed.add(xfast = new CheckboxMenuItem("X-Fast"));
+		xfast.addItemListener(this);
 	}
 	
 	public void start(){
@@ -356,9 +370,34 @@ public class CannonVSBall extends java.applet.Applet implements Runnable,
 
 	@Override
 	public void adjustmentValueChanged(AdjustmentEvent e) {
-
-	}
-
+		Scrollbar sb = (Scrollbar) e.getSource();
+		
+		//get angle value
+		if(sb == angle){
+			int A = e.getValue();
+			
+			if(A > 90){
+				sb.setValue(MaxAng);
+			}			
+			
+			if(A < 90){
+				sb.setValue(MinAng);
+			}
+		}
+		
+		//get velocity value
+		if(sb == velocity){
+			int V = e.getValue();
+			
+			if(V > MaxVel){
+				sb.setValue(MaxVel);
+			}
+			
+			if(V < MinVel){
+				sb.setValue(MinVel);
+			}
+		}
+}
 	/*
 	 * For rendering the game, 
 	 * 
@@ -381,7 +420,7 @@ public class CannonVSBall extends java.applet.Applet implements Runnable,
 	@Override
 	public void itemStateChanged(ItemEvent e) {
 		Object o = e.getSource();
-		System.out.println("Got an event");
+
 		//do not allow more than one check box to be selected for size
 		if(o == xsm_size){
 			sm_size.setState(false);
@@ -546,6 +585,10 @@ class GamePanelDraw extends Panel{
 	public static final int height = 400;
 	public static final int width = 600;
 	
+	// these are for speed
+	int dx = 10;
+	int dy = 10;
+	
 	//canon vars
 	int angle;
 	boolean recalc;
@@ -608,7 +651,35 @@ class GamePanelDraw extends Panel{
 		g.drawPolygon(p);
 		
 	}
-		
+	
+	/************ WALLS ************/
+	public void leftSide() {
+		dx = -dx;
+	}
+
+	public void rightSide() {
+		dx = -dx;
+	}
+
+	public void bottomSide() {
+		dy = -dy;
+	}
+
+	public void topSide() {
+		dy = -dy;
+	}
+/*	
+	public void wall(int dx, int dy) {
+		x += dx;
+		y += dy;
+	}
+
+	public void move() {
+		x += dx;
+		y += dy;
+	}
+
+*/		
 }
 
 class Projectile{
