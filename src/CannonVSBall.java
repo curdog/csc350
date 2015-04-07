@@ -22,6 +22,8 @@ import java.awt.MenuBar;
 import java.awt.MenuItem;
 import java.awt.MenuShortcut;
 import java.awt.Panel;
+import java.awt.Point;
+import java.awt.Polygon;
 import java.awt.Scrollbar;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
@@ -52,7 +54,8 @@ public class CannonVSBall extends java.applet.Applet implements Runnable,
 	
 	Scrollbar angle;
 	Scrollbar velocity;
-	Panel GamePanel, ControlPanel;
+	Panel ControlPanel;
+	GamePanelDraw GamePanel;
 	GridBagLayout gblayout;
 	GridBagConstraints gbc;
 	
@@ -93,8 +96,8 @@ public class CannonVSBall extends java.applet.Applet implements Runnable,
 	public static final float PLANET_X	= -3.14f;
 	
 	//angle boundaries, in degrees
-	private final int MaxAng = 100;
-	private final int MinAng = 0;
+	private final int MaxAng = 90;
+	private final int MinAng = 1;
 	
 	//velocity boundaries, in feet/sec
 	private final int MaxVel = 1210;
@@ -107,7 +110,7 @@ public class CannonVSBall extends java.applet.Applet implements Runnable,
 		
 		//ball = new Ballc();
 		
-		setLayout(new BorderLayout(0,0));
+		setLayout(new BorderLayout());
 		setVisible(true);
 		
 		//Menu Bar
@@ -119,6 +122,10 @@ public class CannonVSBall extends java.applet.Applet implements Runnable,
 		while (!(f instanceof Frame))
 			f = ((Component) f).getParent();
 		((Frame) f).setMenuBar( menu );
+		
+		while (!(f instanceof Frame))
+			f = ((Component) f).getParent();
+		((Frame) f).setTitle("Cannon vs Ball");;
 		//listen
 		
 		
@@ -131,14 +138,14 @@ public class CannonVSBall extends java.applet.Applet implements Runnable,
 		angle.addAdjustmentListener(this);
 		velocity.addAdjustmentListener(this);
 		
-		add(ControlPanel, BorderLayout.CENTER);
-		add(GamePanel, BorderLayout.SOUTH);
+		add(ControlPanel, BorderLayout.SOUTH);
+		add(GamePanel, BorderLayout.CENTER);
 		
 		//ControlPanel.setLayout(gblayout);
 	}
 	
 	private void setGamePanel() {
-		GamePanel = new Panel();
+		GamePanel = new GamePanelDraw();
 		GamePanel.setVisible(true);
 		GamePanel.setLayout(new BorderLayout(0,0));
 		GamePanel.setSize(900,400);
@@ -289,12 +296,12 @@ public class CannonVSBall extends java.applet.Applet implements Runnable,
 	public void paint( Graphics g){
 		if(buffer == null)
 			buffer = createImage(900,490);
-		Graphics gpg = GamePanel.getGraphics();
+		//Graphics gpg = GamePanel.getGraphics();
 		int height = 890;
 		int width = 480;
 		
 		//draw frame
-		gpg.drawRect(5,5,height,width);
+		//gpg.drawRect(5,5,height,width);
 	}
 	
 	public void render( ){
@@ -535,8 +542,78 @@ public class CannonVSBall extends java.applet.Applet implements Runnable,
 
 }
 
-class Projectile{
+class GamePanelDraw extends Panel{
+	public static final int height = 400;
+	public static final int width = 600;
+	
+	//canon vars
+	int angle;
+	boolean recalc;
+	public void setAngle( int angle){
+		this.angle = angle;
+		recalc = true;
+	}
+	
+	public GamePanelDraw(){
+		super();
+		
+		cannonPoints = new Point[4];
+		cannonPoints[0] = new Point( width - 60, height );
+		cannonPoints[1] = new Point( width - 60, height-10 );
+		cannonPoints[2] = new Point( width , height -10 );
+		cannonPoints[3] = new Point( width, height); 
+		
+		angle = 10;
+		recalc = true;
+		drawCannonPoints = new Point[4];
+		
+		for( int i = 0; i < cannonPoints.length; i++){
+			drawCannonPoints[i] = cannonPoints[i];
+		}
+		
+	}
+	
+	
+	
+	public void paint(Graphics g){
+		g.drawRect(12, 12, 12, 12);
+		
+		g.drawRect(0, 0, width, height);
+		drawCannon(g);
+		
+	}
+	
+	Point[] cannonPoints;
+	Point[] drawCannonPoints;
+	public void drawCannon( Graphics g){
+		//base
+		int cannon_offset = 20;
+		g.fillOval(width-cannon_offset*2, height - cannon_offset*2, cannon_offset*2, cannon_offset*2);
+		//cannon
+		//lazy calculations
+		
+		//  x/y + w*sin/cos 
+		if( recalc == true){
+			for( int i = 0; i < cannonPoints.length; i++){
+				drawCannonPoints[i] = new Point( (int)(cannonPoints[i].x * Math.cos((double)angle)), (int)(cannonPoints[i].y * Math.sin((double)angle)));
+			}
+			recalc = false;
+		}
+		
+		Polygon p = new Polygon();
+		for( int i = 0; i < drawCannonPoints.length; i++){
+			p.addPoint((int)drawCannonPoints[i].getX(), (int)drawCannonPoints[i].getY());
+		}
+		
+		g.drawPolygon(p);
+		
+	}
+		
+}
 
+class Projectile{
+	Point s;
+	
 }
 
 class Target{
