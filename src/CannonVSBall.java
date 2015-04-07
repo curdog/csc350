@@ -601,10 +601,10 @@ class GamePanelDraw extends Panel{
 		super();
 		
 		cannonPoints = new Point[4];
-		cannonPoints[0] = new Point( width - 60, height );
+		cannonPoints[3] = new Point( width - 60, height );
 		cannonPoints[1] = new Point( width - 60, height-10 );
 		cannonPoints[2] = new Point( width , height -10 );
-		cannonPoints[3] = new Point( width, height); 
+		cannonPoints[0] = new Point( width, height); 
 		
 		angle = 10;
 		recalc = true;
@@ -638,7 +638,10 @@ class GamePanelDraw extends Panel{
 		//  x/y + w*sin/cos 
 		if( recalc == true){
 			for( int i = 0; i < cannonPoints.length; i++){
-				drawCannonPoints[i] = new Point( (int)(cannonPoints[i].x * Math.cos((double)angle)), (int)(cannonPoints[i].y * Math.sin((double)angle)));
+				drawCannonPoints[i] = new Point( (int)(cannonPoints[i].x * Math.cos((double)angle)+cannonPoints[i].y*Math.sin((double)(angle) )),
+						(int)(-cannonPoints[i].x * Math.sin((double)angle) + cannonPoints[i].y*Math.cos((double)angle)));
+				System.out.println("Translated X" + drawCannonPoints[i].x);
+				System.out.println("Translated Y" + drawCannonPoints[i].y);
 			}
 			recalc = false;
 		}
