@@ -5,7 +5,7 @@
  */
 
 
-//package src;
+package src;
 
 import java.awt.BorderLayout;
 import java.awt.Button;
@@ -24,6 +24,7 @@ import java.awt.MenuShortcut;
 import java.awt.Panel;
 import java.awt.Point;
 import java.awt.Polygon;
+import java.awt.Rectangle;
 import java.awt.Scrollbar;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
@@ -193,10 +194,7 @@ public class CannonVSBall extends java.applet.Applet implements Runnable,
 		//fire button
 		fire = new Button("Fire");
 		
-
-		
 		/********** SETTING UP THE GUI **********/
-		
 		
 		gbc.gridx = 0;
 		gbc.gridy = 0;
@@ -232,11 +230,7 @@ public class CannonVSBall extends java.applet.Applet implements Runnable,
 		menu.add(size = new Menu("Size"));
 		menu.add(speed = new Menu("Speed"));
 		menu.add(env = new Menu ("Environment"));
-		/*	
-		menu.add(parameters);
-		menu.add(size);
 		
-		*/
 		control.add(pause = new MenuItem("Pause", 
 				new MenuShortcut( KeyEvent.getExtendedKeyCodeForChar('P'))));
 		control.add(run = new MenuItem("Run", 
@@ -594,12 +588,19 @@ class GamePanelDraw extends Panel{
 	boolean recalc;
 	public void setAngle( int angle){
 		this.angle = angle;
+		bullet.setSpeed(100, angle);
 		recalc = true;
 	}
+	
+	Projectile bullet;
+	Target tar;
 	
 	public GamePanelDraw(){
 		super();
 		
+		tar = new Target();
+		bullet = new Projectile();
+		//cannon
 		cannonPoints = new Point[4];
 		cannonPoints[3] = new Point( width - 60, height );
 		cannonPoints[1] = new Point( width - 60, height-10 );
@@ -616,18 +617,19 @@ class GamePanelDraw extends Panel{
 		
 	}
 	
-	
-	
 	public void paint(Graphics g){
-		g.drawRect(12, 12, 12, 12);
 		
 		g.drawRect(0, 0, width, height);
+		bullet.paintProjectile(g);
 		drawCannon(g);
+		tar.paintTarget(g);
+		
 		
 	}
 	
 	Point[] cannonPoints;
 	Point[] drawCannonPoints;
+	
 	public void drawCannon( Graphics g){
 		//base
 		int cannon_offset = 20;
@@ -652,7 +654,99 @@ class GamePanelDraw extends Panel{
 		}
 		
 		g.drawPolygon(p);
+	}
+	
+	
+}
+
+class Projectile{
+	float x = GamePanelDraw.width - SIZE;
+	float y = GamePanelDraw.height - SIZE/2;
+	float dx;
+	float dy;
+	float accel = 0.0f;
+	float timeStep = 0.03f;
+	public static final int SIZE = 10;
+	public Projectile(){
 		
+	}
+	
+	public void setTimeStep( float t){
+		
+	}
+	
+	public void setAccel( float a){
+		accel = a;
+	}
+	
+	public void setSpeed( float s, float ang){
+		
+		dx = -s * (float)Math.cos((double)ang);
+		dy = -s * (float)Math.sin((double)ang);
+	}
+	
+	public Rectangle getBoundingRectangle(){
+		return new Rectangle( );
+	}
+	
+	public void paintProjectile( Graphics g){
+		Color oldColor = g.getColor();
+		g.setColor(Color.GRAY);
+		g.drawOval((int)x, (int)y, SIZE, SIZE/2);
+		g.setColor(oldColor);
+	}
+	
+	public void updateProjectile(){
+		y+= dy;
+		dy += accel * timeStep;
+		
+	}
+}
+
+class Target {
+	
+	
+	public void paintTarget( Graphics g){
+		Color oldColor = g.getColor();
+		g.setColor(Color.RED);
+		g.fillOval(x, y, diameter, diameter);
+		g.setColor(Color.BLACK);
+		g.drawOval( x,y,diameter,diameter);
+		g.fillOval(x + diameter/4+1, y +diameter/4, diameter/2, diameter/2);
+		g.setColor(oldColor);
+	}
+	
+	public void updateTarget(){
+		x+=dx;
+		y+=dy;
+	}
+
+	public Rectangle getBoundingRectangle(){
+		return new Rectangle(x, y, diameter, diameter);
+	}
+	
+	// placement of the ball
+	int x =  20;
+	int y =  20;
+	// these are for speed
+	int dx = 5;
+	int dy = 15;
+	// this is size
+	int diameter = 20;
+
+	public void reset() {
+		// reset the ball to the start position
+		x =  20;
+		y =  20;
+	}
+
+	public void setSpeed(int s) {
+		dx = s * dx / (int) Math.abs(dx);
+		dy = s * dy / (int) Math.abs(dy);
+	}
+
+	public void setDiameter(int d) {
+		diameter = d;
 	}
 	
 	/************ WALLS ************/
@@ -671,25 +765,6 @@ class GamePanelDraw extends Panel{
 	public void topSide() {
 		dy = -dy;
 	}
-/*	
-	public void wall(int dx, int dy) {
-		x += dx;
-		y += dy;
-	}
 
-	public void move() {
-		x += dx;
-		y += dy;
-	}
 
-*/		
-}
-
-class Projectile{
-	Point s;
-	
-}
-
-class Target{
-	
 }
