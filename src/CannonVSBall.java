@@ -374,20 +374,34 @@ public class CannonVSBall extends java.applet.Applet implements Runnable,
 	}
 
 	/*
-	 * For rendering the game, 
-	 * 
+	 * For rendering the game,
 	 */
 	public void run() {
-		
-		while(true == true){
-			if( p ){
+
+		long s;
+		long e;
+		while (true == true) {
+			if (p) {
+				s = System.currentTimeMillis();
 				GamePanel.bullet.updateProjectile();
 				GamePanel.tar.updateTarget();
 				GamePanel.repaint();
+				e = System.currentTimeMillis();
+				long adj = 33 - (e - s);
+				if( adj < 0){
+					adj = 0;
+				}
+				try {
+					Thread.sleep(adj);
+				} catch (InterruptedException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+
 			}
 		}
-		
 	}
+	
 
 	@Override
 	public void itemStateChanged(ItemEvent e) {
@@ -617,7 +631,7 @@ class GamePanelDraw extends Panel{
 	
 	Image gi;
 	public void paint(Graphics gb){
-		gi = createImage(width, height);
+		gi = createImage(width+1, height+1);
 		Graphics g = gi.getGraphics();
 		g.drawRect(0, 0, width, height);
 		
@@ -651,8 +665,6 @@ class GamePanelDraw extends Panel{
 		g.fillOval(width-cannon_offset*2, height - cannon_offset*2, cannon_offset*2, cannon_offset*2);
 		//cannon
 		//lazy calculations
-		
-		//  x/y + w*sin/cos 
 		if( recalc == true){
 			float innerRad = 10;
 			float outerRad = 100;
@@ -675,8 +687,11 @@ class GamePanelDraw extends Panel{
 		for( int i = 0; i < drawCannonPoints.length; i++){
 			p.addPoint((int)drawCannonPoints[i].getX(), (int)drawCannonPoints[i].getY());
 		}
+		Color old = g.getColor();
+		g.setColor( new Color(0,0,51));
+		g.fillPolygon(p);
+		g.setColor(old);
 		
-		g.drawPolygon(p);
 	}
 	
 	
@@ -752,8 +767,8 @@ class Target {
 	int x =  20;
 	int y =  20;
 	// these are for speed
-	int dx = 5;
-	int dy = 15;
+	int dx = 1;
+	int dy = 1;
 	// this is size
 	int diameter = 20;
 
