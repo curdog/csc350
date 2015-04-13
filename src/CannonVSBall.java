@@ -214,15 +214,14 @@ public class CannonVSBall extends java.applet.Applet implements Runnable,
 		gbc.gridx = 1;
 		gbc.gridy = 0;
 		gbc.gridwidth = 2;
-
-		//ControlPanel.add(angle,gbc);
+		gbc.ipadx=50;
+		
+		ControlPanel.add(angle,gbc);
 		
 		gbc.gridx = 5;
 		gbc.gridy = 0;
-		gbc.gridwidth = 2;
 
-	//	ControlPanel.add(velocity, gbc);
-		
+		ControlPanel.add(velocity, gbc);
 		
 	}
 
@@ -387,6 +386,8 @@ public class CannonVSBall extends java.applet.Applet implements Runnable,
 				GamePanel.tar.updateTarget();
 				GamePanel.repaint();
 				e = System.currentTimeMillis();
+				
+				//adjust for sucky vs super computer
 				long adj = 33 - (e - s);
 				if( adj < 0){
 					adj = 0;
@@ -394,7 +395,6 @@ public class CannonVSBall extends java.applet.Applet implements Runnable,
 				try {
 					Thread.sleep(adj);
 				} catch (InterruptedException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 
@@ -729,8 +729,8 @@ class Projectile{
 	
 	public void paintProjectile( Graphics g){
 		Color oldColor = g.getColor();
-		g.setColor(Color.GRAY);
-		g.drawOval((int)x, (int)y, SIZE, SIZE/2);
+		g.setColor(Color.DARK_GRAY);
+		g.fillOval((int)x, (int)y, SIZE, SIZE/2);
 		g.setColor(oldColor);
 	}
 	
