@@ -36,6 +36,7 @@ import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.Timer;
 
 import javax.swing.text.StyleContext.SmallAttributeSet;
 
@@ -59,6 +60,8 @@ public class CannonVSBall extends java.applet.Applet implements Runnable,
 	GamePanelDraw GamePanel;
 	GridBagLayout gblayout;
 	GridBagConstraints gbc;
+	
+	Timer timeUnit;
 	//TODO
 	Label timeWasted;
 	//sub elements
@@ -110,7 +113,6 @@ public class CannonVSBall extends java.applet.Applet implements Runnable,
 		p = true;
 		q = false;
 		
-		//ball = new Ballc();
 		
 		setLayout(new BorderLayout());
 		setVisible(true);
@@ -161,15 +163,32 @@ public class CannonVSBall extends java.applet.Applet implements Runnable,
 		
 		ControlPanel = new Panel();
 			
+		
+		angle = new Scrollbar(Scrollbar.HORIZONTAL, 0, 1, 0, 90);
+		velocity = new Scrollbar(Scrollbar.HORIZONTAL, 0, 1,100,1200);
+		
+		int scrollHeightd = 900;
+		
+		angle.setSize(100, 15);
+		velocity.setSize(100, 15);
+		angle.setLocation(300, scrollHeightd);
+		velocity.setLocation(400, scrollHeightd);
+		
+		
+		angle.setVisible(true);
+		velocity.setVisible(true);
+		
+
+		ControlPanel.add(angle);
+		ControlPanel.add(velocity);
+
+		
 		gbc = new GridBagConstraints();
 		gblayout = new GridBagLayout();
 		
 		ControlPanel.setVisible(true);
 		ControlPanel.setLayout(gblayout);
-		
-		angle = new Scrollbar(Scrollbar.HORIZONTAL, 0, 1, 0, 90);
-		velocity = new Scrollbar(Scrollbar.HORIZONTAL, 0, 1,100,1200);
-		
+
 		
 		//labels
 		angleLabel = new Label("45");
@@ -196,13 +215,13 @@ public class CannonVSBall extends java.applet.Applet implements Runnable,
 		gbc.gridy = 0;
 		gbc.gridwidth = 2;
 
-		ControlPanel.add(angle,gbc);
+		//ControlPanel.add(angle,gbc);
 		
 		gbc.gridx = 5;
 		gbc.gridy = 0;
 		gbc.gridwidth = 2;
 
-		ControlPanel.add(velocity, gbc);
+	//	ControlPanel.add(velocity, gbc);
 		
 		
 	}
@@ -302,6 +321,7 @@ public class CannonVSBall extends java.applet.Applet implements Runnable,
 		// button selection
 				if (source == "Quit") {
 					q = true;
+					theThread.stop();;
 					System.exit(0);
 					
 				}else if(source == "Run"){
@@ -358,18 +378,15 @@ public class CannonVSBall extends java.applet.Applet implements Runnable,
 	 * 
 	 */
 	public void run() {
-	/*	while(more){
-			ball.repaint();
-			
-			if(!p){
-				ball.move();
+		
+		while(true == true){
+			if( p ){
+				GamePanel.bullet.updateProjectile();
+				GamePanel.tar.updateTarget();
+				GamePanel.repaint();
 			}
-			
-			try{
-				theThread.sleep(delay);
-			} catch (InterruptedException e){}
 		}
-*/
+		
 	}
 
 	@Override
@@ -598,8 +615,10 @@ class GamePanelDraw extends Panel{
 		
 	}
 	
-	public void paint(Graphics g){
-		
+	Image gi;
+	public void paint(Graphics gb){
+		gi = createImage(width, height);
+		Graphics g = gi.getGraphics();
 		g.drawRect(0, 0, width, height);
 		
 		bullet.paintProjectile(g);
@@ -607,9 +626,14 @@ class GamePanelDraw extends Panel{
 		tar.paintTarget(g);
 		drawScore(g);
 		
+		gb.drawImage(gi,0,0,getBackground(),this);
+		
 		
 	}
 	
+	public void update(Graphics g){
+		paint(g);
+	}
 	Point[] cannonPoints;
 	Point[] drawCannonPoints;
 	
