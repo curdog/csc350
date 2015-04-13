@@ -104,9 +104,9 @@ public class CannonVSBall extends java.applet.Applet implements Runnable,
 	private final int MaxAng = 90;
 	private final int MinAng = 1;
 	
-	//velocity boundaries, in feet/sec
-	private final int MaxVel = 1210;
-	private final int MinVel = 100;
+	//velocity boundaries, in m/sec
+	private final int MaxVel = 363;
+	private final int MinVel = 30;
 	
 	public void init(){
 		//pause, quit
@@ -144,6 +144,7 @@ public class CannonVSBall extends java.applet.Applet implements Runnable,
 		
 		add(ControlPanel, BorderLayout.SOUTH);
 		add(GamePanel, BorderLayout.CENTER);
+		GamePanel.addMouseListener(this);
 		
 		//ControlPanel.setLayout(gblayout);
 	}
@@ -164,23 +165,23 @@ public class CannonVSBall extends java.applet.Applet implements Runnable,
 		ControlPanel = new Panel();
 			
 		
-		angle = new Scrollbar(Scrollbar.HORIZONTAL, 0, 1, 0, 90);
-		velocity = new Scrollbar(Scrollbar.HORIZONTAL, 0, 1,100,1200);
+		angle = new Scrollbar(Scrollbar.HORIZONTAL, 0, 1, 0, 91);
+		velocity = new Scrollbar(Scrollbar.HORIZONTAL, 0, 1,MinVel,MaxVel);
 		
 		int scrollHeightd = 900;
 		
 		angle.setSize(100, 15);
 		velocity.setSize(100, 15);
-		angle.setLocation(300, scrollHeightd);
-		velocity.setLocation(400, scrollHeightd);
 		
+		angle.setValue(45);
+		velocity.setValue(34);
 		
 		angle.setVisible(true);
 		velocity.setVisible(true);
 		
 
-		ControlPanel.add(angle);
-		ControlPanel.add(velocity);
+	//	ControlPanel.add(angle);
+	//	ControlPanel.add(velocity);
 
 		
 		gbc = new GridBagConstraints();
@@ -468,6 +469,7 @@ public class CannonVSBall extends java.applet.Applet implements Runnable,
 			marsp.setState(false);
 			saturnp.setState(false);
 			neptunep.setState(false);
+			GamePanel.bullet.setAccel(MERCURY);
 		}else if(o == venusp){
 			GamePanel.bullet.setAccel(VENUS);
 			mercuryp.setState(false);
@@ -477,7 +479,8 @@ public class CannonVSBall extends java.applet.Applet implements Runnable,
 			jupiterp.setState(false);
 			marsp.setState(false);
 			saturnp.setState(false);
-			neptunep.setState(false);	
+			neptunep.setState(false);
+			GamePanel.bullet.setAccel(VENUS);
 		}else if(o == earthp){
 			GamePanel.bullet.setAccel(EARTH);
 			venusp.setState(false);
@@ -487,7 +490,8 @@ public class CannonVSBall extends java.applet.Applet implements Runnable,
 			jupiterp.setState(false);
 			marsp.setState(false);
 			saturnp.setState(false);
-			neptunep.setState(false);	
+			neptunep.setState(false);
+			GamePanel.bullet.setAccel(EARTH);
 		}else if(o == plutop){
 			GamePanel.bullet.setAccel(PLUTO);
 			venusp.setState(false);
@@ -497,7 +501,8 @@ public class CannonVSBall extends java.applet.Applet implements Runnable,
 			jupiterp.setState(false);
 			marsp.setState(false);
 			saturnp.setState(false);
-			neptunep.setState(false);	
+			neptunep.setState(false);
+			GamePanel.bullet.setAccel(PLUTO);
 		}else if( o == uranusp){
 			GamePanel.bullet.setAccel(URANUS);
 			venusp.setState(false);
@@ -507,7 +512,8 @@ public class CannonVSBall extends java.applet.Applet implements Runnable,
 			jupiterp.setState(false);
 			marsp.setState(false);
 			saturnp.setState(false);
-			neptunep.setState(false);	
+			neptunep.setState(false);
+			GamePanel.bullet.setAccel(URANUS);
 		}else if(o == jupiterp){
 			GamePanel.bullet.setAccel(JUPITER);
 			venusp.setState(false);
@@ -517,7 +523,8 @@ public class CannonVSBall extends java.applet.Applet implements Runnable,
 			mercuryp.setState(false);
 			marsp.setState(false);
 			saturnp.setState(false);
-			neptunep.setState(false);	
+			neptunep.setState(false);
+			GamePanel.bullet.setAccel(JUPITER);
 		}else if(o == marsp){
 			GamePanel.bullet.setAccel(MARS);
 			venusp.setState(false);
@@ -527,7 +534,8 @@ public class CannonVSBall extends java.applet.Applet implements Runnable,
 			jupiterp.setState(false);
 			mercuryp.setState(false);
 			saturnp.setState(false);
-			neptunep.setState(false);	
+			neptunep.setState(false);
+			GamePanel.bullet.setAccel(MARS);
 		}else if(o == saturnp){
 			GamePanel.bullet.setAccel(SATURN);
 			venusp.setState(false);
@@ -538,6 +546,7 @@ public class CannonVSBall extends java.applet.Applet implements Runnable,
 			marsp.setState(false);
 			mercuryp.setState(false);
 			neptunep.setState(false);	
+			GamePanel.bullet.setAccel(SATURN);
 		}else if(o == neptunep){
 			GamePanel.bullet.setAccel(NEPTUNE);
 			venusp.setState(false);
@@ -547,7 +556,8 @@ public class CannonVSBall extends java.applet.Applet implements Runnable,
 			jupiterp.setState(false);
 			marsp.setState(false);
 			saturnp.setState(false);
-			mercuryp.setState(false);	
+			mercuryp.setState(false);
+			GamePanel.bullet.setAccel(NEPTUNE);
 		}
 		
 		//do not allow more than one speed to be selected 
@@ -584,11 +594,17 @@ public class CannonVSBall extends java.applet.Applet implements Runnable,
 		}
 	}
 
-	public void mouseClicked(MouseEvent arg0) {}
+	public void mouseClicked(MouseEvent arg0) {
+		
+	}
 	public void mouseEntered(MouseEvent arg0) {}
 	public void mouseExited(MouseEvent arg0) {}
 	public void mousePressed(MouseEvent arg0) {}
-	public void mouseReleased(MouseEvent arg0) {}
+	public void mouseReleased(MouseEvent arg0) {
+		if( arg0.getX() > 560 && arg0.getY() > 340 ){
+			GamePanel.bullet.fire();
+		}
+	}
 
 }
 
@@ -746,8 +762,9 @@ class Projectile{
 		  dy = 0.0f;
 		  rdx = 0.0f;
 		  rdy = 0.0f;
-		  accel = 1.0f;
+		  
 		  timeStep = 0.03f;
+		fire = false;
 		
 		
 	}
@@ -781,15 +798,27 @@ class Projectile{
 		g.setColor(oldColor);
 	}
 	
+	
+	boolean fire = false;
 	public void fire(){
 		rdx = dx;
 		rdy = dy;
+		fire = true;
 	}
 	
 	public void updateProjectile(){
-		y+= rdy;
-	//	rdy += accel * timeStep;
-		x += rdx;
+		if(fire ){
+			y+= rdy;
+			rdy += accel * timeStep;
+			x += rdx;
+			System.out.println( rdy );
+		}
+		
+		
+		if( x > 610 || y > 410){
+			System.out.println("R");
+			reset();
+		}
 		
 	}
 }
