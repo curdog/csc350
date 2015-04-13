@@ -5,11 +5,14 @@
  */
 
 import java.awt.Button;
+import java.awt.CheckboxMenuItem;
 import java.awt.Color;
 import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Label;
+import java.awt.Menu;
+import java.awt.MenuBar;
 import java.awt.Scrollbar;
 import java.awt.TextArea;
 import java.awt.TextField;
@@ -17,6 +20,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.AdjustmentEvent;
 import java.awt.event.AdjustmentListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.BufferedReader;
@@ -27,7 +32,7 @@ import java.net.Socket;
 
 //package src;
 
-public class Chat extends Frame implements Runnable, AdjustmentListener, ActionListener, WindowListener{
+public class Chat extends Frame implements Runnable, AdjustmentListener, ActionListener, WindowListener, ItemListener{
 
 	private static final long serialVersionUID = 1L;
 	protected final static boolean auto_flush = true;
@@ -44,6 +49,11 @@ public class Chat extends Frame implements Runnable, AdjustmentListener, ActionL
 	
 	GridBagLayout gbl;
 	GridBagConstraints gbc;
+	
+	MenuBar menu;
+	Menu Color;
+	CheckboxMenuItem red, blue, green, orange;
+
 	
 	//labels
 	Label hostLabel;
@@ -89,7 +99,16 @@ public class Chat extends Frame implements Runnable, AdjustmentListener, ActionL
 		this.setLayout(null);
 		this.setVisible(true);
 		
+		Color.add(red = (new CheckboxMenuItem("Red")));
+		red.addItemListener(this);
+		Color.add(green = new CheckboxMenuItem("Green"));
+		green.addItemListener(this);
+		Color.add(blue = new CheckboxMenuItem("Blue"));
+		blue.addItemListener(this);
+		Color.add(orange = new CheckboxMenuItem("Orange"));
+		orange.addItemListener(this);
 		
+			
 		//labels, buttons, scrollbar
 		hostLabel = new Label("Host:");
 		portLabel = new Label("Port:");
@@ -181,6 +200,29 @@ public class Chat extends Frame implements Runnable, AdjustmentListener, ActionL
 		changePort.addActionListener(this);
 	}
 	
+	public void itemStateChanged(ItemEvent e) {
+		Object o = e.getSource();
+
+		//menu for colors
+		if(o == red){
+			orange.setState(false);
+			blue.setState(false);
+			green.setState(false);
+		}else if(o == orange){
+			red.setState(false);
+			blue.setState(false);
+			green.setState(false);
+		}else if(o == green){
+			orange.setState(false);
+			blue.setState(false);
+			red.setState(false);
+		}else if(o == blue){
+			orange.setState(false);
+			red.setState(false);
+			green.setState(false);
+		}
+}
+		
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub
