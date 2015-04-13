@@ -338,6 +338,8 @@ public class CannonVSBall extends java.applet.Applet implements Runnable,
 					if(!p){
 						p = true;
 					}
+				} else if (source.equals(fire) ){
+					GamePanel.bullet.fire();
 				}
 				
 				repaint();
@@ -364,11 +366,13 @@ public class CannonVSBall extends java.applet.Applet implements Runnable,
 		if (sb == angle) {
 			GamePanel.setAngle(angle.getValue());
 			GamePanel.bullet.setSpeed( velocity.getValue(), angle.getValue());
+			angleLabel.setText("A:"+ angle.getValue());
 		}
 
 		// get velocity value
 		if (sb == velocity) {
 			GamePanel.bullet.setSpeed( velocity.getValue(), angle.getValue());
+			velocLabel.setText("V: " + velocity.getValue());
 		}
 	}
 
@@ -384,6 +388,7 @@ public class CannonVSBall extends java.applet.Applet implements Runnable,
 				s = System.currentTimeMillis();
 				GamePanel.bullet.updateProjectile();
 				GamePanel.tar.updateTarget();
+				GamePanel.collision();
 				GamePanel.repaint();
 				e = System.currentTimeMillis();
 				
@@ -629,6 +634,15 @@ class GamePanelDraw extends Panel{
 		
 	}
 	
+	
+	public void collision(){
+		if( bullet.getBoundingRectangle().intersects( tar.getBoundingRectangle() ))
+			rscore++;
+		if( tar.getBoundingRectangle().intersects( new Rectangle(width-40, height-40, 40, 40))){
+			cscore++;
+		}
+	}
+	
 	Image gi;
 	public void paint(Graphics gb){
 		gi = createImage(width+1, height+1);
@@ -651,6 +665,9 @@ class GamePanelDraw extends Panel{
 	Point[] cannonPoints;
 	Point[] drawCannonPoints;
 	
+	int cscore = 0;
+	int rscore = 0;
+	
 	public void drawScore( Graphics g){
 		Color c = g.getColor();
 		g.setColor(Color.BLUE);
@@ -663,6 +680,7 @@ class GamePanelDraw extends Panel{
 		//base
 		int cannon_offset = 20;
 		g.fillOval(width-cannon_offset*2, height - cannon_offset*2, cannon_offset*2, cannon_offset*2);
+		g.fillRect(width-cannon_offset, height-cannon_offset, cannon_offset, cannon_offset);
 		//cannon
 		//lazy calculations
 		if( recalc == true){
@@ -700,9 +718,11 @@ class GamePanelDraw extends Panel{
 class Projectile{
 	float x = GamePanelDraw.width - SIZE;
 	float y = GamePanelDraw.height - SIZE/2;
-	float dx;
-	float dy;
-	float accel = 0.0f;
+	float dx =0.0f;
+	float dy = 0.0f;
+	float rdx = 0.0f;
+	float rdy = 0.0f;
+	float accel = 1.0f;
 	float timeStep = 0.03f;
 	public static final int SIZE = 10;
 	public Projectile(){
@@ -718,9 +738,13 @@ class Projectile{
 	}
 	
 	public void setSpeed( float s, float ang){
+		System.out.println(s);
+		System.out.println(ang);
+		dx = (-s) * Math.abs( (float)Math.cos((double)ang * Math.PI / 180));
 		
-		dx = -s * (float)Math.cos((double)ang);
-		dy = -s * (float)Math.sin((double)ang);
+		dy = (-s) * Math.abs((float)Math.sin((double)ang * Math.PI /180));
+		System.out.println( dx);
+		System.out.println( dy);
 	}
 	
 	public Rectangle getBoundingRectangle(){
@@ -734,9 +758,15 @@ class Projectile{
 		g.setColor(oldColor);
 	}
 	
+	public void fire(){
+		rdx = dx;
+		rdy = dy;
+	}
+	
 	public void updateProjectile(){
-		y+= dy;
-		dy += accel * timeStep;
+		y+= rdy;
+	//	rdy += accel * timeStep;
+		x += rdx;
 		
 	}
 }
@@ -757,6 +787,13 @@ class Target {
 	public void updateTarget(){
 		x+=dx;
 		y+=dy;
+		
+		if( x < 0 || x > 600 - diameter ){
+			dx = -dx;
+		}
+		if( y < 0 || y > 400 - diameter){
+			dy = - dy;
+		}
 	}
 
 	public Rectangle getBoundingRectangle(){
