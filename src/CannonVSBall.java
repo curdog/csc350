@@ -636,10 +636,15 @@ class GamePanelDraw extends Panel{
 	
 	
 	public void collision(){
-		if( bullet.getBoundingRectangle().intersects( tar.getBoundingRectangle() ))
+		if( bullet.getBoundingRectangle().intersects( tar.getBoundingRectangle() )){
 			rscore++;
+			tar.reset();
+			bullet.reset();
+		}
 		if( tar.getBoundingRectangle().intersects( new Rectangle(width-40, height-40, 40, 40))){
 			cscore++;
+			tar.reset();
+			bullet.reset();
 		}
 	}
 	
@@ -668,11 +673,16 @@ class GamePanelDraw extends Panel{
 	int cscore = 0;
 	int rscore = 0;
 	
+	public void reset(){
+		cscore = 0;
+		rscore = 0;
+	}
+	
 	public void drawScore( Graphics g){
 		Color c = g.getColor();
 		g.setColor(Color.BLUE);
-		g.drawString("Computer Score: ", width - 140, 20);
-		g.drawString("The Rock Score: ", width - 140, 40);
+		g.drawString("Computer Score: " + cscore, width - 140, 20);
+		g.drawString("The Rock Score: " + rscore, width - 140, 40);
 		g.setColor(c);
 	}
 	
@@ -729,6 +739,19 @@ class Projectile{
 		
 	}
 	
+	public void reset(){
+		x = GamePanelDraw.width - SIZE;
+		y = GamePanelDraw.height - SIZE/2;
+		dx =0.0f;
+		  dy = 0.0f;
+		  rdx = 0.0f;
+		  rdy = 0.0f;
+		  accel = 1.0f;
+		  timeStep = 0.03f;
+		
+		
+	}
+	
 	public void setTimeStep( float t){
 		
 	}
@@ -748,7 +771,7 @@ class Projectile{
 	}
 	
 	public Rectangle getBoundingRectangle(){
-		return new Rectangle( );
+		return new Rectangle( (int)x, (int)y,SIZE,SIZE );
 	}
 	
 	public void paintProjectile( Graphics g){
@@ -813,6 +836,8 @@ class Target {
 		// reset the ball to the start position
 		x =  20;
 		y =  20;
+		
+		
 	}
 
 	public void setSpeed(int s) {
