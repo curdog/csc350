@@ -59,7 +59,8 @@ public class CannonVSBall extends java.applet.Applet implements Runnable,
 	GamePanelDraw GamePanel;
 	GridBagLayout gblayout;
 	GridBagConstraints gbc;
-	
+	//TODO
+	Label timeWasted;
 	//sub elements
 	Menu control, parameters, size, speed, env;
 	MenuItem pause, run, restart;
@@ -166,26 +167,9 @@ public class CannonVSBall extends java.applet.Applet implements Runnable,
 		ControlPanel.setVisible(true);
 		ControlPanel.setLayout(gblayout);
 		
-		angle = new Scrollbar(Scrollbar.HORIZONTAL, 45, 1, 0, 90);
-		velocity = new Scrollbar(Scrollbar.HORIZONTAL, 400, 100,100,1200);
+		angle = new Scrollbar(Scrollbar.HORIZONTAL, 0, 1, 0, 90);
+		velocity = new Scrollbar(Scrollbar.HORIZONTAL, 0, 1,100,1200);
 		
-		/*
-		angle.setBlockIncrement(1);
-		velocity.setBlockIncrement(1);
-		
-		angle.setMinimum(5);
-		velocity.setMinimum(2);
-		
-		angle.setUnitIncrement(1);
-		velocity.setUnitIncrement(1);
-		*/
-		angle.setSize(100,25);
-		velocity.setSize(100,25);
-		
-		angle.setVisible(true);
-		velocity.setVisible(true);
-		angle.setEnabled(true);
-		velocity.setEnabled(true);
 		
 		//labels
 		angleLabel = new Label("45");
@@ -211,15 +195,13 @@ public class CannonVSBall extends java.applet.Applet implements Runnable,
 		gbc.gridx = 1;
 		gbc.gridy = 0;
 		gbc.gridwidth = 2;
-		angle.setMaximum(MaxAng);
-		angle.setMinimum(MinAng);
+
 		ControlPanel.add(angle,gbc);
 		
 		gbc.gridx = 5;
 		gbc.gridy = 0;
 		gbc.gridwidth = 2;
-		velocity.setMaximum(MaxVel);
-		velocity.setMaximum(MaxVel);
+
 		ControlPanel.add(velocity, gbc);
 		
 		
@@ -312,13 +294,6 @@ public class CannonVSBall extends java.applet.Applet implements Runnable,
 		//gpg.drawRect(5,5,height,width);
 	}
 	
-	public void render( ){
-		
-	}
-	
-	public void model(){
-		
-	}
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -365,33 +340,19 @@ public class CannonVSBall extends java.applet.Applet implements Runnable,
 	@Override
 	public void adjustmentValueChanged(AdjustmentEvent e) {
 		Scrollbar sb = (Scrollbar) e.getSource();
-		
-		//get angle value
-		if(sb == angle){
-			int A = e.getValue();
-			
-			if(A > 90){
-				sb.setValue(MaxAng);
-			}			
-			
-			if(A < 90){
-				sb.setValue(MinAng);
-			}
+
+		// get angle value
+		if (sb == angle) {
+			GamePanel.setAngle(angle.getValue());
+			GamePanel.bullet.setSpeed( velocity.getValue(), angle.getValue());
 		}
-		
-		//get velocity value
-		if(sb == velocity){
-			int V = e.getValue();
-			
-			if(V > MaxVel){
-				sb.setValue(MaxVel);
-			}
-			
-			if(V < MinVel){
-				sb.setValue(MinVel);
-			}
+
+		// get velocity value
+		if (sb == velocity) {
+			GamePanel.bullet.setSpeed( velocity.getValue(), angle.getValue());
 		}
-}
+	}
+
 	/*
 	 * For rendering the game, 
 	 * 
@@ -417,36 +378,42 @@ public class CannonVSBall extends java.applet.Applet implements Runnable,
 
 		//do not allow more than one check box to be selected for size
 		if(o == xsm_size){
+			GamePanel.tar.setDiameter(10);
 			sm_size.setState(false);
 			med_size.setState(false);
 			lg_size.setState(false);
 			xlg_size.setState(false);
 			barn_size.setState(false);
 		}else if(o == sm_size){
+			GamePanel.tar.setDiameter(20);
 			xsm_size.setState(false);
 			med_size.setState(false);
 			lg_size.setState(false);
 			xlg_size.setState(false);
 			barn_size.setState(false);
 		}else if(o == med_size){
+			GamePanel.tar.setDiameter(40);
 			xsm_size.setState(false);
 			sm_size.setState(false);
 			lg_size.setState(false);
 			xlg_size.setState(false);
 			barn_size.setState(false);
 		}else if(o == lg_size){
+			GamePanel.tar.setDiameter(80);
 			xsm_size.setState(false);
 			sm_size.setState(false);
 			med_size.setState(false);
 			xlg_size.setState(false);
 			barn_size.setState(false);
 		}else if(o == xlg_size){
+			GamePanel.tar.setDiameter(120);
 			xsm_size.setState(false);
 			sm_size.setState(false);
 			lg_size.setState(false);
 			med_size.setState(false);
 			barn_size.setState(false);
 		}else if( o == barn_size){
+			GamePanel.tar.setDiameter(200);
 			xsm_size.setState(false);
 			sm_size.setState(false);
 			lg_size.setState(false);
@@ -456,6 +423,7 @@ public class CannonVSBall extends java.applet.Applet implements Runnable,
 		
 		//do not allow more than one check box to be selected for the environment
 		if(o == mercuryp){
+			GamePanel.bullet.setAccel(MERCURY);
 			venusp.setState(false);
 			earthp.setState(false);
 			plutop.setState(false);
@@ -465,6 +433,7 @@ public class CannonVSBall extends java.applet.Applet implements Runnable,
 			saturnp.setState(false);
 			neptunep.setState(false);
 		}else if(o == venusp){
+			GamePanel.bullet.setAccel(VENUS);
 			mercuryp.setState(false);
 			earthp.setState(false);
 			plutop.setState(false);
@@ -474,6 +443,7 @@ public class CannonVSBall extends java.applet.Applet implements Runnable,
 			saturnp.setState(false);
 			neptunep.setState(false);	
 		}else if(o == earthp){
+			GamePanel.bullet.setAccel(EARTH);
 			venusp.setState(false);
 			mercuryp.setState(false);
 			plutop.setState(false);
@@ -483,6 +453,7 @@ public class CannonVSBall extends java.applet.Applet implements Runnable,
 			saturnp.setState(false);
 			neptunep.setState(false);	
 		}else if(o == plutop){
+			GamePanel.bullet.setAccel(PLUTO);
 			venusp.setState(false);
 			earthp.setState(false);
 			mercuryp.setState(false);
@@ -492,6 +463,7 @@ public class CannonVSBall extends java.applet.Applet implements Runnable,
 			saturnp.setState(false);
 			neptunep.setState(false);	
 		}else if( o == uranusp){
+			GamePanel.bullet.setAccel(URANUS);
 			venusp.setState(false);
 			earthp.setState(false);
 			plutop.setState(false);
@@ -501,6 +473,7 @@ public class CannonVSBall extends java.applet.Applet implements Runnable,
 			saturnp.setState(false);
 			neptunep.setState(false);	
 		}else if(o == jupiterp){
+			GamePanel.bullet.setAccel(JUPITER);
 			venusp.setState(false);
 			earthp.setState(false);
 			plutop.setState(false);
@@ -510,6 +483,7 @@ public class CannonVSBall extends java.applet.Applet implements Runnable,
 			saturnp.setState(false);
 			neptunep.setState(false);	
 		}else if(o == marsp){
+			GamePanel.bullet.setAccel(MARS);
 			venusp.setState(false);
 			earthp.setState(false);
 			plutop.setState(false);
@@ -519,6 +493,7 @@ public class CannonVSBall extends java.applet.Applet implements Runnable,
 			saturnp.setState(false);
 			neptunep.setState(false);	
 		}else if(o == saturnp){
+			GamePanel.bullet.setAccel(SATURN);
 			venusp.setState(false);
 			earthp.setState(false);
 			plutop.setState(false);
@@ -528,6 +503,7 @@ public class CannonVSBall extends java.applet.Applet implements Runnable,
 			mercuryp.setState(false);
 			neptunep.setState(false);	
 		}else if(o == neptunep){
+			GamePanel.bullet.setAccel(NEPTUNE);
 			venusp.setState(false);
 			earthp.setState(false);
 			plutop.setState(false);
@@ -540,26 +516,31 @@ public class CannonVSBall extends java.applet.Applet implements Runnable,
 		
 		//do not allow more than one speed to be selected 
 		if(o == xslow){
+			GamePanel.tar.setSpeed(1);
 			slow.setState(false);
 			avg.setState(false);
 			fast.setState(false);
 			xfast.setState(false);
 		}else if(o == slow){
+			GamePanel.tar.setSpeed(10);
 			xslow.setState(false);
 			avg.setState(false);
 			fast.setState(false);
 			xfast.setState(false);
 		}else if(o == avg){
+			GamePanel.tar.setSpeed(20);
 			slow.setState(false);
 			xslow.setState(false);
 			fast.setState(false);
 			xfast.setState(false);
 		}else if(o == fast){
+			GamePanel.tar.setSpeed(50);
 			slow.setState(false);
 			avg.setState(false);
 			xslow.setState(false);
 			xfast.setState(false);
 		}else if(o == xfast){
+			GamePanel.tar.setSpeed(120);
 			slow.setState(false);
 			avg.setState(false);
 			fast.setState(false);
@@ -592,8 +573,8 @@ class GamePanelDraw extends Panel{
 		recalc = true;
 	}
 	
-	Projectile bullet;
-	Target tar;
+	public Projectile bullet;
+	public Target tar;
 	
 	public GamePanelDraw(){
 		super();
@@ -607,7 +588,7 @@ class GamePanelDraw extends Panel{
 		cannonPoints[2] = new Point( width , height -10 );
 		cannonPoints[0] = new Point( width, height); 
 		
-		angle = 10;
+		angle = 70;
 		recalc = true;
 		drawCannonPoints = new Point[4];
 		
@@ -620,15 +601,25 @@ class GamePanelDraw extends Panel{
 	public void paint(Graphics g){
 		
 		g.drawRect(0, 0, width, height);
+		
 		bullet.paintProjectile(g);
 		drawCannon(g);
 		tar.paintTarget(g);
+		drawScore(g);
 		
 		
 	}
 	
 	Point[] cannonPoints;
 	Point[] drawCannonPoints;
+	
+	public void drawScore( Graphics g){
+		Color c = g.getColor();
+		g.setColor(Color.BLUE);
+		g.drawString("Computer Score: ", width - 140, 20);
+		g.drawString("The Rock Score: ", width - 140, 40);
+		g.setColor(c);
+	}
 	
 	public void drawCannon( Graphics g){
 		//base
@@ -639,12 +630,20 @@ class GamePanelDraw extends Panel{
 		
 		//  x/y + w*sin/cos 
 		if( recalc == true){
-			for( int i = 0; i < cannonPoints.length; i++){
-				drawCannonPoints[i] = new Point( (int)(cannonPoints[i].x * Math.cos((double)angle)+cannonPoints[i].y*Math.sin((double)(angle) )),
-						(int)(-cannonPoints[i].x * Math.sin((double)angle) + cannonPoints[i].y*Math.cos((double)angle)));
-				System.out.println("Translated X" + drawCannonPoints[i].x);
-				System.out.println("Translated Y" + drawCannonPoints[i].y);
-			}
+			float innerRad = 10;
+			float outerRad = 100;
+			drawCannonPoints[0] = new Point( width - (int)(innerRad * Math.cos( (double)((angle - 2.5f)) * Math.PI/180) ),
+						height - (int)(innerRad * Math.sin( (double)((angle - 2.5f)) * Math.PI/180 )));
+			
+			drawCannonPoints[1] = new Point(width - (int)(innerRad * Math.cos( (double)((angle + 2.5f)) * Math.PI/180) ),
+					height - (int)(innerRad * Math.sin( (double)((angle + 2.5f)) * Math.PI/180 )));
+		
+			drawCannonPoints[2] = new Point(width - (int)(outerRad * Math.cos( (double)((angle + 2.5f)) * Math.PI/180) ),
+					height - (int)(outerRad * Math.sin( (double)((angle + 2.5f)) * Math.PI/180 )));
+			
+			drawCannonPoints[3] = new Point(width -  (int)(outerRad * Math.cos( (double)((angle - 2.5f)) * Math.PI/180) ),
+					height - (int)(outerRad * Math.sin( (double)( (angle - 2.5f)) * Math.PI/180 )));
+			
 			recalc = false;
 		}
 		
