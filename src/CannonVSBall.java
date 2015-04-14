@@ -38,6 +38,8 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.Timer;
 
+import javax.swing.JOptionPane;
+import javax.swing.plaf.OptionPaneUI;
 import javax.swing.text.StyleContext.SmallAttributeSet;
 
 public class CannonVSBall extends java.applet.Applet implements Runnable,
@@ -659,6 +661,7 @@ class GamePanelDraw extends Panel{
 		}
 		if( tar.getBoundingRectangle().intersects( new Rectangle(width-40, height-40, 40, 40))){
 			cscore++;
+			JOptionPane.showMessageDialog(null, "You loose, try x-slow and barn-size next time", "Matrix wins", JOptionPane.INFORMATION_MESSAGE);
 			tar.reset();
 			bullet.reset();
 		}
@@ -761,8 +764,7 @@ class Projectile{
 		dx =0.0f;
 		  dy = 0.0f;
 		  rdx = 0.0f;
-		  rdy = 0.0f;
-		  
+		  rdy = 0.0f;  
 		  timeStep = 0.03f;
 		fire = false;
 		
@@ -811,13 +813,13 @@ class Projectile{
 			y+= rdy;
 			rdy += accel * timeStep;
 			x += rdx;
-			System.out.println( rdy );
+			System.out.println( x );
 		}
 		
-		
-		if( x > 610 || y > 410){
+		if( x < 0 || y > 410){
 			System.out.println("R");
 			reset();
+			JOptionPane.showMessageDialog(null, "Ball Left Play", "Wear Glasses", JOptionPane.INFORMATION_MESSAGE);
 		}
 		
 	}
