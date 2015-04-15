@@ -1,4 +1,3 @@
-package src;
 /* Laurel Miller, Sean Curtis, Kris Fielding
  * CET 350 - Java, Group 3
  * Program 7 - Chat
@@ -42,7 +41,6 @@ public class Chat extends Frame implements Runnable, AdjustmentListener, ActionL
 	Socket client;
 	Socket server;
 	ServerSocket listen_socket;
-	
 	BufferedReader br;
 	InputStreamReader is;
 	PrintWriter pw;
@@ -53,7 +51,7 @@ public class Chat extends Frame implements Runnable, AdjustmentListener, ActionL
 	GridBagConstraints gbc;
 	
 	MenuBar menu;
-	Menu colorMenu;
+	Menu Color;
 	CheckboxMenuItem red, blue, green, orange;
 
 	
@@ -86,7 +84,6 @@ public class Chat extends Frame implements Runnable, AdjustmentListener, ActionL
 	
 	public static void main(String[] args){
 		Chat x = new Chat();
-		x.setSize(400, 600);
 		x.setVisible(true);
 		
 		BufferedReader kbd = new BufferedReader( new InputStreamReader(System.in) );
@@ -96,25 +93,21 @@ public class Chat extends Frame implements Runnable, AdjustmentListener, ActionL
 		
 		gbl = new GridBagLayout();
 		gbc = new GridBagConstraints();
-		menu = new MenuBar();
-		colorMenu = new Menu("Color");
 		
 		this.addWindowListener(this);
 		this.setResizable(true);
-		this.setLayout(gbl);
+		this.setLayout(null);
 		this.setVisible(true);
 		
-		colorMenu.add(red = (new CheckboxMenuItem("Red")));
+		Color.add(red = (new CheckboxMenuItem("Red")));
 		red.addItemListener(this);
-		colorMenu.add(green = new CheckboxMenuItem("Green"));
+		Color.add(green = new CheckboxMenuItem("Green"));
 		green.addItemListener(this);
-		colorMenu.add(blue = new CheckboxMenuItem("Blue"));
+		Color.add(blue = new CheckboxMenuItem("Blue"));
 		blue.addItemListener(this);
-		colorMenu.add(orange = new CheckboxMenuItem("Orange"));
+		Color.add(orange = new CheckboxMenuItem("Orange"));
 		orange.addItemListener(this);
 		
-		menu.add(colorMenu);
-		this.setMenuBar(menu);
 			
 		//labels, buttons, scrollbar
 		hostLabel = new Label("Host:");
@@ -126,11 +119,6 @@ public class Chat extends Frame implements Runnable, AdjustmentListener, ActionL
 		connect = new Button("Connect");
 		startServer = new Button("Start Server");
 		SB = new Scrollbar(Scrollbar.VERTICAL, 0, 1, 0, 100);
-		
-		host = new TextField();
-		port = new TextField();
-		outMesg = new TextField();
-		mesg = new TextArea();
 		
 /*		SB.setValue(300);
 		SB.setBackground(Color.GRAY);
@@ -252,13 +240,5 @@ public class Chat extends Frame implements Runnable, AdjustmentListener, ActionL
 	public void windowIconified(WindowEvent e) {}
 	public void windowOpened(WindowEvent e) {}
 	
-	
-	public void startServer(){
-		
-	}
-	
-	public void switchHost(){
-		
-	}
 
 }
