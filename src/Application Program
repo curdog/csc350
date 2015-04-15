@@ -32,7 +32,7 @@ public class ApplicationProg extends Frame implements ActionListener,
 
 	private static final long serialVersionUID = 10L;
 	private static final int MAXSPEED = 100;
-	private static final int MINSPEED = 0;
+	private static final int MINSPEED = 1;
 	private static final int SPEED = 1;
 	private static final int MAXSIZE = 100;
 	private static final int MINSIZE = 0;
@@ -97,12 +97,12 @@ public class ApplicationProg extends Frame implements ActionListener,
 		sizeLabel = new Label("Size:");
 
 		// speed scroll bars
-		speed = new Scrollbar(Scrollbar.HORIZONTAL, 0, 1, 1, 100);
+		speed = new Scrollbar(Scrollbar.HORIZONTAL, 1, 1, 1, 100);
 		
 		speed.setMaximum(MAXSPEED);
 		speed.setMinimum(MINSPEED);
 		speed.setUnitIncrement(SPEED);
-		speed.setBlockIncrement( 1);
+		speed.setBlockIncrement(1);
 		speed.setValue(0);
 		speed.setBackground(Color.GRAY);
 		speed.setSize(sliderW, sliderH);
@@ -178,28 +178,26 @@ public class ApplicationProg extends Frame implements ActionListener,
 		Graphics g = buffer.getGraphics();
 
 		// eliminate previous drawing;
-		cg.clearRect(0, 0, 900, 490);
+		g.clearRect(0, 0, 900+OFFSETX, 490+OFFSETY);
 		
 		Rectangle r = obj.getBoundingRectange();
 		g.drawRect(OFFSETX, OFFSETY, height-1, width-1);
 		
 		boolean draw = false;
 		
-		if( (int)r.getMaxX() >= height + OFFSETX - obj.getRadius()){
+		if( (int)r.getMaxX() >= height + (OFFSETX-3) - obj.getRadius()){
 			obj.rightSide();
-			//obj.wall((int)r.getMaxX() - height );
 			draw = true;
 		}
 		if( (int)r.getMinX() <= OFFSETX - obj.getRadius() ){
 			obj.leftSide();
-		//	obj.wall( OFFSETX - (int)r.getMinX(), OFFSETX - (int)r.getMinX());
 			draw = true;
 		}
-		if( (int)r.getMaxY() >= width + OFFSETY - obj.getRadius()){
+		if( (int)r.getMaxY() >= width + (OFFSETY-3) - obj.getRadius()){
 			obj.bottomSide();
 			draw = true;
 		}
-		if( (int)r.getMinY() <= OFFSETY - obj.getRadius() ){
+		if( (int)r.getMinY() <= (OFFSETY-2) - obj.getRadius() ){
 			obj.topSide();
 			draw = true;
 		}
@@ -208,6 +206,10 @@ public class ApplicationProg extends Frame implements ActionListener,
 		
 		cg.drawImage(buffer, OFFSETX-1, OFFSETY-1, null);
 
+	}
+	
+	public void update(Graphics g){
+		paint(g);
 	}
 
 	public void start() {
