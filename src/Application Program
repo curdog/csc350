@@ -15,6 +15,7 @@ import java.awt.Button;
 import java.awt.Color;
 import java.awt.Frame;
 import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.Label;
 import java.awt.Rectangle;
 import java.awt.Scrollbar;
@@ -164,13 +165,23 @@ public class ApplicationProg extends Frame implements ActionListener,
 	}
 
 	Rectangle bounds;
-
+	Image buffer;
+	
 	// draws the frame for the bouncing ball
-	public void paint(Graphics g) {
+	public void paint(Graphics cg) {
 		int height = 900;
 		int width = 490;
+		
+		if (buffer == null)
+			buffer = createImage(900+OFFSETX, 490+OFFSETY);
+
+		Graphics g = buffer.getGraphics();
+
+		// eliminate previous drawing;
+		cg.clearRect(0, 0, 900, 490);
+		
 		Rectangle r = obj.getBoundingRectange();
-		g.drawRect(OFFSETX, OFFSETY, height, width);
+		g.drawRect(OFFSETX, OFFSETY, height-1, width-1);
 		
 		boolean draw = false;
 		
@@ -194,6 +205,8 @@ public class ApplicationProg extends Frame implements ActionListener,
 		}
 		if( !draw)
 			obj.drawBall(g);
+		
+		cg.drawImage(buffer, OFFSETX-1, OFFSETY-1, null);
 
 	}
 
