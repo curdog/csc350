@@ -26,6 +26,7 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -33,6 +34,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.Iterator;
 import java.util.TimerTask;
 import java.util.Vector;
@@ -40,7 +42,7 @@ import java.util.Vector;
 //package src;
 
 public class Chat extends Frame implements Runnable, AdjustmentListener,
-		ActionListener, WindowListener, ItemListener {
+		ActionListener, WindowListener, ItemListener, ChatListener {
 
 	private static final long serialVersionUID = 1L;
 	protected final static boolean auto_flush = true;
@@ -136,8 +138,10 @@ public class Chat extends Frame implements Runnable, AdjustmentListener,
 
 		host = new TextField();
 		port = new TextField();
+		
 		outMesg = new TextField();
 		mesg = new TextArea();
+		dialogue = new TextArea();
 
 		/*
 		 * SB.setValue(300); SB.setBackground(Color.GRAY); SB.setSize(sliderW,
@@ -148,57 +152,68 @@ public class Chat extends Frame implements Runnable, AdjustmentListener,
 		/********** SETTING UP GUI **********/
 
 		gbc.gridx = 0;
-		gbc.gridy = 0;
+		gbc.gridy = 2;
 		gbc.gridwidth = 1;
 		this.add(hostLabel, gbc);
 
-		gbc.gridx = 1;
-		gbc.gridy = 0;
+		gbc.gridx = 0;
+		gbc.gridy = 3;
 		gbc.gridwidth = 1;
 		this.add(portLabel, gbc);
 
-		gbc.gridx = 0;
-		gbc.gridy = 1;
-		gbc.gridwidth = 3;
+		gbc.ipadx = 100;
+		gbc.gridx = 1;
+		gbc.gridy = 2;
+		gbc.gridwidth = 1;
 		this.add(host, gbc);
 
 		gbc.gridx = 1;
-		gbc.gridy = 1;
-		gbc.gridwidth = 3;
+		gbc.gridy = 3;
+		gbc.gridwidth = 1;
 		this.add(port, gbc);
-
-		gbc.gridx = 3;
-		gbc.gridy = 0;
-		gbc.gridwidth = 4;
+		gbc.ipadx = 0;
+		
+		gbc.gridx = 0;
+		gbc.gridy = 1;
+		gbc.gridwidth = 2;
+		gbc.ipadx = 250;
 		this.add(outMesg, gbc);
-
-		gbc.gridx = 4;
+		gbc.ipadx = 0;
+		
+		gbc.gridx = 0;
 		gbc.gridy = 0;
 		gbc.gridwidth = 4;
-		this.add(mesg, gbc);
+		this.add(dialogue, gbc);
 
-		gbc.gridx = 3;
-		gbc.gridy = 4;
+		gbc.gridwidth = 4;
+		gbc.gridx = 0;
+		gbc.gridy = 5;
+		mesg.setRows( 5);
+		mesg.setSize(mesg.getWidth(), 200);
+		this.add(mesg,gbc);
+		
+		gbc.gridx = 2;
+		gbc.gridy = 1;
 		gbc.gridwidth = 1;
 		this.add(send, gbc);
 
-		gbc.gridx = 0;
-		gbc.gridy = 4;
+		gbc.gridx = 2;
+		gbc.gridy = 2;
 		gbc.gridwidth = 1;
 		this.add(changeHost, gbc);
 
-		gbc.gridx = 1;
-		gbc.gridy = 4;
+		gbc.gridx = 2;
+		gbc.gridy = 3;
 		gbc.gridwidth = 1;
 		this.add(changePort, gbc);
 
-		gbc.gridx = 1;
-		gbc.gridy = 5;
+		gbc.gridx = 3;
+		gbc.gridy = 3;
 		gbc.gridwidth = 1;
 		this.add(connect, gbc);
 
-		gbc.gridx = 2;
-		gbc.gridy = 5;
+		gbc.gridx = 3;
+		gbc.gridy = 4;
 		gbc.gridwidth = 1;
 		this.add(disconnect, gbc);
 
@@ -346,18 +361,26 @@ public class Chat extends Frame implements Runnable, AdjustmentListener,
 		
 	}
 
+	@Override
+	public void chatMessageRecieved(String mesg) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
 
 class ChatClient implements Runnable{
 	Vector<ChatListener> listeners;
-
+	Socket server;
+	String colorSel;
+	
 	public ChatClient(){
 		listeners = new Vector<ChatListener>();
 	}
 	public void sendMesg(String s) {
 		try {
 			PrintWriter pw = new PrintWriter(server.getOutputStream());
-			pw.println(colSel+s);
+			pw.println(colorSel + s);
 		} catch (Exception e) {
 
 		}
@@ -365,10 +388,12 @@ class ChatClient implements Runnable{
 	}
 	
 	public void setColor(){
-		
+		colorSel = "B";
 	}
 	
-	public void setServer(){
+	public void setServer( String serv, int port ) throws UnknownHostException, IOException{
+		server = new Socket(serv, port);
+		server.setKeepAlive(true);
 		
 	}
 	
@@ -383,11 +408,38 @@ class ChatClient implements Runnable{
 			i.next().chatMessageRecieved(mesg);
 	}
 	
+	boolean activeListen;
+	
+	public void setActiveListen( boolean b ){
+		activeListen = b;
+	}
+	
+	public boolean getActiveListen(){
+		return activeListen;
+	}
+	
 	//listen for messages
 	@Override
 	public void run() {
-		// TODO Auto-generated method stub
+		BufferedReader  bfreader = null;
+		try {
+			bfreader = new BufferedReader(  new InputStreamReader( server.getInputStream() ) );
+			while ( activeListen ){
+				String s = bfreader.readLine();
+				doMessage( s );
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
+		if( bfreader != null)
+			try {
+				bfreader.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 	}
 	
 }
