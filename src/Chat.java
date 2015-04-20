@@ -34,6 +34,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.Iterator;
 import java.util.TimerTask;
@@ -88,6 +89,9 @@ public class Chat extends Frame implements Runnable, AdjustmentListener,
 
 	// scrollbar
 	Scrollbar SB;
+	
+	ChatClient clientGuy;
+	ChatServer serverGuy;
 
 	// listen_socket = new Server Socket(PORT);
 	// client = listen_socket.accept():
@@ -97,8 +101,8 @@ public class Chat extends Frame implements Runnable, AdjustmentListener,
 		x.setSize(400, 600);
 		x.setVisible(true);
 
-		BufferedReader kbd = new BufferedReader(
-				new InputStreamReader(System.in));
+	//	BufferedReader kbd = new BufferedReader(
+	//			new InputStreamReader(System.in));
 	}
 
 	public Chat() {
@@ -362,8 +366,8 @@ public class Chat extends Frame implements Runnable, AdjustmentListener,
 	}
 
 	@Override
-	public void chatMessageRecieved(String mesg) {
-		// TODO Auto-generated method stub
+	public void chatMessageRecieved(String mesg, ChatClient l) {
+		dialogue.append(mesg);
 		
 	}
 
@@ -392,9 +396,27 @@ class ChatClient implements Runnable{
 	}
 	
 	public void setServer( String serv, int port ) throws UnknownHostException, IOException{
+		if( server != null){
+			try{
+				server.close();
+			} catch (IOException e){
+				System.out.println("Blocked in IO");
+			}
+		}
+			
 		server = new Socket(serv, port);
 		server.setKeepAlive(true);
 		
+	}
+	
+	public void setSocket( Socket s ){
+		server = s;
+		try {
+			server.setKeepAlive(true);
+		} catch (SocketException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	public void addListener( ChatListener c){
@@ -405,7 +427,7 @@ class ChatClient implements Runnable{
 	public void doMessage( String mesg ){
 		Iterator<ChatListener> i = listeners.iterator();
 		while( i.hasNext())
-			i.next().chatMessageRecieved(mesg);
+			i.next().chatMessageRecieved(mesg, this);
 	}
 	
 	boolean activeListen;
@@ -445,16 +467,51 @@ class ChatClient implements Runnable{
 }
 
 interface ChatListener{
-	public void chatMessageRecieved( String mesg);
+	public void chatMessageRecieved( String mesg, ChatClient src);
 }
 
-class ChatServer implements Runnable{
+class ChatServer implements Runnable, ChatListener{
+	ServerSocket serv;
+	Thread acceptor;
+	Vector<ChatClient> peons;
+	int port = 44004;
 	
 	public ChatServer(){
-		
+		peons = new Vector<ChatClient>();
 	}
 
+	public void setPort( int p ){
+		port = p;
+		stopServer();
+		startServer();
+	}
+	
+	public int getPort( ){
+		return port;
+	}
+	
+	
+	boolean serverListenState = false;
+	
+	public void startServer(){
+		serverListenState = true;
+	}
+	
+	public void stopServer() {
+		serverListenState = false;
+		//stop listening to peons
+		
+		Iterator<ChatClient> i = peons.iterator();
+		while( i.hasNext() ){
+			i.next().setActiveListen(false);
+		}
+		
+		peons.clear();
+		
+	}
+	
 	String lastMesg = "";
+	
 	public void broadcast(){
 		if( serverListenState == true ){
 			Iterator<Socket> i = clients.iterator();
@@ -473,6 +530,26 @@ class ChatServer implements Runnable{
 	
 	@Override
 	public void run() {
+		while( serverListenState == true){
+			Socket t = null;
+			try {
+				t = serv.accept();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			if ( t != null ){
+				ChatClient tc = new ChatClient();
+				tc.setSocket(t);
+				tc.addListener(this);
+				peons.add( tc );
+			}
+		}
+		
+	}
+
+	@Override
+	public void chatMessageRecieved(String mesg, ChatClient src) {
 		// TODO Auto-generated method stub
 		
 	}
