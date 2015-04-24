@@ -221,12 +221,16 @@ public class Chat extends Frame implements Runnable, AdjustmentListener,
 		gbc.gridwidth = 1;
 		this.add(disconnect, gbc);
 
-		gbc.gridx = 0;
-		gbc.gridy = 5;
+		gbc.gridx = 2;
+		gbc.gridy = 4;
 		gbc.gridwidth = 1;
 		this.add(startServer, gbc);
 
+		
+		port.setText(Integer.toString(DEFAULT_PORT));
+		host.setText("127000000001");
 		send.addActionListener(this);
+		outMesg.addActionListener(this);
 		connect.addActionListener(this);
 		disconnect.addActionListener(this);
 		startServer.addActionListener(this);
@@ -291,12 +295,25 @@ public class Chat extends Frame implements Runnable, AdjustmentListener,
 			
 		} else if ( e.getSource() == changePort){
 			
-		} else if ( e.getSource() == send || e.getSource()==mesg ){
-			
+		} else if ( e.getSource() == send || e.getSource()==outMesg ){
+			if( !(outMesg.getText()).equals("") ){
+				sendMesg( outMesg.getText() );
+			} else {
+				mesg.append("You need someting to say to chat, telepathy not allowed\n");
+			}
+			outMesg.setText("");
 		} else if ( e.getSource() == disconnect ){
 			
 		} else if ( e.getSource() == startServer){
-			
+			try {
+				startServer();
+			} catch (NumberFormatException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 		} else if ( e.getSource() == connect ){
 			
 		} else {
@@ -339,6 +356,14 @@ public class Chat extends Frame implements Runnable, AdjustmentListener,
 
 	}
 
+	public void sendMesg( String s ){
+		if( clientGuy != null ){
+			
+		} else{
+			mesg.append("You have no friends\n");
+		}
+	}
+	
 	//for server mode
 	
 	public void stopServer() {
@@ -349,7 +374,7 @@ public class Chat extends Frame implements Runnable, AdjustmentListener,
 		
 	}
 	
-	public void endClient(){
+	public void stopClient(){
 		
 	}
 
@@ -358,7 +383,11 @@ public class Chat extends Frame implements Runnable, AdjustmentListener,
 	}
 
 	public void switchPort() {
-
+		if( server != null){
+			
+		}
+		stopClient();
+		startClient();
 	}
 	
 	public void recvMesg( String s){
@@ -503,7 +532,14 @@ class ChatServer implements Runnable, ChatListener{
 		
 		Iterator<ChatClient> i = peons.iterator();
 		while( i.hasNext() ){
-			i.next().setActiveListen(false);
+			ChatClient c = i.next();
+			c.setActiveListen(false);
+			try {
+				c.server.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		
 		peons.clear();
@@ -511,22 +547,6 @@ class ChatServer implements Runnable, ChatListener{
 	}
 	
 	String lastMesg = "";
-	
-	public void broadcast(){
-		if( serverListenState == true ){
-			Iterator<Socket> i = clients.iterator();
-			while( i.hasNext() ){
-				try {
-					PrintWriter pw = new PrintWriter(i.next().getOutputStream());
-					pw.println(lastMesg);
-				} catch (Exception e) {
-
-				}
-
-			}
-		}
-	}
-
 	
 	@Override
 	public void run() {
@@ -550,7 +570,12 @@ class ChatServer implements Runnable, ChatListener{
 
 	@Override
 	public void chatMessageRecieved(String mesg, ChatClient src) {
-		// TODO Auto-generated method stub
+		Iterator<ChatClient> i = peons.iterator();
+		
+		while ( i.hasNext() ){
+			ChatClient c = i.next();
+			c.doMessage(mesg);
+		}
 		
 	}
 }
