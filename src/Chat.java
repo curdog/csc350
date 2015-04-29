@@ -11,6 +11,7 @@ import java.awt.Checkbox;
 import java.awt.CheckboxGroup;
 import java.awt.CheckboxMenuItem;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -41,6 +42,7 @@ import java.net.UnknownHostException;
 import java.util.Iterator;
 import java.util.TimerTask;
 import java.util.Vector;
+import java.awt.font.*;
 
 //package src;
 
@@ -96,9 +98,9 @@ public class Chat extends Frame implements Runnable, AdjustmentListener,
 	ChatServer serverGuy;
 	
 	//radio buttons
-		CheckboxGroup Font = new CheckboxGroup();
-		CheckboxGroup font1, font2, font3, font4;
-
+		CheckboxGroup fonts = new CheckboxGroup();
+		CheckboxGroup font1, font2, font3;
+		
 
 	// listen_socket = new Server Socket(PORT);
 	// client = listen_socket.accept():
@@ -112,6 +114,8 @@ public class Chat extends Frame implements Runnable, AdjustmentListener,
 	//			new InputStreamReader(System.in));
 	}
 
+	Font style1, style2, style3;
+	
 	public Chat() {
 		theThread = new Thread(this);
 		gbl = new GridBagLayout();
@@ -119,12 +123,14 @@ public class Chat extends Frame implements Runnable, AdjustmentListener,
 		menu = new MenuBar();
 		colorMenu = new Menu("Color");
 		
-		Checkbox font1 = new Checkbox("Arial", Font, true);
-		Checkbox font2 = new Checkbox("Times New Roman", Font, false);
-		Checkbox font3 = new Checkbox("Verdana", Font, false);
-		Checkbox font4 = new Checkbox("Cambria", Font, false);
-
-
+		Checkbox font1 = new Checkbox("Monospaced", fonts, false);
+		Checkbox font2 = new Checkbox("Sans Serif", fonts, false);
+		Checkbox font3 = new Checkbox("Serif", fonts, false);
+	
+		Font style1 = Font.getFont(Font.MONOSPACED);
+		Font style2 = Font.getFont(Font.SANS_SERIF);
+		Font style3 = Font.getFont(Font.SERIF);
+		
 		this.addWindowListener(this);
 		this.setResizable(true);
 		this.setLayout(gbl);
@@ -224,11 +230,6 @@ public class Chat extends Frame implements Runnable, AdjustmentListener,
 		gbc.gridwidth = 1;
 		this.add(font3, gbc);
 		
-		gbc.gridx = 3;
-		gbc.gridy = 7;
-		gbc.gridwidth = 1;
-		this.add(font4, gbc);
-		
 		gbc.gridx = 2;
 		gbc.gridy = 1;
 		gbc.gridwidth = 1;
@@ -298,19 +299,37 @@ public class Chat extends Frame implements Runnable, AdjustmentListener,
 			green.setState(false);
 			colSel = "B";
 		}
-	/*	
+	
+		//changing the font
 		if(o == font1)
 		{
-			setText(Arial);
+			changeHost.setFont(style1);
+			changePort.setFont(style1);
+			startServer.setFont(style1);
+			connect.setFont(style1);
+			disconnect.setFont(style1);
+			send.setFont(style1);
+			portLabel.setFont(style1);
+			hostLabel.setFont(style1);
 		}else if ( o == font2){
-			setText(TimesNewRoman);
+			changeHost.setFont(style2);
+			changePort.setFont(style2);
+			startServer.setFont(style2);
+			connect.setFont(style2);
+			disconnect.setFont(style2);
+			send.setFont(style2);
+			portLabel.setFont(style2);
+			hostLabel.setFont(style2);
 		}else if(o == font3){
-			setText(Verdana);
-		}else if(o== font4){
-			setText(Cambria)
-		}
-	*/	
-
+			changeHost.setFont(style3);
+			changePort.setFont(style3);
+			startServer.setFont(style3);
+			connect.setFont(style3);
+			disconnect.setFont(style3);
+			send.setFont(style3);
+			portLabel.setFont(style3);
+			hostLabel.setFont(style3);
+		}	
 	}
 
 	boolean serverListenState = false;
