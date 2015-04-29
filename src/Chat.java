@@ -1,4 +1,4 @@
-package src;
+//package src;
 
 /* Laurel Miller, Sean Curtis, Kris Fielding
  * CET 350 - Java, Group 3
@@ -7,6 +7,8 @@ package src;
  */
 
 import java.awt.Button;
+import java.awt.Checkbox;
+import java.awt.CheckboxGroup;
 import java.awt.CheckboxMenuItem;
 import java.awt.Color;
 import java.awt.Frame;
@@ -92,6 +94,11 @@ public class Chat extends Frame implements Runnable, AdjustmentListener,
 	
 	ChatClient clientGuy;
 	ChatServer serverGuy;
+	
+	//radio buttons
+		CheckboxGroup Font = new CheckboxGroup();
+		CheckboxGroup font1, font2, font3, font4;
+
 
 	// listen_socket = new Server Socket(PORT);
 	// client = listen_socket.accept():
@@ -111,6 +118,12 @@ public class Chat extends Frame implements Runnable, AdjustmentListener,
 		gbc = new GridBagConstraints();
 		menu = new MenuBar();
 		colorMenu = new Menu("Color");
+		
+		Checkbox font1 = new Checkbox("Arial", Font, true);
+		Checkbox font2 = new Checkbox("Times New Roman", Font, false);
+		Checkbox font3 = new Checkbox("Verdana", Font, false);
+		Checkbox font4 = new Checkbox("Cambria", Font, false);
+
 
 		this.addWindowListener(this);
 		this.setResizable(true);
@@ -196,6 +209,26 @@ public class Chat extends Frame implements Runnable, AdjustmentListener,
 		mesg.setSize(mesg.getWidth(), 200);
 		this.add(mesg,gbc);
 		
+		gbc.gridx = 0;
+		gbc.gridy = 7;
+		gbc.gridwidth = 1;
+		this.add(font1, gbc);
+		
+		gbc.gridx = 1;
+		gbc.gridy = 7;
+		gbc.gridwidth = 1;
+		this.add(font2, gbc);
+		
+		gbc.gridx = 2;
+		gbc.gridy = 7;
+		gbc.gridwidth = 1;
+		this.add(font3, gbc);
+		
+		gbc.gridx = 3;
+		gbc.gridy = 7;
+		gbc.gridwidth = 1;
+		this.add(font4, gbc);
+		
 		gbc.gridx = 2;
 		gbc.gridy = 1;
 		gbc.gridwidth = 1;
@@ -265,6 +298,19 @@ public class Chat extends Frame implements Runnable, AdjustmentListener,
 			green.setState(false);
 			colSel = "B";
 		}
+	/*	
+		if(o == font1)
+		{
+			setText(Arial);
+		}else if ( o == font2){
+			setText(TimesNewRoman);
+		}else if(o == font3){
+			setText(Verdana);
+		}else if(o== font4){
+			setText(Cambria)
+		}
+	*/	
+
 	}
 
 	boolean serverListenState = false;
