@@ -1,4 +1,4 @@
-//package src;
+package src;
 
 /* Laurel Miller, Sean Curtis, Kris Fielding
  * CET 350 - Java, Group 3
@@ -35,6 +35,8 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.net.Inet4Address;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
@@ -357,9 +359,9 @@ public class Chat extends Frame implements Runnable, AdjustmentListener,
 
 	public void actionPerformed(ActionEvent e) {
 		if( e.getSource() == changeHost){
-			
+			switchHost();
 		} else if ( e.getSource() == changePort){
-			
+			switchPort();
 		} else if ( e.getSource() == send || e.getSource()==outMesg ){
 			if( !(outMesg.getText()).equals("") ){
 				sendMesg( outMesg.getText() );
@@ -368,7 +370,7 @@ public class Chat extends Frame implements Runnable, AdjustmentListener,
 			}
 			outMesg.setText("");
 		} else if ( e.getSource() == disconnect ){
-			
+			stopClient();
 		} else if ( e.getSource() == startServer){
 			try {
 				startServer();
@@ -380,7 +382,7 @@ public class Chat extends Frame implements Runnable, AdjustmentListener,
 				e1.printStackTrace();
 			}
 		} else if ( e.getSource() == connect ){
-			
+			startClient();
 		} else {
 			
 		}
@@ -417,13 +419,16 @@ public class Chat extends Frame implements Runnable, AdjustmentListener,
 		//server = listen_socket.
 		//serverListenState = true;
 		theThread.run();
-		
+		if( serverGuy == null){
+			serverGuy = new ChatServer();
+			serverGuy.setPort( Integer.parseInt(port.getText() ) );
+		}
 
 	}
 
 	public void sendMesg( String s ){
 		if( clientGuy != null ){
-			
+			clientGuy.sendMesg(s);
 		} else{
 			mesg.append("You have no friends\n");
 		}
@@ -436,31 +441,52 @@ public class Chat extends Frame implements Runnable, AdjustmentListener,
 	}
 	
 	public void startClient() {
-		
+		if( clientGuy == null)
+			clientGuy = new ChatClient();
+		try {
+			clientGuy.setServer( host.getText() ,Integer.parseInt(port.getText()));
+		} catch (NumberFormatException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (UnknownHostException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		clientGuy.addListener(this);
 	}
 	
 	public void stopClient(){
-		
+		System.exit(0);
 	}
 
 	public void switchHost() {
-
+		clientGuy = null;
+		startClient();
 	}
 
 	public void switchPort() {
 		if( server != null){
-			
+			stopServer();
+			try {
+				startServer();
+			} catch (NumberFormatException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
-		stopClient();
-		startClient();
+		switchHost();
 	}
 	
-	public void recvMesg( String s){
-		
-	}
 
 	@Override
 	public void chatMessageRecieved(String mesg, ChatClient l) {
+		System.out.println("Got one");
 		dialogue.append(mesg);
 		
 	}
@@ -471,6 +497,7 @@ class ChatClient implements Runnable{
 	Vector<ChatListener> listeners;
 	Socket server;
 	String colorSel;
+	Thread servLis;
 	
 	public ChatClient(){
 		listeners = new Vector<ChatListener>();
@@ -478,7 +505,8 @@ class ChatClient implements Runnable{
 	public void sendMesg(String s) {
 		try {
 			PrintWriter pw = new PrintWriter(server.getOutputStream());
-			pw.println(colorSel + s);
+			pw.println( s + "\n");
+			System.out.println("Sending");
 		} catch (Exception e) {
 
 		}
@@ -497,9 +525,12 @@ class ChatClient implements Runnable{
 				System.out.println("Blocked in IO");
 			}
 		}
-			
-		server = new Socket(serv, port);
+		//InetAddress ia = InetAddress.
+		server = new Socket(InetAddress.getByName(serv), port);
 		server.setKeepAlive(true);
+		
+		servLis = new Thread( this );
+		servLis.start();
 		
 	}
 	
@@ -524,7 +555,7 @@ class ChatClient implements Runnable{
 			i.next().chatMessageRecieved(mesg, this);
 	}
 	
-	boolean activeListen;
+	boolean activeListen = true;
 	
 	public void setActiveListen( boolean b ){
 		activeListen = b;
@@ -538,10 +569,13 @@ class ChatClient implements Runnable{
 	@Override
 	public void run() {
 		BufferedReader  bfreader = null;
+		System.out.println("In thread");
 		try {
 			bfreader = new BufferedReader(  new InputStreamReader( server.getInputStream() ) );
 			while ( activeListen ){
+				System.out.println("WOrking");
 				String s = bfreader.readLine();
+				System.out.println( s );
 				doMessage( s );
 			}
 		} catch (IOException e) {
@@ -577,6 +611,7 @@ class ChatServer implements Runnable, ChatListener{
 	public void setPort( int p ){
 		port = p;
 		stopServer();
+		
 		startServer();
 	}
 	
@@ -589,6 +624,18 @@ class ChatServer implements Runnable, ChatListener{
 	
 	public void startServer(){
 		serverListenState = true;
+		
+		try {
+			serv = new ServerSocket(port);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		if( acceptor == null)
+			acceptor = new Thread(this);
+		acceptor.start();
+		
 	}
 	
 	public void stopServer() {
@@ -636,7 +683,7 @@ class ChatServer implements Runnable, ChatListener{
 	@Override
 	public void chatMessageRecieved(String mesg, ChatClient src) {
 		Iterator<ChatClient> i = peons.iterator();
-		
+		System.out.println("Got Message");
 		while ( i.hasNext() ){
 			ChatClient c = i.next();
 			c.doMessage(mesg);
